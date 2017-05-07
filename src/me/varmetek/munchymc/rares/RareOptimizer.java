@@ -13,6 +13,7 @@ import org.bukkit.block.Furnace;
 import org.bukkit.enchantments.EnchantmentTarget;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockDamageEvent;
 import org.bukkit.event.inventory.*;
@@ -47,113 +48,7 @@ public class RareOptimizer extends RareItemListener
 	}
 
 
-	@EventHandler
-	public void optimizeTouch(PlayerInteractEvent ev)
-	{
-		if(!ev.hasBlock())return;
 
-		Player pl = ev.getPlayer();
-		BlockState ih = ev.getClickedBlock().getState();
-
-
-		if(!check(pl))return;
-
-		if(ih == null)return;
-
-		if(ev.getPlayer().isSneaking())
-		{
-			if(isOptimized(ih))
-			{
-				ih.removeMetadata(KEY, plugin);
-				Messenger.send(pl, " &7This container has been Unoptimized");
-				ev.setCancelled(true);
-				return;
-			}
-		}else{
-			if (optimize(ih))
-			{
-				Messenger.send(pl, "&7 This container has been Optimized.");
-				ev.setCancelled(true);
-			}
-		}
-
-	}
-
-
-	@EventHandler
-	public void smelt(FurnaceSmeltEvent ev)
-	{
-		BlockState bs = ev.getBlock().getState();
-		if(isOptimized(bs))
-		{
-			optimize(bs);
-		}
-	}
-	@EventHandler
-	public void burnFuel(FurnaceBurnEvent ev){
-
-		Furnace furn = (Furnace)ev.getBlock().getState();
-		if(furn.hasMetadata(KEY) && furn.getInventory().getViewers().isEmpty())
-		{
-			furn.removeMetadata(KEY, plugin);
-		}
-
-	}
-
-	@EventHandler
-	public void unOptimizeTouch(BlockDamageEvent ev)
-	{
-		Player pl = ev.getPlayer();
-		if(!check(pl))return;
-		ev.setCancelled(true);
-		ev.setInstaBreak(false);
-
-
-	}
-
-	@EventHandler
-	public void blockBreak(BlockBreakEvent ev)
-	{
-		BlockState bs = ev.getBlock().getState();
-
-
-			bs.removeMetadata(KEY,plugin);
-	}
-
-	@EventHandler
-	public void hopperTransfer(InventoryMoveItemEvent ev)
-	{
-		BlockState bs = getState(ev.getInitiator().getHolder());
-		BlockState dest = getState(ev.getDestination().getHolder());
-		if(dest instanceof  Furnace)
-		{
-			if(isOptimized(dest))
-				optimize(dest);
-		}
-		if(dest.hasMetadata("HopTime"))
-		{
-			((BukkitRunnable) dest.getMetadata("HopTime").get(0).value()).cancel();
-			dest.removeMetadata("HopTime", plugin);
-		}
-		//Messenger.sendAll(ev.getEventName());
-		if(isOptimized(bs))
-		{
-
-			//Messenger.sendAll(ev.getEventName() +" - is Optimized");
-			boolean isSource = ev.getSource().equals(ev.getInitiator());
-			dest.setMetadata("HopTime", new FixedMetadataValue(plugin,
-			new BukkitRunnable(){
-				public void run(){
-					if(!optimizeHopper(ev.getSource(),ev.getDestination(),bs))
-						this.cancel();
-
-				}
-			}));
-			(
-					(BukkitRunnable)dest.getMetadata("HopTime").get(0).value()).runTaskTimer(plugin,0,1L);
-
-		}
-	}
 	private static Material getContainerType(BlockState ih)
 	{
 		if(optimizable.contains(ih.getType()))
@@ -282,29 +177,147 @@ public class RareOptimizer extends RareItemListener
 	private static final List<EnchantmentTarget> whiteList = Arrays.asList(
 			new EnchantmentTarget[] { EnchantmentTarget.ALL, EnchantmentTarget.TOOL});
 
-	@EventHandler
-	public void openEnchant(InventoryOpenEvent ev)
-	{
-		Inventory inv = ev.getInventory();
-		if(inv == null)return;
-		if(inv.getType() != InventoryType.ANVIL)return;
-		if(!check((Player) ev.getPlayer()))return;
+	@Override
+	public void clean (){
 
-		Messenger.send(ev.getPlayer(), "&7 Optimized Repairing Enabled.");
 	}
-	@EventHandler
-	public void optmizedEnchant(PrepareAnvilEvent ev)
-	{
 
-		AnvilInventory anvil= ev.getInventory();
-		if(anvil == null)return;
+	@Override
+	public Listener supplyListener (){
+		return new Listener()
+		{
+			@EventHandler
+			public void optimizeTouch(PlayerInteractEvent ev)
+			{
+				if(!ev.hasBlock())return;
+
+				Player pl = ev.getPlayer();
+				BlockState ih = ev.getClickedBlock().getState();
 
 
-		Player pl = (Player)ev.getViewers().get(0);
-		if(!(check(pl)) ) return;
-		//Messenger.send(pl, "&7 Optimized Repairing Enabled.");
-		//ItemStack item1 = anvil.getItem(0);
-		//ItemStack item2 = anvil.getItem(1);
+				if(!check(pl))return;
+
+				if(ih == null)return;
+
+				if(ev.getPlayer().isSneaking())
+				{
+					if(isOptimized(ih))
+					{
+						ih.removeMetadata(KEY, plugin);
+						Messenger.send(pl, " &7This container has been Unoptimized");
+						ev.setCancelled(true);
+						return;
+					}
+				}else{
+					if (optimize(ih))
+					{
+						Messenger.send(pl, "&7 This container has been Optimized.");
+						ev.setCancelled(true);
+					}
+				}
+
+			}
+
+
+			@EventHandler
+			public void smelt(FurnaceSmeltEvent ev)
+			{
+				BlockState bs = ev.getBlock().getState();
+				if(isOptimized(bs))
+				{
+					optimize(bs);
+				}
+			}
+			@EventHandler
+			public void burnFuel(FurnaceBurnEvent ev){
+
+				Furnace furn = (Furnace)ev.getBlock().getState();
+				if(furn.hasMetadata(KEY) && furn.getInventory().getViewers().isEmpty())
+				{
+					furn.removeMetadata(KEY, plugin);
+				}
+
+			}
+
+			@EventHandler
+			public void unOptimizeTouch(BlockDamageEvent ev)
+			{
+				Player pl = ev.getPlayer();
+				if(!check(pl))return;
+				ev.setCancelled(true);
+				ev.setInstaBreak(false);
+
+
+			}
+
+			@EventHandler
+			public void blockBreak(BlockBreakEvent ev)
+			{
+				BlockState bs = ev.getBlock().getState();
+
+
+				bs.removeMetadata(KEY,plugin);
+			}
+
+			@EventHandler
+			public void hopperTransfer(InventoryMoveItemEvent ev)
+			{
+				BlockState bs = getState(ev.getInitiator().getHolder());
+				BlockState dest = getState(ev.getDestination().getHolder());
+				if(dest instanceof  Furnace)
+				{
+					if(isOptimized(dest))
+						optimize(dest);
+				}
+				if(dest.hasMetadata("HopTime"))
+				{
+					((BukkitRunnable) dest.getMetadata("HopTime").get(0).value()).cancel();
+					dest.removeMetadata("HopTime", plugin);
+				}
+				//Messenger.sendAll(ev.getEventName());
+				if(isOptimized(bs))
+				{
+
+					//Messenger.sendAll(ev.getEventName() +" - is Optimized");
+					boolean isSource = ev.getSource().equals(ev.getInitiator());
+					dest.setMetadata("HopTime", new FixedMetadataValue(plugin,
+						                                                  new BukkitRunnable(){
+							                                                  public void run(){
+								                                                  if(!optimizeHopper(ev.getSource(),ev.getDestination(),bs))
+									                                                  this.cancel();
+
+							                                                  }
+						                                                  }));
+					(
+						(BukkitRunnable)dest.getMetadata("HopTime").get(0).value()).runTaskTimer(plugin,0,1L);
+
+				}
+			}
+
+
+			@EventHandler
+			public void openEnchant(InventoryOpenEvent ev)
+			{
+				Inventory inv = ev.getInventory();
+				if(inv == null)return;
+				if(inv.getType() != InventoryType.ANVIL)return;
+				if(!check((Player) ev.getPlayer()))return;
+
+				Messenger.send(ev.getPlayer(), "&7 Optimized Repairing Enabled.");
+			}
+			@EventHandler
+			public void optmizedEnchant(PrepareAnvilEvent ev)
+			{
+
+				AnvilInventory anvil= ev.getInventory();
+				if(anvil == null)return;
+
+
+				Player pl = (Player)ev.getViewers().get(0);
+				if(!(check(pl)) ) return;
+				//Messenger.send(pl, "&7 Optimized Repairing Enabled.");
+				//ItemStack item1 = anvil.getItem(0);
+				//ItemStack item2 = anvil.getItem(1);
 		/*if(item1  == null | item2 == null)return;
 		if(item1.getType() == Material.AIR || item1.getType() == Material.AIR)return;
 		if(item1.getType() != item2.getType())return;
@@ -335,21 +348,23 @@ public class RareOptimizer extends RareItemListener
 		}*/
 
 
-		ItemStack result = UtilInventory.combineEnchantments(anvil.getItem(0),anvil.getItem(1),true,false);
-		if(result == null)return;
-		String name = anvil.getRenameText();
-		ItemMeta im = result.getItemMeta();
-		ev.getInventory().setRepairCost(1);
-		if(im instanceof Repairable) ((Repairable)im).setRepairCost(1);
-		im.setDisplayName(Utils.colorCode(name));
+				ItemStack result = UtilInventory.combineEnchantments(anvil.getItem(0),anvil.getItem(1),true,false);
+				if(result == null)return;
+				String name = anvil.getRenameText();
+				ItemMeta im = result.getItemMeta();
+				ev.getInventory().setRepairCost(1);
+				if(im instanceof Repairable) ((Repairable)im).setRepairCost(1);
+				im.setDisplayName(Utils.colorCode(name));
 
-		result.setItemMeta(im);
+				result.setItemMeta(im);
 
-		result.setDurability((short)0);
+				result.setDurability((short)0);
 
 
-		ev.setResult(result);
+				ev.setResult(result);
 
+			}
+
+		};
 	}
-
 }

@@ -10,6 +10,7 @@ import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.Listener;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryType;
@@ -170,79 +171,92 @@ public  final class RareParkourBoots extends RareItemListener
 	}
 	///////////////////////////////////////////////////////////////////////////////////////////////////
 
-	////////////////////////////////////////////////////////////////////////////////////////////////
-	@EventHandler
-	public void wear(InventoryClickEvent ev){
-		Player pl = (Player)ev.getWhoClicked();
-		Inventory inv = ev.getClickedInventory();
-		if(inv == null)return;
-		if(!inv.equals(pl.getInventory()))return;
-	
-		if(ev.getSlotType() !=  InventoryType.SlotType.ARMOR)return;
-		plugin.getTaskHandler().run(()->{
-			if(check(pl)){
-			
-				blocks.put(pl.getUniqueId(), new HashSet<BlockVector>() );
-				makeFloor(pl.getUniqueId());
-			}else{
-			
+
+	@Override
+	public void clean (){
+
+	}
+
+	@Override
+	public Listener supplyListener (){
+		return new Listener()
+		{
+			////////////////////////////////////////////////////////////////////////////////////////////////
+			@EventHandler
+			public void wear(InventoryClickEvent ev){
+				Player pl = (Player)ev.getWhoClicked();
+				Inventory inv = ev.getClickedInventory();
+				if(inv == null)return;
+				if(!inv.equals(pl.getInventory()))return;
+
+				if(ev.getSlotType() !=  InventoryType.SlotType.ARMOR)return;
+				plugin.getTaskHandler().run(()->{
+					if(check(pl)){
+
+						blocks.put(pl.getUniqueId(), new HashSet<BlockVector>() );
+						makeFloor(pl.getUniqueId());
+					}else{
+
+						removePlayer(pl.getUniqueId());
+					}
+
+				});
+			}
+
+			@EventHandler
+			public void walk(PlayerMoveEvent e){
+				Player pl = e.getPlayer();
+				if(check(pl)){
+					if(!blocks.containsKey(pl.getUniqueId())){
+						blocks.put(pl.getUniqueId(), new HashSet<BlockVector>() );
+					}
+
+					if(blocks.containsKey(pl.getUniqueId())){
+
+						makeFloor(pl.getUniqueId(),
+							new Vector(e.getTo().getX()- e.getFrom().getX(), 0 ,e.getTo().getZ()- e.getFrom().getZ()));
+					}
+				}
+			}
+
+			@EventHandler
+			public void onSneak(PlayerToggleSneakEvent ev){
+				Player pl = ev.getPlayer();
+				if(!ev.isSneaking())return;
+				clearBlocks(pl.getUniqueId());
+			}
+
+			@EventHandler
+			public void onLeave(PlayerQuitEvent ev){
+				Player pl = ev.getPlayer();
 				removePlayer(pl.getUniqueId());
 			}
 
-		});
-	}
-
-	@EventHandler
-	public void walk(PlayerMoveEvent e){
-		Player pl = e.getPlayer();
-		if(check(pl)){
-			if(!blocks.containsKey(pl.getUniqueId())){
-				blocks.put(pl.getUniqueId(), new HashSet<BlockVector>() );
-				}
-			
-			if(blocks.containsKey(pl.getUniqueId())){
-				
-				makeFloor(pl.getUniqueId(),
-						new Vector(e.getTo().getX()- e.getFrom().getX(), 0 ,e.getTo().getZ()- e.getFrom().getZ()));
+			@EventHandler
+			public void onKick(PlayerKickEvent ev){
+				Player pl = ev.getPlayer();
+				removePlayer(pl.getUniqueId());
 			}
-		}
-	}
-	
-	@EventHandler
-	public void onSneak(PlayerToggleSneakEvent ev){
-		Player pl = ev.getPlayer();
-		if(!ev.isSneaking())return;
-		clearBlocks(pl.getUniqueId());
-	}
-	
-	@EventHandler
-	public void onLeave(PlayerQuitEvent ev){
-		Player pl = ev.getPlayer();
-		removePlayer(pl.getUniqueId());
-	}
-	
-	@EventHandler
-	public void onKick(PlayerKickEvent ev){
-		Player pl = ev.getPlayer();
-		removePlayer(pl.getUniqueId());
-	}
-	
-	@EventHandler
-	public void onTeleport(PlayerTeleportEvent ev){
-		final Player pl = ev.getPlayer();
-		clearBlocks(pl.getUniqueId());
-		plugin.getTaskHandler().run(()->{
-				makeFloor(pl.getUniqueId());
 
-	});
+			@EventHandler
+			public void onTeleport(PlayerTeleportEvent ev){
+				final Player pl = ev.getPlayer();
+				clearBlocks(pl.getUniqueId());
+				plugin.getTaskHandler().run(()->{
+					makeFloor(pl.getUniqueId());
+
+				});
+			}
+			@EventHandler
+			public void onDeath(	PlayerDeathEvent ev){
+
+				final Player pl = ev.getEntity();
+				clearBlocks(pl.getUniqueId());
+			}
+
+		};
 	}
-	@EventHandler
-	public void onDeath(	PlayerDeathEvent ev){
-		
-		final Player pl = ev.getEntity();
-		clearBlocks(pl.getUniqueId());
-	}
-	
+
 ////////////////////////////////////////////////////////////////////////////
 		
 

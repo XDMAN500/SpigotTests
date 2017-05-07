@@ -27,18 +27,31 @@ public class RareSuperChest extends RareItemListener implements Listener
 	}
 
 	
-	@EventHandler
-	public void OpenChestEvent(PlayerInteractEvent ev){
-		Player pl = (Player)ev.getPlayer();
-		if(!check(pl))return;
-		if(Utils.isRightClicked(ev.getAction()))
-		pl.openInventory(pl.getEnderChest());
-		ev.setCancelled(true);
+
+	@Override
+	public void clean (){
+
 	}
-	@EventHandler
-	public void OpenChestEvent(BlockPlaceEvent ev){
-		Player pl = (Player)ev.getPlayer();
-		if(!check(pl))return;
-		ev.setCancelled(true);
+
+	@Override
+	public Listener supplyListener (){
+		return new Listener()
+		{
+			@EventHandler
+			public void OpenChestEvent(PlayerInteractEvent ev){
+				Player pl = (Player)ev.getPlayer();
+				if(!check(pl))return;
+				if(Utils.isRightClicked(ev.getAction()))
+					pl.openInventory(pl.getEnderChest());
+				ev.setCancelled(true);
+			}
+			@EventHandler
+			public void OpenChestEvent(BlockPlaceEvent ev){
+				Player pl = (Player)ev.getPlayer();
+				if(!check(pl))return;
+				ev.setCancelled(true);
+			}
+
+		};
 	}
 }

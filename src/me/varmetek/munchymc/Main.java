@@ -7,13 +7,12 @@ import me.varmetek.core.item.CustomItem;
 import me.varmetek.core.item.ItemMap;
 import me.varmetek.core.service.Element;
 import me.varmetek.core.service.ElementManager;
-import me.varmetek.core.service.ElementService;
 import me.varmetek.core.util.Cleanable;
 import me.varmetek.core.util.PluginMain;
 import me.varmetek.core.util.TaskHandler;
 import me.varmetek.munchymc.backend.*;
 import me.varmetek.munchymc.backend.hooks.HookManager;
-import me.varmetek.munchymc.backend.kit.KitHandler;
+import me.varmetek.munchymc.backend.KitHandler;
 import me.varmetek.munchymc.backend.test.CustomItemRare;
 import me.varmetek.munchymc.backend.test.EnumCustomItem;
 import me.varmetek.munchymc.commands.*;
@@ -49,7 +48,6 @@ public final class Main extends PluginMain implements Cleanable
 	private HookManager hookManager;
 	private PointManager pointManager;
 	private UserHandler userHandler;
-	private ElementService elementService;
 	private TaskHandler taskHandler;
 	private DataManager dataManager;
 	private ElementManager elementManager;
@@ -66,7 +64,6 @@ public final class Main extends PluginMain implements Cleanable
 		itemMap = new ItemMap();
 		dataManager = new DataManager(this);
 		taskHandler = new TaskHandler(this);
-		elementService = new ElementService(this);
 		//chatPlaceholderMap = new ChatPlaceholderMap("&8<&b"+Utils.placeholder("playerName")+"&8> &7"+Utils.placeholder("playerMessage"));
 		userHandler = new UserHandler(this);
 		hookManager = new HookManager(this);
@@ -135,11 +132,6 @@ public final class Main extends PluginMain implements Cleanable
 		return userHandler;
 	}
 
-	public ElementService getElementService ()
-	{
-		return elementService;
-	}
-
 	public TaskHandler getTaskHandler ()
 	{
 		return taskHandler;
@@ -187,14 +179,14 @@ public final class Main extends PluginMain implements Cleanable
 	{
 		tickLoop.cancel();
 		userHandler.clean();
-		elementService.clean();
+		elementManager.clean();
 		dataManager.clean();
 		taskHandler.clean();
 		itemMap.clean();
 		kitHandler.clean();
 		kitHandler = null;
 		userHandler = null;
-		elementService = null;
+		elementManager = null;
 		taskHandler = null;
 		dataManager = null;
 		itemMap = null;
@@ -347,7 +339,7 @@ public final class Main extends PluginMain implements Cleanable
 						@Override
 						public void registerEvent ()
 						{
-							plug.getElementService().registerListener(new RareParkourBoots(this,plug));
+							plug.getElementManager().register(new RareParkourBoots(this,plug));
 						}
 					})
 				.register(
@@ -387,7 +379,7 @@ public final class Main extends PluginMain implements Cleanable
 					@Override
 					public void registerEvent ()
 					{
-						plug.getElementService().registerListener(new RareArtemisPlate(this,plug));
+            plug.getElementManager().register(new RareArtemisPlate(this,plug));
 					}
 				})
 				.register(
@@ -403,7 +395,7 @@ public final class Main extends PluginMain implements Cleanable
 					@Override
 					public void registerEvent ()
 					{
-						plug.getElementService().registerListener(new RareHanSoloPants(this,plug));
+            plug.getElementManager().register(new RareHanSoloPants(this,plug));
 					}
 				})
 				.register(
@@ -419,7 +411,7 @@ public final class Main extends PluginMain implements Cleanable
 					@Override
 					public void registerEvent ()
 					{
-						plug.getElementService().registerListener(new RareHawkEye(this,plug));
+            plug.getElementManager().register(new RareHawkEye(this,plug));
 					}
 				})
 				.register(
@@ -443,7 +435,7 @@ public final class Main extends PluginMain implements Cleanable
 					@Override
 					public void registerEvent ()
 					{
-						plug.getElementService().registerListener(new RareOptimizer(this,plug));
+            plug.getElementManager().register(new RareOptimizer(this,plug));
 					}
 				})
 				.register(
@@ -467,7 +459,7 @@ public final class Main extends PluginMain implements Cleanable
 					@Override
 					public void registerEvent ()
 					{
-						plug.getElementService().registerListener(new RareSuperChest(this,plug));
+            plug.getElementManager().register(new RareSuperChest(this,plug));
 					}
 				})
 				.register(
@@ -483,7 +475,7 @@ public final class Main extends PluginMain implements Cleanable
 					@Override
 					public void registerEvent ()
 					{
-						plug.getElementService().registerListener(new RareVaderCape(this,plug));
+            plug.getElementManager().register(new RareVaderCape(this,plug));
 					}
 				})
 				.register(
@@ -509,7 +501,7 @@ public final class Main extends PluginMain implements Cleanable
 					@Override
 					public void registerEvent ()
 					{
-						plug.getElementService().registerListener(new RareZuesBolt(this,plug));
+            plug.getElementManager().register(new RareZuesBolt(this,plug));
 					}
 				}
 				);

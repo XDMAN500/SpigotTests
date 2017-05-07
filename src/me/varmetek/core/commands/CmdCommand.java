@@ -144,7 +144,7 @@ public class CmdCommand
 			out.name = this.name;
 			out.tab = this.tab;
 
-			out.aliases = aliases == null ? ImmutableList.copyOf(this.aliases ) : empty;
+			out.aliases = aliases != null ? ImmutableList.copyOf(this.aliases ) : empty;
 			out.desc = this.desc;
 			out.perm = this.perm;
 			return out;

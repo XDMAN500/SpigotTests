@@ -3,23 +3,24 @@ package me.varmetek.munchymc.backend;
 import me.varmetek.core.util.Cleanable;
 import me.varmetek.core.util.Messenger;
 import me.varmetek.munchymc.Main;
-import me.varmetek.munchymc.backend.kit.Kit;
 import me.varmetek.munchymc.util.UtilFile;
 import me.varmetek.munchymc.util.UtilInventory;
 import org.apache.commons.lang.Validate;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.OfflinePlayer;
+import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.MemorySection;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.potion.PotionEffect;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.Random;
-import java.util.Set;
+import java.util.*;
 
 /**
  * Created by XDMAN500 on 1/14/2017.
@@ -32,6 +33,7 @@ public final class DataManager implements Cleanable
 	protected Main plugin;
 	private UserData  userData;
 	private KitData  kitData;
+	private PointData pointData;
 
 	public DataManager(Main plugin){
 		this.plugin = plugin;
@@ -44,6 +46,9 @@ public final class DataManager implements Cleanable
 	public KitData asKitData(){
 		return kitData;
 	}
+  public PointData asPointData(){
+    return pointData;
+  }
 
 	public void clean(){
 		plugin = null;
@@ -110,87 +115,6 @@ public final class DataManager implements Cleanable
 	}
 
 
-
-	public  Point loadPoint (String name){
-		/*File myFile = CoreFile.LOC.file;
-		if (!myFile.exists())
-			return null;
-		FileConfiguration config = YamlConfiguration.loadConfiguration(myFile);
-		Location loc = null;
-		DataSection ds = null;
-		if (!config.contains(name))
-			return null;
-		if (config.contains(name + ".location"))
-
-			loc = readLocation(config, name + ".location");
-
-		if (config.contains(name + ".data"))
-			ds = DataSection.parse(config.getString(name + ".data"));
-
-		Point p = Point.createPoint(name, loc);
-		if (p != null)
-			p.setData(ds);*/
-
-
-		return null;// loadLocation(CoreFile.LOC.file,name);
-	}
-
-	public  boolean savePoint (Point p) throws IOException{
-
-	/*	File myFile = CoreFile.LOC.file;
-		if (!myFile.exists())
-			myFile.createNewFile();
-		FileConfiguration warpConfig = YamlConfiguration.loadConfiguration(myFile);
-
-		writeLocation(warpConfig, p.name + ".location", p.location);
-		warpConfig.set(p.name + ".data", p.data.toString());
-		warpConfig.save(myFile);
-
-		// Bukkit.broadcastMessage("WARP CREATED");*/
-		return true;
-	}
-
-	public  Set<String> getPointList (){
-
-		File myFile = CoreFile.LOC.file;
-		if (myFile.exists())
-		{
-			FileConfiguration warpConfig = YamlConfiguration.loadConfiguration(myFile);
-			if (warpConfig.getConfigurationSection("").getKeys(false) == null)
-			{
-				Messenger.debug("No list");
-				return null;
-			}
-			if (warpConfig.getConfigurationSection("").getKeys(false).size() == 0)
-			{
-				Messenger.debug("No locs");
-				return null;
-			}
-
-			return warpConfig.getConfigurationSection("").getKeys(false);
-
-		}
-		return null;
-	}
-
-	public  boolean doesPointExist (String warp)
-	{
-		return getPointList().contains(warp);
-	}
-
-	public  boolean removePoint (String name) throws IOException{
-		File myFile = CoreFile.CONFIG.file;
-		if (!myFile.exists())
-			return false;
-		FileConfiguration warpConfig = YamlConfiguration.loadConfiguration(myFile);
-		warpConfig.set("name", null);
-
-		warpConfig.save(myFile);
-
-		return true;
-
-		// User
-	}
 
 	public void createCoreFiles(){
 		CoreFile.createFiles();
@@ -451,35 +375,41 @@ public final class DataManager implements Cleanable
 
 	}
 	public final class KitData{
-		public  String getKitDirectory (Kit  kit)
+		/*public  String getKitDirectory (Kit  kit)
 		{
 			return  CoreFile.KITS.getDirectory() + __+ kit.ID()+".yml";
-		}
+		}*/
 		public  String getKitDirectory (String   kit)
 		{
 			return  CoreFile.KITS.getDirectory() + __+ kit+".yml";
 		}
 
-		public File getKitFile(Kit kit) throws IllegalArgumentException, IOException{
+		/*public File getKitFile(Kit kit) throws IllegalArgumentException, IOException{
 
 			return UtilFile.getAndCreate( getKitDirectory(kit));
-		}
+		}*/
 		public File getKitFile(String kit) throws IllegalArgumentException, IOException{
 
 			return UtilFile.getFile( getKitDirectory(kit));
 		}
 
-		public void saveKit(Kit k)throws IOException{
-				saveKit( k, getKitFile(k));
+		public void saveKit(String name) throws IOException {
+
+				saveKit( name, getKitFile(name));
 		}
 
 
-		private void saveKit(Kit k, File f) throws IOException{
+		private void saveKit(String name, File f) throws IOException{
+		  if(!f.exists()){
+		    UtilFile.create(f);
+      }
+			Validate.isTrue(plugin.getKitHandler().isKit(name), "Could not save kit \""+ name+ "\" because it does not exist");
+			Kit kit = plugin.getKitHandler().getKit(name).get();
 
+			YamlConfiguration config =  YamlConfiguration.loadConfiguration(f);
 
-				YamlConfiguration config =  YamlConfiguration.loadConfiguration(f);
-
-				config.set("inv", k.getInv());
+				config.set("inv", kit.getInv());
+				config.set("effects", kit.getEffects());
 				config.save(f);
 
 
@@ -487,61 +417,76 @@ public final class DataManager implements Cleanable
 
 
 
-		public void saveKits(){
-			for(Kit k: plugin.getKitHandler().values()){
+		public void saveKits() throws IOException{
+			for(String k: plugin.getKitHandler().getKits().keySet()){
 				try{
 					saveKit(k);
 				}catch(Exception e){
-					Bukkit.getLogger().warning("Failed to save kit " + k.ID());
+					Bukkit.getLogger().warning("Failed to save kit " + k);
 				}
 			}
 		}
 
 
+    private List<PotionEffect> convertEffects( List<Map<?,?>> input){
+      List<PotionEffect> output =  new ArrayList<>();
 
+      for(Map<?,?> effect : input){
+        if( effect == null)continue;
+        output.add(new PotionEffect((Map<String, Object>) effect));
+      }
+      return output;
+
+    }
 		public Kit loadKit(String  k) throws IOException{
 
-				File f = getKitFile(k);
-				if(!f.exists())throw new IOException("Kit file doesnt exist for kit " +k);
 
-				YamlConfiguration config = YamlConfiguration.loadConfiguration(f);
-
-				Object sec = config.get("inv");
-				if(sec instanceof  MemorySection){
-					return new Kit(k, UtilInventory.toInvMap((MemorySection)sec));
-				}else{
-
-				}
-
-
-			return null;
+			  return loadKit(k,getKitFile(k));
 		}
+
+		private Kit loadKit(String  name, File f) throws IOException{
+
+
+      if(!f.exists())
+        throw new IOException("Kit file doesnt exist for kit " +name);
+
+      YamlConfiguration config = YamlConfiguration.loadConfiguration(f);
+      Object sec = config.get("inv");
+
+      List<Map<?,?>> list = config.getMapList("effects");
+
+      Map<Integer,ItemStack> inv = Collections.EMPTY_MAP;
+
+      if(sec instanceof  MemorySection){
+        inv = UtilInventory.toInvMap((MemorySection)sec);
+      }
+      List<PotionEffect> effects = Collections.EMPTY_LIST;
+      if(list != null){
+        effects= convertEffects(list);
+      }
+      Kit kit = new Kit.Builder().setInventory(inv).setEffects(effects).build();
+      plugin.getKitHandler().setKit(name,kit );
+      return kit;
+    }
+
 		private Kit loadKit(File f) throws IOException{
 
 			if(!f.exists() || !f.getName().endsWith(".yml")) throw new IllegalArgumentException("Invalid file for kit");
 
-
-			YamlConfiguration config = YamlConfiguration.loadConfiguration(f);
 			String name = f.getName().substring(0,f.getName().lastIndexOf('.'));
-			Object sec = config.get("inv");
-			if(sec instanceof  MemorySection){
-				return new Kit(name, UtilInventory.toInvMap((MemorySection)sec));
-			}else{
-
-			}
 
 
-			return null;
+      return loadKit(name,f);
 		}
 
-		public void loadKits(){
+		public void loadKits() throws IOException{
 
 			File f =  new File(plugin.getDataFolder(),CoreFile.KITS.getDirectory());
-			if(!f.exists()) return;
+      validateTrue(!f.exists(),"File for kitsdoes not exists");
 
 			for(File file: f.listFiles()){
 				try{
-					plugin.getKitHandler().register(loadKit(file));
+					loadKit(file);
 				}catch(Exception e){
 					if(file.getName().endsWith(".yml")){
 						Bukkit.getLogger().info("Could not load kit from file "+ f.getName());
@@ -557,16 +502,126 @@ public final class DataManager implements Cleanable
 			}
 		}
 
-		public void reloadKits(){
-			plugin.getKitHandler().unregisterAll();
+		public void reloadKits() throws IOException{
+			plugin.getKitHandler().clear();
 			loadKits();
 
 		}
 	}
+  public final class PointData{
+    PointManager manager = plugin.getPointManager();
 
+    public  Point loadPoint (String name) throws IOException{
+      File file = CoreFile.Points.file;
+      validateTrue(!file.exists(),"File for points does not exists");
+
+      FileConfiguration config = YamlConfiguration.loadConfiguration(file);
+      Validate.isTrue(config.isConfigurationSection(name));
+      ConfigurationSection sec = config.getConfigurationSection(name);
+      boolean isWarp = sec.isBoolean("warp");
+      Validate.isTrue(sec.isConfigurationSection("location"));
+
+
+      Map<String,Object> data = sec.getConfigurationSection("location").getValues(false);
+      Location loc = Location.deserialize(data);
+      Point p = new Point.Builder(loc).build();
+      manager.setPoint(name,p);
+      if(isWarp) manager.setWarp(name);
+      return p;
+
+
+		/*File myFile = CoreFile.LOC.file;
+		if (!myFile.exists())
+			return null;
+		FileConfiguration config = YamlConfiguration.loadConfiguration(myFile);
+		Location loc = null;
+		DataSection ds = null;
+		if (!config.contains(name))
+			return null;
+		if (config.contains(name + ".location"))
+
+			loc = readLocation(config, name + ".location");
+
+		if (config.contains(name + ".data"))
+			ds = DataSection.parse(config.getString(name + ".data"));
+
+		Point p = Point.createPoint(name, loc);
+		if (p != null)
+			p.setData(ds);*/
+
+
+
+    }
+
+    public  boolean savePoint (String name ) throws IOException{
+      Validate.isTrue(manager.pointExist(name),"Point \"" + name + "\" cannot be saved as it does not exist");
+
+
+      File file = CoreFile.Points.file;
+      if (!file.exists()){
+        UtilFile.create(file);
+      }
+      FileConfiguration config = YamlConfiguration.loadConfiguration(file);
+      Point point = manager.getPoint(name).get();
+      config.set(name +".location", point.getLocation());
+      config.set(name +".warp", manager.isWarp(name));
+
+      config.save(file);
+
+	/*	File myFile = CoreFile.LOC.file;
+		if (!myFile.exists())
+			myFile.createNewFile();
+		FileConfiguration warpConfig = YamlConfiguration.loadConfiguration(myFile);
+
+		writeLocation(warpConfig, p.name + ".location", p.location);
+		warpConfig.set(p.name + ".data", p.data.toString());
+		warpConfig.save(myFile);
+
+		// Bukkit.broadcastMessage("WARP CREATED");*/
+      return true;
+    }
+
+    public void saveAllPoints() throws IOException{
+      File file = CoreFile.Points.file;
+      if (!file.exists()){
+        UtilFile.create(file);
+      }
+
+      FileConfiguration config = YamlConfiguration.loadConfiguration(file);
+      //Cleaning
+      for(String key :config.getKeys(false)){
+        config.set(key,null);
+      }
+
+      //Saving
+      for(String name:manager.getPoints().keySet()){
+        savePoint(name);
+      }
+      config.save(file);
+    }
+
+    public void loadllPoints() throws IOException{
+      File file = CoreFile.Points.file;
+      validateTrue(!file.exists(),"File for points does not exists");
+
+      FileConfiguration config = YamlConfiguration.loadConfiguration(file);
+      //Loading
+      for(String key :config.getKeys(false)){
+        loadPoint(key);
+      }
+
+    }
+
+
+
+
+  }
+	private void validateTrue(boolean c, String reason) throws IOException{
+	  if(!c)throw new IOException(reason);
+  }
 	private enum CoreFile{
 		WARPS("", ".yml"), LOC("", ".yml"), CONFIG("", ".yml"), USER("",__), USERREG(USER.getDirectory(),".yml"),
-		KITS("",__);
+		KITS("",__),Points("",".yml");
 
 		private String path;
 		private File file = null;

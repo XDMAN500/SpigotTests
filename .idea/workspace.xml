@@ -29,24 +29,26 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="ElementManager.java" pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/src/me/varmetek/core/service/ElementManager.java">
+      <file leaf-file-name="CommandKit.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/me/varmetek/munchymc/commands/CommandKit.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="425">
-              <caret line="104" column="39" lean-forward="true" selection-start-line="104" selection-start-column="39" selection-end-line="104" selection-end-column="39" />
+            <state relative-caret-position="-644">
+              <caret line="70" column="66" lean-forward="true" selection-start-line="70" selection-start-column="66" selection-end-line="70" selection-end-column="66" />
               <folding>
                 <element signature="imports" expanded="true" />
-                <element signature="method#ElementManager#0;class#ElementManager#0" expanded="true" />
-                <element signature="method#register#0;class#ElementManager#0" expanded="true" />
-                <element signature="method#registerAll#0;class#ElementManager#0" expanded="true" />
-                <element signature="e#1617#1618#0" expanded="true" />
-                <element signature="e#1676#1677#0" expanded="true" />
-                <element signature="method#registerCmd#0;class#ElementManager#0" expanded="true" />
-                <element signature="method#registerall#0;class#ElementManager#0" expanded="true" />
-                <element signature="method#register#1;class#ElementManager#0" expanded="true" />
-                <element signature="method#onCommand#0;class#ElementManager#0" expanded="true" />
-                <element signature="method#clean#0;class#ElementManager#0" expanded="true" />
+                <element signature="method#forKit#0;class#CommandKit#0" expanded="true" />
+                <element signature="method#forHelpCommand#0;class#CommandKit#0" expanded="true" />
               </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="CommandJoin.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/me/varmetek/munchymc/commands/CommandJoin.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="840">
+              <caret line="65" column="4" lean-forward="false" selection-start-line="65" selection-start-column="4" selection-end-line="65" selection-end-column="4" />
+              <folding />
             </state>
           </provider>
         </entry>
@@ -54,8 +56,8 @@
       <file leaf-file-name="CmdCommand.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/me/varmetek/core/commands/CmdCommand.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="483">
-              <caret line="140" column="60" lean-forward="false" selection-start-line="140" selection-start-column="60" selection-end-line="140" selection-end-column="60" />
+            <state relative-caret-position="725">
+              <caret line="144" column="25" lean-forward="true" selection-start-line="144" selection-start-column="25" selection-end-line="144" selection-end-column="25" />
               <folding>
                 <element signature="method#Builder#0;class#Builder#0;class#CmdCommand#0" expanded="true" />
                 <element signature="method#Builder#1;class#Builder#0;class#CmdCommand#0" expanded="true" />
@@ -67,90 +69,127 @@
           </provider>
         </entry>
       </file>
+      <file leaf-file-name="plugin.yml" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/plugin.yml">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="375">
+              <caret line="25" column="13" lean-forward="false" selection-start-line="25" selection-start-column="13" selection-end-line="25" selection-end-column="13" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="DataManager.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/me/varmetek/munchymc/backend/DataManager.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="-514">
+              <caret line="395" column="16" lean-forward="false" selection-start-line="395" selection-start-column="16" selection-end-line="395" selection-end-column="16" />
+              <folding>
+                <element signature="imports" expanded="true" />
+                <element signature="method#getUserFile#0;class#UserData#0;class#DataManager#0" expanded="true" />
+                <element signature="method#createUserFile#0;class#UserData#0;class#DataManager#0" expanded="true" />
+                <element signature="method#createUserFile#1;class#UserData#0;class#DataManager#0" expanded="true" />
+                <element signature="method#getUserFile#1;class#UserData#0;class#DataManager#0" expanded="true" />
+                <element signature="method#saveKit#0;class#KitData#0;class#DataManager#0" expanded="true" />
+                <element signature="method#saveKit#1;class#KitData#0;class#DataManager#0" expanded="true" />
+                <element signature="method#saveKits#0;class#KitData#0;class#DataManager#0" expanded="true" />
+                <element signature="method#convertEffects#0;class#KitData#0;class#DataManager#0" expanded="true" />
+                <element signature="method#loadKit#0;class#KitData#0;class#DataManager#0" expanded="true" />
+                <element signature="method#loadKit#1;class#KitData#0;class#DataManager#0" expanded="true" />
+                <element signature="method#loadKit#2;class#KitData#0;class#DataManager#0" expanded="true" />
+                <element signature="method#loadKits#0;class#KitData#0;class#DataManager#0" expanded="true" />
+                <element signature="method#removeKit#0;class#KitData#0;class#DataManager#0" expanded="true" />
+                <element signature="method#reloadKits#0;class#KitData#0;class#DataManager#0" expanded="true" />
+                <element signature="class#PointData#0;class#DataManager#0" expanded="true" />
+                <element signature="method#loadPoint#0;class#PointData#0;class#DataManager#0" expanded="true" />
+                <element signature="method#savePoint#0;class#PointData#0;class#DataManager#0" expanded="true" />
+                <element signature="method#saveAllPoints#0;class#PointData#0;class#DataManager#0" expanded="true" />
+                <element signature="method#loadllPoints#0;class#PointData#0;class#DataManager#0" expanded="true" />
+                <element signature="method#validateTrue#0;class#DataManager#0" expanded="true" />
+                <element signature="class#CoreFile#0;class#DataManager#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="CommandCheckInv.java" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/src/me/varmetek/munchymc/commands/CommandCheckInv.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="440">
+              <caret line="204" column="0" lean-forward="false" selection-start-line="204" selection-start-column="0" selection-end-line="204" selection-end-column="0" />
+              <folding>
+                <element signature="imports" expanded="true" />
+                <element signature="e#1012#1013#0" expanded="true" />
+                <element signature="e#1035#1036#0" expanded="true" />
+                <element signature="method#clean#0;class#CommandCheckInv#0" expanded="true" />
+                <element signature="method#supplyCmd#0;class#CommandCheckInv#0" expanded="true" />
+                <element signature="method#workInv#0;class#CommandCheckInv#0" expanded="true" />
+                <element signature="method#invClose#0;class#2863:6781" expanded="true" />
+                <element signature="method#onInvClick#0;class#2863:6781" expanded="true" />
+                <element signature="method#onInvPickUp#0;class#2863:6781" expanded="true" />
+                <element signature="method#onHandSwitch#0;class#2863:6781" expanded="true" />
+                <element signature="method#onKick#0;class#2863:6781" expanded="true" />
+                <element signature="method#onLeave#0;class#2863:6781" expanded="true" />
+                <element signature="method#onItemDrop#0;class#2863:6781" expanded="true" />
+                <element signature="method#onItemPick#0;class#2863:6781" expanded="true" />
+                <element signature="method#onHandSwap#0;class#2863:6781" expanded="true" />
+                <element signature="method#onHandSwap#1;class#2863:6781" expanded="true" />
+                <element signature="method#onHandSwap#2;class#2863:6781" expanded="true" />
+                <element signature="method#onHandSwap#3;class#2863:6781" expanded="true" />
+                <element signature="method#onHandSwap#4;class#2863:6781" expanded="true" />
+                <element signature="method#onHandSwap#5;class#2863:6781" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="Inventory.java" pinned="false" current-in-tab="false">
+        <entry file="file://$USER_HOME$/Desktop/Spigot Stuff/1.11.2/Spigot/Spigot-API/src/main/java/org/bukkit/inventory/Inventory.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="305">
+              <caret line="396" column="22" lean-forward="true" selection-start-line="396" selection-start-column="22" selection-end-line="396" selection-end-column="23" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="UtilFile.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/me/varmetek/munchymc/util/UtilFile.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="255">
+              <caret line="33" column="21" lean-forward="false" selection-start-line="33" selection-start-column="21" selection-end-line="33" selection-end-column="21" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="UtilInventory.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/me/varmetek/munchymc/util/UtilInventory.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="379">
+              <caret line="247" column="61" lean-forward="false" selection-start-line="247" selection-start-column="61" selection-end-line="247" selection-end-column="61" />
+              <folding>
+                <element signature="method#toInvMap#0;class#UtilInventory#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
       <file leaf-file-name="PointManager.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/me/varmetek/munchymc/backend/PointManager.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="281">
-              <caret line="41" column="18" lean-forward="false" selection-start-line="41" selection-start-column="18" selection-end-line="41" selection-end-column="18" />
+            <state relative-caret-position="251">
+              <caret line="26" column="15" lean-forward="false" selection-start-line="26" selection-start-column="15" selection-end-line="26" selection-end-column="15" />
               <folding>
                 <element signature="imports" expanded="true" />
-                <element signature="e#472#473#0" expanded="true" />
-                <element signature="e#515#516#0" expanded="true" />
-                <element signature="e#566#567#0" expanded="true" />
-                <element signature="e#610#611#0" expanded="true" />
                 <element signature="method#setPoint#0;class#PointManager#0" expanded="true" />
-                <element signature="e#907#908#0" expanded="true" />
-                <element signature="e#947#948#0" expanded="true" />
+                <element signature="method#delPoint#0;class#PointManager#0" expanded="true" />
                 <element signature="method#getPoint#0;class#PointManager#0" expanded="true" />
                 <element signature="method#setWarp#0;class#PointManager#0" expanded="true" />
                 <element signature="method#delWarp#0;class#PointManager#0" expanded="true" />
                 <element signature="method#isWarp#0;class#PointManager#0" expanded="true" />
                 <element signature="method#getWarp#0;class#PointManager#0" expanded="true" />
                 <element signature="method#isValid#0;class#PointManager#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="CommandMsg.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/me/varmetek/munchymc/commands/CommandMsg.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="410">
-              <caret line="80" column="16" lean-forward="false" selection-start-line="80" selection-start-column="16" selection-end-line="80" selection-end-column="16" />
-              <folding>
-                <element signature="imports" expanded="true" />
-                <element signature="e#2596#2597#0" expanded="true" />
-                <element signature="e#2617#2618#0" expanded="true" />
-                <element signature="method#msg#0;class#CommandMsg#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="Main.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/me/varmetek/munchymc/Main.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="461">
-              <caret line="255" column="27" lean-forward="false" selection-start-line="255" selection-start-column="27" selection-end-line="255" selection-end-column="27" />
-              <folding>
-                <element signature="imports" expanded="true" />
-                <element signature="method#Main#0;class#Main#0" expanded="true" />
-                <element signature="method#onEnable#0;class#Main#0" expanded="true" />
-                <element signature="method#checkDepends#0;class#Main#0" expanded="true" />
-                <element signature="method#getChatPlaceholderMap#0;class#Main#0" expanded="true" />
-                <element signature="class#5231:5518" expanded="false" />
-                <element signature="method#clean#0;class#5231:5518" expanded="true" />
-                <element signature="method#setupPermissions#0;class#Main#0" expanded="true" />
-                <element signature="method#setupChat#0;class#Main#0" expanded="true" />
-                <element signature="method#setupEconomy#0;class#Main#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="plugin.yml" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/plugin.yml">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="315">
-              <caret line="21" column="17" lean-forward="false" selection-start-line="21" selection-start-column="17" selection-end-line="21" selection-end-column="17" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="User.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/me/varmetek/munchymc/backend/User.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="275">
-              <caret line="171" column="0" lean-forward="false" selection-start-line="171" selection-start-column="0" selection-end-line="171" selection-end-column="0" />
-              <folding>
-                <element signature="method#setTestMode#0;class#User#0" expanded="false" />
-                <element signature="e#4868#4869#0" expanded="true" />
-                <element signature="e#4893#4894#0" expanded="true" />
-                <element signature="e#4936#4937#0" expanded="true" />
-                <element signature="e#4965#4966#0" expanded="true" />
-                <element signature="e#5000#5001#0" expanded="true" />
-                <element signature="e#5029#5030#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -177,30 +216,11 @@
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
-        <option value="$PROJECT_DIR$/src/me/varmetek/core/commands/CmdContainer.java" />
-        <option value="$PROJECT_DIR$/src/me/varmetek/core/commands/CmdBuilder.java" />
-        <option value="$PROJECT_DIR$/src/me/varmetek/core/service/Command.java" />
-        <option value="$PROJECT_DIR$/src/me/varmetek/core/commands/CmdLogic.java" />
-        <option value="$PROJECT_DIR$/src/me/varmetek/core/util/Messenger.java" />
-        <option value="$PROJECT_DIR$/src/me/varmetek/core/user/BaseUser.java" />
-        <option value="$PROJECT_DIR$/src/me/varmetek/core/commands/CmdTab.java" />
-        <option value="$PROJECT_DIR$/src/me/varmetek/munchymc/backend/kit/Kit.java" />
-        <option value="$PROJECT_DIR$/src/me/varmetek/core/service/EventSupplier.java" />
-        <option value="$PROJECT_DIR$/src/me/varmetek/core/commands/CmdSupplier.java" />
-        <option value="$PROJECT_DIR$/src/me/varmetek/core/commands/ElementManager.java" />
-        <option value="$PROJECT_DIR$/src/me/varmetek/core/service/CommandContainer.java" />
-        <option value="$PROJECT_DIR$/src/me/varmetek/core/service/ElementService.java" />
-        <option value="$PROJECT_DIR$/src/me/varmetek/core/commands/CmdManager.java" />
-        <option value="$PROJECT_DIR$/src/me/varmetek/munchymc/commands/CommandSave.java" />
-        <option value="$PROJECT_DIR$/src/me/varmetek/core/Event.java" />
-        <option value="$PROJECT_DIR$/src/me/varmetek/core/EventLogic.java" />
-        <option value="$PROJECT_DIR$/src/me/varmetek/munchymc/EventLogic.java" />
         <option value="$PROJECT_DIR$/src/me/varmetek/munchymc/fakeevents/EventLogic.java" />
         <option value="$PROJECT_DIR$/src/me/varmetek/munchymc/fakeevents/EvLogic.java" />
         <option value="$PROJECT_DIR$/src/me/varmetek/munchymc/fakeevents/EvEvent.java" />
         <option value="$PROJECT_DIR$/src/me/varmetek/core/service/ListenerSupplier.java" />
         <option value="$PROJECT_DIR$/src/me/varmetek/munchymc/commands/CommandJoin.java" />
-        <option value="$PROJECT_DIR$/src/me/varmetek/munchymc/commands/CommandKit.java" />
         <option value="$PROJECT_DIR$/src/me/varmetek/munchymc/commands/CommandLoad.java" />
         <option value="$PROJECT_DIR$/src/me/varmetek/munchymc/commands/CommandOpenInv.java" />
         <option value="$PROJECT_DIR$/src/me/varmetek/munchymc/commands/CommandProvisions.java" />
@@ -219,15 +239,34 @@
         <option value="$PROJECT_DIR$/src/me/varmetek/core/util/PluginMain.java" />
         <option value="$PROJECT_DIR$/src/me/varmetek/munchymc/backend/Point.java" />
         <option value="$PROJECT_DIR$/src/me/varmetek/munchymc/commands/CommandAction.java" />
-        <option value="$PROJECT_DIR$/src/me/varmetek/munchymc/backend/PointManager.java" />
         <option value="$PROJECT_DIR$/src/me/varmetek/munchymc/commands/CommandRares.java" />
-        <option value="$PROJECT_DIR$/src/me/varmetek/core/commands/CmdCommand.java" />
         <option value="$PROJECT_DIR$/src/me/varmetek/munchymc/commands/CommandWarps.java" />
         <option value="$PROJECT_DIR$/src/me/varmetek/munchymc/backend/User.java" />
         <option value="$PROJECT_DIR$/src/me/varmetek/munchymc/commands/CommandMsg.java" />
-        <option value="$PROJECT_DIR$/src/me/varmetek/munchymc/Main.java" />
-        <option value="$PROJECT_DIR$/src/plugin.yml" />
         <option value="$PROJECT_DIR$/src/me/varmetek/core/service/ElementManager.java" />
+        <option value="$PROJECT_DIR$/src/me/varmetek/munchymc/backend/hooks/HookPerm.java" />
+        <option value="$PROJECT_DIR$/src/me/varmetek/munchymc/backend/RareItemListener.java" />
+        <option value="$PROJECT_DIR$/src/me/varmetek/munchymc/rares/RareArtemisPlate.java" />
+        <option value="$PROJECT_DIR$/src/me/varmetek/munchymc/rares/RareHanSoloPants.java" />
+        <option value="$PROJECT_DIR$/src/me/varmetek/munchymc/rares/RareHawkEye.java" />
+        <option value="$PROJECT_DIR$/src/me/varmetek/munchymc/rares/RareHermesSandals.java" />
+        <option value="$PROJECT_DIR$/src/me/varmetek/munchymc/rares/RareOptimizer.java" />
+        <option value="$PROJECT_DIR$/src/me/varmetek/munchymc/rares/RareParkourBoots.java" />
+        <option value="$PROJECT_DIR$/src/me/varmetek/munchymc/rares/RareSuperChest.java" />
+        <option value="$PROJECT_DIR$/src/me/varmetek/munchymc/rares/RareVaderCape.java" />
+        <option value="$PROJECT_DIR$/src/me/varmetek/munchymc/rares/RareZuesBolt.java" />
+        <option value="$PROJECT_DIR$/src/me/varmetek/munchymc/MunchyMax.java" />
+        <option value="$PROJECT_DIR$/src/me/varmetek/munchymc/backend/kit/KitHandler.java" />
+        <option value="$PROJECT_DIR$/src/me/varmetek/munchymc/backend/kit/Kit.java" />
+        <option value="$PROJECT_DIR$/src/me/varmetek/munchymc/Main.java" />
+        <option value="$PROJECT_DIR$/src/me/varmetek/munchymc/backend/PointManager.java" />
+        <option value="$PROJECT_DIR$/src/me/varmetek/munchymc/backend/Kit.java" />
+        <option value="$PROJECT_DIR$/src/me/varmetek/munchymc/backend/KitHandler.java" />
+        <option value="$PROJECT_DIR$/src/me/varmetek/munchymc/commands/CommandKit.java" />
+        <option value="$PROJECT_DIR$/src/me/varmetek/core/commands/CmdCommand.java" />
+        <option value="$PROJECT_DIR$/src/plugin.yml" />
+        <option value="$PROJECT_DIR$/src/me/varmetek/munchymc/backend/DataManager.java" />
+        <option value="$PROJECT_DIR$/src/me/varmetek/munchymc/commands/CommandCheckInv.java" />
       </list>
     </option>
   </component>
@@ -466,6 +505,36 @@
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
+              <option name="myItemId" value="rares" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="MunchyFixes" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="MunchyFixes" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="src" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="me" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="varmetek" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="munchymc" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
               <option name="myItemId" value="commands" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
@@ -522,7 +591,15 @@
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
-              <option name="myItemId" value="core" />
+              <option name="myItemId" value="munchymc" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="backend" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="hooks" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
@@ -549,10 +626,6 @@
             </PATH_ELEMENT>
             <PATH_ELEMENT>
               <option name="myItemId" value="core" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="service" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
@@ -596,7 +669,47 @@
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
-              <option name="myItemId" value="assets" />
+              <option name="myItemId" value="src" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="ca" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="thederpygolems" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="armorequip" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="MunchyFixes" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="MunchyFixes" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="META-INF" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="MunchyFixes" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="MunchyFixes" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="bin" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
@@ -884,24 +997,25 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="1616" height="916" extended-state="6" />
-    <editor active="true" />
+    <editor active="false" />
     <layout>
       <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
-      <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3173971" sideWeight="0.49485862" order="6" side_tool="false" content_ui="tabs" />
+      <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.31673053" sideWeight="0.49485862" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Nl-Palette" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
-      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.0" sideWeight="0.30976865" order="8" side_tool="false" content_ui="tabs" />
+      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32950193" sideWeight="0.30784062" order="8" side_tool="false" content_ui="tabs" />
       <window_info id="Palette&#9;" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
       <window_info id="Image Layers" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Capture Analysis" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
-      <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.29246488" sideWeight="0.6902314" order="7" side_tool="true" content_ui="tabs" />
+      <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32950193" sideWeight="0.69215935" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="false" weight="0.33" sideWeight="0.5" order="10" side_tool="false" content_ui="tabs" />
       <window_info id="Properties" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
-      <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32934928" sideWeight="0.5" order="9" side_tool="false" content_ui="tabs" />
+      <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32822478" sideWeight="0.5" order="9" side_tool="false" content_ui="tabs" />
       <window_info id="Capture Tool" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Designer" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.3348329" sideWeight="0.82851636" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.30140486" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.24678664" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.0" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="UI Designer" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
@@ -913,7 +1027,6 @@
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
       <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
-      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.30140486" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
     </layout>
     <layout-to-restore>
       <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
@@ -959,12 +1072,6 @@
           <option name="timeStamp" value="12" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/me/varmetek/munchymc/rares/RareOptimizer.java</url>
-          <line>340</line>
-          <properties />
-          <option name="timeStamp" value="31" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
           <url>jar://$PROJECT_DIR$/assets/spigot-1.11.2.jar!/net/minecraft/server/v1_11_R1/BlockPurpurSlab.class</url>
           <line>80</line>
           <properties />
@@ -984,21 +1091,9 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/me/varmetek/munchymc/rares/RareArtemisPlate.java</url>
-          <line>32</line>
-          <properties />
-          <option name="timeStamp" value="42" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/me/varmetek/munchymc/rares/RareArtemisPlate.java</url>
-          <line>24</line>
+          <line>25</line>
           <properties />
           <option name="timeStamp" value="43" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/me/varmetek/munchymc/rares/RareParkourBoots.java</url>
-          <line>196</line>
-          <properties />
-          <option name="timeStamp" value="48" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>jar://$PROJECT_DIR$/assets/spigot-1.11.2.jar!/org/bukkit/craftbukkit/v1_11_R1/inventory/CraftMetaItem.class</url>
@@ -1014,13 +1109,13 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/me/varmetek/munchymc/backend/DataManager.java</url>
-          <line>633</line>
+          <line>688</line>
           <properties />
           <option name="timeStamp" value="90" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/me/varmetek/munchymc/backend/DataManager.java</url>
-          <line>596</line>
+          <line>651</line>
           <properties />
           <option name="timeStamp" value="95" />
         </line-breakpoint>
@@ -1068,15 +1163,9 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/me/varmetek/munchymc/rares/RareArtemisPlate.java</url>
-          <line>19</line>
+          <line>20</line>
           <properties />
           <option name="timeStamp" value="114" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/me/varmetek/munchymc/rares/RareParkourBoots.java</url>
-          <line>231</line>
-          <properties />
-          <option name="timeStamp" value="116" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/me/varmetek/munchymc/listeners/EnchantmentListener.java</url>
@@ -1092,27 +1181,21 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/me/varmetek/munchymc/Main.java</url>
-          <line>149</line>
+          <line>141</line>
           <properties />
           <option name="timeStamp" value="126" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/me/varmetek/munchymc/Main.java</url>
-          <line>377</line>
+          <line>369</line>
           <properties />
           <option name="timeStamp" value="130" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/me/varmetek/munchymc/Main.java</url>
-          <line>353</line>
+          <line>345</line>
           <properties />
           <option name="timeStamp" value="133" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/me/varmetek/munchymc/backend/kit/KitHandler.java</url>
-          <line>16</line>
-          <properties />
-          <option name="timeStamp" value="150" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/me/varmetek/core/util/TaskHandler.java</url>
@@ -1206,7 +1289,7 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/me/varmetek/munchymc/Main.java</url>
-          <line>77</line>
+          <line>74</line>
           <properties />
           <option name="timeStamp" value="178" />
         </line-breakpoint>
@@ -1242,13 +1325,13 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/me/varmetek/munchymc/backend/RareItemListener.java</url>
-          <line>15</line>
+          <line>16</line>
           <properties />
           <option name="timeStamp" value="184" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/me/varmetek/munchymc/rares/RareHanSoloPants.java</url>
-          <line>24</line>
+          <line>25</line>
           <properties />
           <option name="timeStamp" value="185" />
         </line-breakpoint>
@@ -1272,7 +1355,7 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/me/varmetek/munchymc/backend/RareItemListener.java</url>
-          <line>25</line>
+          <line>26</line>
           <properties />
           <option name="timeStamp" value="197" />
         </line-breakpoint>
@@ -1362,25 +1445,19 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/me/varmetek/munchymc/MunchyMax.java</url>
-          <line>49</line>
-          <properties />
-          <option name="timeStamp" value="234" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/me/varmetek/munchymc/MunchyMax.java</url>
-          <line>61</line>
+          <line>55</line>
           <properties />
           <option name="timeStamp" value="235" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/me/varmetek/munchymc/MunchyMax.java</url>
-          <line>67</line>
+          <line>61</line>
           <properties />
           <option name="timeStamp" value="236" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/me/varmetek/munchymc/MunchyMax.java</url>
-          <line>73</line>
+          <line>67</line>
           <properties />
           <option name="timeStamp" value="237" />
         </line-breakpoint>
@@ -1446,7 +1523,7 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/me/varmetek/munchymc/Main.java</url>
-          <line>216</line>
+          <line>208</line>
           <properties />
           <option name="timeStamp" value="254" />
         </line-breakpoint>
@@ -1524,7 +1601,7 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/me/varmetek/munchymc/backend/DataManager.java</url>
-          <line>208</line>
+          <line>132</line>
           <properties />
           <option name="timeStamp" value="276" />
         </line-breakpoint>
@@ -1541,8 +1618,8 @@
           <option name="timeStamp" value="285" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/me/varmetek/munchymc/backend/kit/Kit.java</url>
-          <line>67</line>
+          <url>file://$PROJECT_DIR$/src/me/varmetek/munchymc/backend/Kit.java</url>
+          <line>65</line>
           <properties />
           <option name="timeStamp" value="286" />
         </line-breakpoint>
@@ -1557,12 +1634,6 @@
           <line>112</line>
           <properties />
           <option name="timeStamp" value="291" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/me/varmetek/munchymc/commands/CommandKit.java</url>
-          <line>32</line>
-          <properties />
-          <option name="timeStamp" value="295" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/me/varmetek/munchymc/commands/ShopView.java</url>
@@ -1582,11 +1653,47 @@
           <properties />
           <option name="timeStamp" value="305" />
         </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-method">
-          <url>file://$PROJECT_DIR$/src/me/varmetek/munchymc/rares/RareParkourBoots.java</url>
-          <line>195</line>
-          <properties class="me.varmetek.munchymc.rares.RareParkourBoots" method="walk" />
-          <option name="timeStamp" value="49" />
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/me/varmetek/munchymc/Main.java</url>
+          <line>304</line>
+          <properties />
+          <option name="timeStamp" value="307" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/me/varmetek/munchymc/backend/DataManager.java</url>
+          <line>473</line>
+          <properties />
+          <option name="timeStamp" value="310" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/me/varmetek/munchymc/backend/DataManager.java</url>
+          <line>621</line>
+          <properties />
+          <option name="timeStamp" value="315" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/me/varmetek/munchymc/backend/DataManager.java</url>
+          <line>139</line>
+          <properties />
+          <option name="timeStamp" value="316" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/me/varmetek/munchymc/backend/DataManager.java</url>
+          <line>142</line>
+          <properties />
+          <option name="timeStamp" value="317" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/me/varmetek/munchymc/backend/DataManager.java</url>
+          <line>376</line>
+          <properties />
+          <option name="timeStamp" value="318" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/me/varmetek/munchymc/commands/CommandCheckInv.java</url>
+          <line>102</line>
+          <properties />
+          <option name="timeStamp" value="319" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-method">
           <url>jar://$PROJECT_DIR$/assets/spigot-1.11.2.jar!/org/bukkit/craftbukkit/v1_11_R1/inventory/CraftMetaItem.class</url>
@@ -1602,7 +1709,7 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-method">
           <url>file://$PROJECT_DIR$/src/me/varmetek/munchymc/Main.java</url>
-          <line>152</line>
+          <line>144</line>
           <properties class="me.varmetek.munchymc.Main" method="getDataManager" />
           <option name="timeStamp" value="125" />
         </line-breakpoint>
@@ -1650,7 +1757,7 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-method">
           <url>file://$PROJECT_DIR$/src/me/varmetek/munchymc/rares/RareHanSoloPants.java</url>
-          <line>23</line>
+          <line>24</line>
           <properties class="me.varmetek.munchymc.rares.RareHanSoloPants" method="check" />
           <option name="timeStamp" value="186" />
         </line-breakpoint>
@@ -1668,7 +1775,7 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-method">
           <url>file://$PROJECT_DIR$/src/me/varmetek/munchymc/backend/DataManager.java</url>
-          <line>207</line>
+          <line>131</line>
           <properties class="me.varmetek.munchymc.backend.DataManager.UserData" method="getUserDataFileName" />
           <option name="timeStamp" value="277" />
         </line-breakpoint>
@@ -1696,8 +1803,14 @@
           <properties class="me.varmetek.munchymc.listeners.ElytraListener" />
           <option name="timeStamp" value="301" />
         </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-method">
+          <url>file://$PROJECT_DIR$/src/me/varmetek/munchymc/backend/KitHandler.java</url>
+          <line>49</line>
+          <properties class="me.varmetek.munchymc.backend.KitHandler" method="getKits" />
+          <option name="timeStamp" value="312" />
+        </line-breakpoint>
       </breakpoints>
-      <option name="time" value="306" />
+      <option name="time" value="320" />
     </breakpoint-manager>
     <watches-manager />
   </component>
@@ -1706,358 +1819,6 @@
     <option name="FILTER_TARGETS" value="false" />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/src/me/varmetek/core/service/ListenerSupplier.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="135">
-          <caret line="9" column="25" lean-forward="false" selection-start-line="9" selection-start-column="25" selection-end-line="9" selection-end-column="25" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/me/varmetek/munchymc/commands/CommandJoin.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="360">
-          <caret line="134" column="32" lean-forward="false" selection-start-line="134" selection-start-column="32" selection-end-line="134" selection-end-column="32" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/me/varmetek/munchymc/commands/CommandKit.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="270">
-          <caret line="211" column="32" lean-forward="false" selection-start-line="211" selection-start-column="32" selection-end-line="211" selection-end-column="32" />
-          <folding>
-            <element signature="imports" expanded="true" />
-            <element signature="method#forKit#0;class#CommandKit#0" expanded="true" />
-            <element signature="method#forHelpCommand#0;class#CommandKit#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/me/varmetek/munchymc/commands/CommandLoad.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="405">
-          <caret line="50" column="32" lean-forward="false" selection-start-line="50" selection-start-column="32" selection-end-line="50" selection-end-column="32" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/me/varmetek/munchymc/commands/CommandOpenInv.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="420">
-          <caret line="138" column="33" lean-forward="false" selection-start-line="138" selection-start-column="33" selection-end-line="138" selection-end-column="33" />
-          <folding>
-            <element signature="class#2268:3538" expanded="false" />
-            <element signature="e#4141#4142#0" expanded="true" />
-            <element signature="e#4162#4163#0" expanded="true" />
-            <element signature="method#clean#0;class#CommandOpenInv#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/me/varmetek/munchymc/commands/CommandProvisions.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="630">
-          <caret line="47" column="32" lean-forward="false" selection-start-line="47" selection-start-column="32" selection-end-line="47" selection-end-column="32" />
-          <folding>
-            <element signature="imports" expanded="true" />
-            <element signature="method#CommandProvisions#0;class#CommandProvisions#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/me/varmetek/munchymc/commands/CommandRank.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="480">
-          <caret line="121" column="32" lean-forward="false" selection-start-line="121" selection-start-column="32" selection-end-line="121" selection-end-column="32" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/me/varmetek/munchymc/commands/CommandTest.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="635">
-          <caret line="58" column="29" lean-forward="false" selection-start-line="58" selection-start-column="29" selection-end-line="58" selection-end-column="29" />
-          <folding>
-            <element signature="imports" expanded="true" />
-            <element signature="method#CommandTest#0;class#CommandTest#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/me/varmetek/munchymc/fakeevents/EvManager.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="300">
-          <caret line="20" column="7" lean-forward="false" selection-start-line="20" selection-start-column="7" selection-end-line="20" selection-end-column="7" />
-          <folding>
-            <element signature="imports" expanded="false" />
-            <element signature="class#HandlerList#0;class#EvManager#0" expanded="false" />
-            <element signature="method#register#0;class#HandlerList#0;class#EvManager#0" expanded="false" />
-            <element signature="method#registerall#0;class#HandlerList#0;class#EvManager#0" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/me/varmetek/munchymc/fakeevents/EvSupplier.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="105">
-          <caret line="7" column="12" lean-forward="false" selection-start-line="7" selection-start-column="12" selection-end-line="7" selection-end-column="12" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/me/varmetek/core/commands/CmdSupplier.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="135">
-          <caret line="9" column="2" lean-forward="false" selection-start-line="9" selection-start-column="2" selection-end-line="9" selection-end-column="27" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/me/varmetek/munchymc/listeners/ElytraListener.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="360">
-          <caret line="82" column="15" lean-forward="false" selection-start-line="82" selection-start-column="15" selection-end-line="82" selection-end-column="15" />
-          <folding>
-            <element signature="e#832#2064#0" expanded="true" />
-            <element signature="e#2063#2064#0" expanded="true" />
-            <element signature="method#clean#0;class#ElytraListener#0" expanded="true" />
-            <element signature="e#2154#2155#0" expanded="true" />
-            <element signature="e#2172#2173#0" expanded="true" />
-            <element signature="e#2220#2221#0" expanded="true" />
-            <element signature="e#2238#2239#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/me/varmetek/munchymc/listeners/UserTestModeChangeEvent.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="60">
-          <caret line="8" column="13" lean-forward="false" selection-start-line="8" selection-start-column="13" selection-end-line="8" selection-end-column="13" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/me/varmetek/munchymc/listeners/TickListener.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="75">
-          <caret line="5" column="17" lean-forward="false" selection-start-line="5" selection-start-column="17" selection-end-line="5" selection-end-column="17" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/me/varmetek/munchymc/listeners/EnchantmentListener.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-490">
-          <caret line="27" column="0" lean-forward="false" selection-start-line="27" selection-start-column="0" selection-end-line="27" selection-end-column="0" />
-          <folding>
-            <element signature="method#EnchantmentListener#0;class#EnchantmentListener#0" expanded="true" />
-            <element signature="method#clean#0;class#EnchantmentListener#0" expanded="true" />
-            <element signature="e#5353#5354#0" expanded="true" />
-            <element signature="e#5371#5372#0" expanded="true" />
-            <element signature="e#5419#5420#0" expanded="true" />
-            <element signature="e#5439#5440#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/me/varmetek/munchymc/listeners/ChatListener.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-1132">
-          <caret line="27" column="13" lean-forward="false" selection-start-line="27" selection-start-column="13" selection-end-line="27" selection-end-column="13" />
-          <folding>
-            <element signature="method#ChatListener#0;class#ChatListener#0" expanded="true" />
-            <element signature="e#1632#2911#0" expanded="true" />
-            <element signature="e#2910#2911#0" expanded="true" />
-            <element signature="method#clean#0;class#ChatListener#0" expanded="true" />
-            <element signature="e#10647#10648#0" expanded="true" />
-            <element signature="e#10665#10666#0" expanded="true" />
-            <element signature="e#10713#10714#0" expanded="true" />
-            <element signature="e#10735#10736#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/ca/thederpygolems/armorequip/ArmorListener.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="240">
-          <caret line="39" column="9" lean-forward="false" selection-start-line="39" selection-start-column="9" selection-end-line="39" selection-end-column="9" />
-          <folding>
-            <element signature="method#ArmorListener#0;class#ArmorListener#0" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/me/varmetek/munchymc/commands/ShopView.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="105">
-          <caret line="25" column="13" lean-forward="false" selection-start-line="25" selection-start-column="13" selection-end-line="25" selection-end-column="13" />
-          <folding>
-            <element signature="method#ShopView#0;class#ShopView#0" expanded="true" />
-            <element signature="method#clickHead#0;class#963:2211" expanded="true" />
-            <element signature="method#closeInventory#0;class#963:2211" expanded="true" />
-            <element signature="method#clean#0;class#ShopView#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/me/varmetek/core/service/Element.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="150">
-          <caret line="10" column="2" lean-forward="false" selection-start-line="10" selection-start-column="2" selection-end-line="10" selection-end-column="2" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/me/varmetek/munchymc/listeners/MixedListener.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="177">
-          <caret line="281" column="0" lean-forward="false" selection-start-line="281" selection-start-column="0" selection-end-line="281" selection-end-column="0" />
-          <folding>
-            <element signature="method#death#0;class#1463:8697" expanded="true" />
-            <element signature="method#MixedListener#0;class#MixedListener#0" expanded="true" />
-            <element signature="method#clean#0;class#MixedListener#0" expanded="true" />
-            <element signature="e#9477#9478#0" expanded="true" />
-            <element signature="e#9495#9496#0" expanded="true" />
-            <element signature="e#9543#9544#0" expanded="true" />
-            <element signature="e#9563#9564#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/me/varmetek/munchymc/commands/CommandShop.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="180">
-          <caret line="19" column="9" lean-forward="false" selection-start-line="19" selection-start-column="9" selection-end-line="19" selection-end-column="9" />
-          <folding>
-            <element signature="method#CommandShop#0;class#CommandShop#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$USER_HOME$/Desktop/Spigot Stuff/1.11.2/Spigot/Spigot-API/src/main/java/org/bukkit/plugin/PluginDescriptionFile.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1853">
-          <caret line="555" column="2" lean-forward="false" selection-start-line="555" selection-start-column="2" selection-end-line="555" selection-end-column="2" />
-          <folding>
-            <element signature="docComment;method#getDescription#0;class#PluginDescriptionFile#0" expanded="false" />
-            <element signature="docComment;method#getLoad#0;class#PluginDescriptionFile#0" expanded="false" />
-            <element signature="docComment;method#getAuthors#0;class#PluginDescriptionFile#0" expanded="false" />
-            <element signature="docComment;method#getWebsite#0;class#PluginDescriptionFile#0" expanded="false" />
-            <element signature="docComment;method#isDatabaseEnabled#0;class#PluginDescriptionFile#0" expanded="false" />
-            <element signature="docComment;method#getDepend#0;class#PluginDescriptionFile#0" expanded="false" />
-            <element signature="docComment;method#getSoftDepend#0;class#PluginDescriptionFile#0" expanded="false" />
-            <element signature="docComment;method#getLoadBefore#0;class#PluginDescriptionFile#0" expanded="false" />
-            <element signature="docComment;method#getPrefix#0;class#PluginDescriptionFile#0" expanded="false" />
-            <element signature="docComment;method#getCommands#0;class#PluginDescriptionFile#0" expanded="false" />
-            <element signature="docComment;method#getPermissions#0;class#PluginDescriptionFile#0" expanded="false" />
-            <element signature="docComment;method#getPermissionDefault#0;class#PluginDescriptionFile#0" expanded="false" />
-            <element signature="docComment;method#getAwareness#0;class#PluginDescriptionFile#0" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/me/varmetek/munchymc/backend/Points.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="105">
-          <caret line="11" column="13" lean-forward="false" selection-start-line="11" selection-start-column="13" selection-end-line="11" selection-end-column="13" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$USER_HOME$/Desktop/Spigot Stuff/1.11.2/Spigot/Spigot-API/src/main/java/org/bukkit/Location.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="105">
-          <caret line="14" column="13" lean-forward="false" selection-start-line="14" selection-start-column="13" selection-end-line="14" selection-end-column="13" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="jar://$PROJECT_DIR$/assets/spigot-1.11.2.jar!/org/apache/commons/lang/Validate.class">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="455">
-          <caret line="91" column="21" lean-forward="false" selection-start-line="91" selection-start-column="21" selection-end-line="91" selection-end-column="21" />
-          <folding>
-            <element signature="e#2411#2412#0" expanded="true" />
-            <element signature="e#2470#2471#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/me/varmetek/core/util/PluginMain.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="300">
-          <caret line="24" column="42" lean-forward="true" selection-start-line="24" selection-start-column="42" selection-end-line="24" selection-end-column="42" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/me/varmetek/munchymc/backend/UserHandler.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="315">
-          <caret line="71" column="4" lean-forward="false" selection-start-line="71" selection-start-column="4" selection-end-line="71" selection-end-column="4" />
-          <folding>
-            <element signature="e#2541#2542#0" expanded="true" />
-            <element signature="e#2559#2560#0" expanded="true" />
-            <element signature="e#2607#2608#0" expanded="true" />
-            <element signature="e#2627#2628#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/me/varmetek/munchymc/backend/Point.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="255">
-          <caret line="17" column="3" lean-forward="true" selection-start-line="17" selection-start-column="3" selection-end-line="17" selection-end-column="3" />
-          <folding>
-            <element signature="imports" expanded="true" />
-            <element signature="method#Point#0;class#Point#0" expanded="true" />
-            <element signature="e#432#433#0" expanded="true" />
-            <element signature="e#508#509#0" expanded="true" />
-            <element signature="class#Builder#0;class#Point#0" expanded="true" />
-            <element signature="method#setLocation#0;class#Builder#0;class#Point#0" expanded="true" />
-            <element signature="e#869#870#0" expanded="true" />
-            <element signature="e#909#910#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="jar://$PROJECT_DIR$/assets/spigot-1.11.2.jar!/com/google/common/collect/HashBasedTable.class">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="30">
-          <caret line="5" column="31" lean-forward="false" selection-start-line="5" selection-start-column="31" selection-end-line="5" selection-end-column="31" />
-          <folding>
-            <element signature="e#1475#1476#0" expanded="true" />
-            <element signature="e#1511#1512#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="jar://$PROJECT_DIR$/assets/spigot-1.11.2.jar!/com/google/common/collect/Tables.class">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="38">
-          <caret line="34" column="97" lean-forward="true" selection-start-line="34" selection-start-column="97" selection-end-line="34" selection-end-column="97" />
-          <folding>
-            <element signature="e#1201#1342#0" expanded="true" />
-            <element signature="e#1341#1342#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="jar://$PROJECT_DIR$/assets/spigot-1.11.2.jar!/com/google/common/collect/StandardTable.class">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="105">
-          <caret line="37" column="6" lean-forward="false" selection-start-line="37" selection-start-column="6" selection-end-line="37" selection-end-column="6" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/me/varmetek/munchymc/commands/CommandAction.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="200">
@@ -2169,43 +1930,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/me/varmetek/core/commands/CmdCommand.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="483">
-          <caret line="140" column="60" lean-forward="false" selection-start-line="140" selection-start-column="60" selection-end-line="140" selection-end-column="60" />
-          <folding>
-            <element signature="method#Builder#0;class#Builder#0;class#CmdCommand#0" expanded="true" />
-            <element signature="method#Builder#1;class#Builder#0;class#CmdCommand#0" expanded="true" />
-            <element signature="method#setLogic#0;class#Builder#0;class#CmdCommand#0" expanded="true" />
-            <element signature="method#setDescription#0;class#Builder#0;class#CmdCommand#0" expanded="false" />
-            <element signature="method#setPermission#0;class#Builder#0;class#CmdCommand#0" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/me/varmetek/munchymc/backend/PointManager.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="281">
-          <caret line="41" column="18" lean-forward="false" selection-start-line="41" selection-start-column="18" selection-end-line="41" selection-end-column="18" />
-          <folding>
-            <element signature="imports" expanded="true" />
-            <element signature="e#472#473#0" expanded="true" />
-            <element signature="e#515#516#0" expanded="true" />
-            <element signature="e#566#567#0" expanded="true" />
-            <element signature="e#610#611#0" expanded="true" />
-            <element signature="method#setPoint#0;class#PointManager#0" expanded="true" />
-            <element signature="e#907#908#0" expanded="true" />
-            <element signature="e#947#948#0" expanded="true" />
-            <element signature="method#getPoint#0;class#PointManager#0" expanded="true" />
-            <element signature="method#setWarp#0;class#PointManager#0" expanded="true" />
-            <element signature="method#delWarp#0;class#PointManager#0" expanded="true" />
-            <element signature="method#isWarp#0;class#PointManager#0" expanded="true" />
-            <element signature="method#getWarp#0;class#PointManager#0" expanded="true" />
-            <element signature="method#isValid#0;class#PointManager#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/me/varmetek/core/user/BaseUser.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="105">
@@ -2259,37 +1983,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/me/varmetek/munchymc/Main.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="461">
-          <caret line="255" column="27" lean-forward="false" selection-start-line="255" selection-start-column="27" selection-end-line="255" selection-end-column="27" />
-          <folding>
-            <element signature="imports" expanded="true" />
-            <element signature="method#Main#0;class#Main#0" expanded="true" />
-            <element signature="method#onEnable#0;class#Main#0" expanded="true" />
-            <element signature="method#checkDepends#0;class#Main#0" expanded="true" />
-            <element signature="method#getChatPlaceholderMap#0;class#Main#0" expanded="true" />
-            <element signature="class#5231:5518" expanded="false" />
-            <element signature="method#clean#0;class#5231:5518" expanded="true" />
-            <element signature="method#setupPermissions#0;class#Main#0" expanded="true" />
-            <element signature="method#setupChat#0;class#Main#0" expanded="true" />
-            <element signature="method#setupEconomy#0;class#Main#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/plugin.yml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="315">
-          <caret line="21" column="17" lean-forward="false" selection-start-line="21" selection-start-column="17" selection-end-line="21" selection-end-column="17" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/me/varmetek/core/service/ElementManager.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="425">
-          <caret line="104" column="39" lean-forward="true" selection-start-line="104" selection-start-column="39" selection-end-line="104" selection-end-column="39" />
+          <caret line="104" column="39" lean-forward="false" selection-start-line="104" selection-start-column="39" selection-end-line="104" selection-end-column="39" />
           <folding>
             <element signature="imports" expanded="true" />
             <element signature="method#ElementManager#0;class#ElementManager#0" expanded="true" />
@@ -2302,6 +1999,452 @@
             <element signature="method#register#1;class#ElementManager#0" expanded="true" />
             <element signature="method#onCommand#0;class#ElementManager#0" expanded="true" />
             <element signature="method#clean#0;class#ElementManager#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/me/varmetek/munchymc/backend/hooks/HookPerm.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="210">
+          <caret line="22" column="2" lean-forward="false" selection-start-line="22" selection-start-column="2" selection-end-line="22" selection-end-column="2" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/me/varmetek/munchymc/backend/hooks/HookGroupMan.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="105">
+          <caret line="10" column="13" lean-forward="false" selection-start-line="10" selection-start-column="13" selection-end-line="10" selection-end-column="13" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/me/varmetek/munchymc/backend/RareItemListener.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="405">
+          <caret line="49" column="16" lean-forward="false" selection-start-line="49" selection-start-column="16" selection-end-line="49" selection-end-column="16" />
+          <folding>
+            <element signature="e#1359#1360#0" expanded="true" />
+            <element signature="e#1379#1380#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/me/varmetek/munchymc/rares/RareArtemisPlate.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="377">
+          <caret line="59" column="5" lean-forward="false" selection-start-line="59" selection-start-column="5" selection-end-line="59" selection-end-column="5" />
+          <folding>
+            <element signature="imports" expanded="true" />
+            <element signature="method#clean#0;class#RareArtemisPlate#0" expanded="true" />
+            <element signature="e#807#1363#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/me/varmetek/munchymc/rares/RareHanSoloPants.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="440">
+          <caret line="45" column="0" lean-forward="false" selection-start-line="45" selection-start-column="0" selection-end-line="45" selection-end-column="0" />
+          <folding>
+            <element signature="imports" expanded="true" />
+            <element signature="method#clean#0;class#RareHanSoloPants#0" expanded="true" />
+            <element signature="e#768#930#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/me/varmetek/munchymc/rares/RareHawkEye.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="440">
+          <caret line="65" column="0" lean-forward="false" selection-start-line="65" selection-start-column="0" selection-end-line="65" selection-end-column="0" />
+          <folding>
+            <element signature="method#clean#0;class#RareHawkEye#0" expanded="true" />
+            <element signature="e#852#1383#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/me/varmetek/munchymc/rares/RareHermesSandals.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="440">
+          <caret line="92" column="0" lean-forward="false" selection-start-line="92" selection-start-column="0" selection-end-line="92" selection-end-column="0" />
+          <folding>
+            <element signature="method#clean#0;class#RareHermesSandals#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/me/varmetek/munchymc/rares/RareOptimizer.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1070">
+          <caret line="366" column="0" lean-forward="false" selection-start-line="366" selection-start-column="0" selection-end-line="366" selection-end-column="0" />
+          <folding>
+            <element signature="method#clean#0;class#RareOptimizer#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/me/varmetek/munchymc/rares/RareParkourBoots.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1080">
+          <caret line="255" column="0" lean-forward="false" selection-start-line="255" selection-start-column="0" selection-end-line="255" selection-end-column="0" />
+          <folding>
+            <element signature="method#clean#0;class#RareParkourBoots#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/me/varmetek/munchymc/rares/RareSuperChest.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="420">
+          <caret line="53" column="0" lean-forward="false" selection-start-line="53" selection-start-column="0" selection-end-line="53" selection-end-column="0" />
+          <folding>
+            <element signature="method#clean#0;class#RareSuperChest#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/me/varmetek/munchymc/rares/RareVaderCape.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="440">
+          <caret line="67" column="0" lean-forward="false" selection-start-line="67" selection-start-column="0" selection-end-line="67" selection-end-column="0" />
+          <folding>
+            <element signature="imports" expanded="true" />
+            <element signature="method#clean#0;class#RareVaderCape#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/me/varmetek/munchymc/rares/RareZuesBolt.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="21">
+          <caret line="90" column="18" lean-forward="false" selection-start-line="90" selection-start-column="18" selection-end-line="90" selection-end-column="18" />
+          <folding>
+            <element signature="imports" expanded="true" />
+            <element signature="method#onRightClick#0;class#RareZuesBolt#0" expanded="true" />
+            <element signature="method#inSight#0;class#RareZuesBolt#0" expanded="true" />
+            <element signature="method#clean#0;class#RareZuesBolt#0" expanded="true" />
+            <element signature="method#supplyListener#0;class#RareZuesBolt#0" expanded="true" />
+            <element signature="e#5344#7064#0" expanded="true" />
+            <element signature="e#7063#7064#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/me/varmetek/core/util/SimpleMap.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="332">
+          <caret line="73" column="0" lean-forward="true" selection-start-line="73" selection-start-column="0" selection-end-line="73" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$USER_HOME$/Desktop/Spigot Stuff/1.11.2/Spigot/Spigot-API/src/main/java/org/bukkit/configuration/serialization/ConfigurationSerializable.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="227">
+          <caret line="23" column="17" lean-forward="false" selection-start-line="23" selection-start-column="17" selection-end-line="23" selection-end-column="17" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://$PROJECT_DIR$/assets/spigot-1.11.2.jar!/com/google/common/collect/ImmutableMap.class">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="246">
+          <caret line="65" column="42" lean-forward="false" selection-start-line="65" selection-start-column="42" selection-end-line="65" selection-end-column="42" />
+          <folding>
+            <element signature="method#of#5;class#ImmutableMap#0" expanded="true" />
+            <element signature="method#values#0;class#ImmutableMap#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/me/varmetek/munchymc/backend/Point.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="255">
+          <caret line="17" column="3" lean-forward="true" selection-start-line="17" selection-start-column="3" selection-end-line="17" selection-end-column="3" />
+          <folding>
+            <element signature="imports" expanded="true" />
+            <element signature="method#Point#0;class#Point#0" expanded="true" />
+            <element signature="class#Builder#0;class#Point#0" expanded="true" />
+            <element signature="method#setLocation#0;class#Builder#0;class#Point#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/me/varmetek/munchymc/MunchyMax.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="152">
+          <caret line="46" column="0" lean-forward="false" selection-start-line="46" selection-start-column="0" selection-end-line="46" selection-end-column="0" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/me/varmetek/munchymc/backend/Kit.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-60">
+          <caret line="16" column="13" lean-forward="false" selection-start-line="16" selection-start-column="13" selection-end-line="16" selection-end-column="13" />
+          <folding>
+            <element signature="imports" expanded="true" />
+            <element signature="method#Kit#0;class#Kit#0" expanded="true" />
+            <element signature="method#apply#0;class#Kit#0" expanded="true" />
+            <element signature="e#1655#1656#0" expanded="true" />
+            <element signature="e#1679#1680#0" expanded="true" />
+            <element signature="class#Builder#0;class#Kit#0" expanded="true" />
+            <element signature="method#setInventory#0;class#Builder#0;class#Kit#0" expanded="true" />
+            <element signature="method#setInventory#1;class#Builder#0;class#Kit#0" expanded="true" />
+            <element signature="method#setEffects#0;class#Builder#0;class#Kit#0" expanded="true" />
+            <element signature="method#setEffects#1;class#Builder#0;class#Kit#0" expanded="true" />
+            <element signature="method#fromPlayer#0;class#Builder#0;class#Kit#0" expanded="true" />
+            <element signature="method#fromKit#0;class#Builder#0;class#Kit#0" expanded="true" />
+            <element signature="method#build#0;class#Builder#0;class#Kit#0" expanded="true" />
+            <marker date="1494131329578" expanded="false" signature="1362:1366" ph=" { " />
+            <marker date="1494131329578" expanded="false" signature="1381:1384" ph=" }" />
+            <marker date="1494131329578" expanded="false" signature="1425:1429" ph=" { " />
+            <marker date="1494131329578" expanded="false" signature="1465:1468" ph=" }" />
+            <marker date="1494131329578" expanded="false" signature="1519:1524" ph=" { " />
+            <marker date="1494131329578" expanded="false" signature="1547:1550" ph=" }" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://C:/Program Files/Java/jdk1.8.0_31/src.zip!/java/util/Collections.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="165">
+          <caret line="4426" column="25" lean-forward="false" selection-start-line="4426" selection-start-column="25" selection-end-line="4426" selection-end-column="25" />
+          <folding>
+            <element signature="e#175299#175300#0" expanded="false" />
+            <element signature="e#175342#175343#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$USER_HOME$/Desktop/Spigot Stuff/1.11.2/Spigot/Spigot-API/src/main/java/org/bukkit/potion/PotionEffect.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="165">
+          <caret line="97" column="11" lean-forward="false" selection-start-line="97" selection-start-column="11" selection-end-line="97" selection-end-column="11" />
+          <folding>
+            <element signature="method#PotionEffect#4;class#PotionEffect#0" expanded="true" />
+            <element signature="method#serialize#0;class#PotionEffect#0" expanded="true" />
+            <element signature="e#4860#4876#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/me/varmetek/munchymc/backend/KitHandler.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="302">
+          <caret line="60" column="17" lean-forward="false" selection-start-line="60" selection-start-column="17" selection-end-line="60" selection-end-column="17" />
+          <folding>
+            <element signature="imports" expanded="true" />
+            <element signature="method#KitHandler#0;class#KitHandler#0" expanded="true" />
+            <element signature="e#541#542#0" expanded="true" />
+            <element signature="e#592#593#0" expanded="true" />
+            <element signature="e#936#937#0" expanded="true" />
+            <element signature="e#981#982#0" expanded="true" />
+            <element signature="method#getKits#0;class#KitHandler#0" expanded="true" />
+            <element signature="e#1141#1142#0" expanded="true" />
+            <element signature="e#1162#1163#0" expanded="true" />
+            <element signature="method#clean#0;class#KitHandler#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/me/varmetek/munchymc/Main.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="390">
+          <caret line="236" column="18" lean-forward="false" selection-start-line="236" selection-start-column="18" selection-end-line="236" selection-end-column="18" />
+          <folding>
+            <element signature="imports" expanded="true" />
+            <element signature="method#Main#0;class#Main#0" expanded="true" />
+            <element signature="method#onEnable#0;class#Main#0" expanded="true" />
+            <element signature="method#checkDepends#0;class#Main#0" expanded="true" />
+            <element signature="method#getChatPlaceholderMap#0;class#Main#0" expanded="true" />
+            <element signature="e#3871#3872#0" expanded="true" />
+            <element signature="e#3895#3896#0" expanded="true" />
+            <element signature="method#clean#0;class#Main#0" expanded="true" />
+            <element signature="class#5018:5305" expanded="false" />
+            <element signature="method#clean#0;class#5018:5305" expanded="true" />
+            <element signature="method#setupPermissions#0;class#Main#0" expanded="true" />
+            <element signature="method#setupChat#0;class#Main#0" expanded="true" />
+            <element signature="method#setupEconomy#0;class#Main#0" expanded="true" />
+            <element signature="method#registerItems#0;class#Main#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$USER_HOME$/Desktop/Spigot Stuff/1.11.2/Spigot/Spigot-API/src/main/java/org/bukkit/Location.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-4845">
+          <caret line="14" column="13" lean-forward="false" selection-start-line="14" selection-start-column="13" selection-end-line="14" selection-end-column="13" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://C:/Program Files/Java/jdk1.8.0_31/src.zip!/java/lang/Iterable.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="660">
+          <caret line="71" column="0" lean-forward="false" selection-start-line="71" selection-start-column="0" selection-end-line="71" selection-end-column="0" />
+          <folding>
+            <element signature="method#forEach#0;class#Iterable#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/plugin.yml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="375">
+          <caret line="25" column="13" lean-forward="false" selection-start-line="25" selection-start-column="13" selection-end-line="25" selection-end-column="13" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/me/varmetek/core/commands/CmdCommand.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="725">
+          <caret line="144" column="25" lean-forward="true" selection-start-line="144" selection-start-column="25" selection-end-line="144" selection-end-column="25" />
+          <folding>
+            <element signature="method#Builder#0;class#Builder#0;class#CmdCommand#0" expanded="true" />
+            <element signature="method#Builder#1;class#Builder#0;class#CmdCommand#0" expanded="true" />
+            <element signature="method#setLogic#0;class#Builder#0;class#CmdCommand#0" expanded="true" />
+            <element signature="method#setDescription#0;class#Builder#0;class#CmdCommand#0" expanded="false" />
+            <element signature="method#setPermission#0;class#Builder#0;class#CmdCommand#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/me/varmetek/munchymc/commands/CommandJoin.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="840">
+          <caret line="65" column="4" lean-forward="false" selection-start-line="65" selection-start-column="4" selection-end-line="65" selection-end-column="4" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/me/varmetek/munchymc/commands/CommandKit.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-644">
+          <caret line="70" column="66" lean-forward="true" selection-start-line="70" selection-start-column="66" selection-end-line="70" selection-end-column="66" />
+          <folding>
+            <element signature="imports" expanded="true" />
+            <element signature="method#forKit#0;class#CommandKit#0" expanded="true" />
+            <element signature="method#forHelpCommand#0;class#CommandKit#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/me/varmetek/munchymc/util/UtilFile.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="255">
+          <caret line="33" column="21" lean-forward="false" selection-start-line="33" selection-start-column="21" selection-end-line="33" selection-end-column="21" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/me/varmetek/munchymc/util/UtilInventory.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="379">
+          <caret line="247" column="61" lean-forward="false" selection-start-line="247" selection-start-column="61" selection-end-line="247" selection-end-column="61" />
+          <folding>
+            <element signature="method#toInvMap#0;class#UtilInventory#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/me/varmetek/munchymc/backend/PointManager.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="251">
+          <caret line="26" column="15" lean-forward="false" selection-start-line="26" selection-start-column="15" selection-end-line="26" selection-end-column="15" />
+          <folding>
+            <element signature="imports" expanded="true" />
+            <element signature="method#setPoint#0;class#PointManager#0" expanded="true" />
+            <element signature="method#delPoint#0;class#PointManager#0" expanded="true" />
+            <element signature="method#getPoint#0;class#PointManager#0" expanded="true" />
+            <element signature="method#setWarp#0;class#PointManager#0" expanded="true" />
+            <element signature="method#delWarp#0;class#PointManager#0" expanded="true" />
+            <element signature="method#isWarp#0;class#PointManager#0" expanded="true" />
+            <element signature="method#getWarp#0;class#PointManager#0" expanded="true" />
+            <element signature="method#isValid#0;class#PointManager#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/me/varmetek/munchymc/backend/DataManager.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-514">
+          <caret line="395" column="16" lean-forward="false" selection-start-line="395" selection-start-column="16" selection-end-line="395" selection-end-column="16" />
+          <folding>
+            <element signature="imports" expanded="true" />
+            <element signature="method#getUserFile#0;class#UserData#0;class#DataManager#0" expanded="true" />
+            <element signature="method#createUserFile#0;class#UserData#0;class#DataManager#0" expanded="true" />
+            <element signature="method#createUserFile#1;class#UserData#0;class#DataManager#0" expanded="true" />
+            <element signature="method#getUserFile#1;class#UserData#0;class#DataManager#0" expanded="true" />
+            <element signature="method#saveKit#0;class#KitData#0;class#DataManager#0" expanded="true" />
+            <element signature="method#saveKit#1;class#KitData#0;class#DataManager#0" expanded="true" />
+            <element signature="method#saveKits#0;class#KitData#0;class#DataManager#0" expanded="true" />
+            <element signature="method#convertEffects#0;class#KitData#0;class#DataManager#0" expanded="true" />
+            <element signature="method#loadKit#0;class#KitData#0;class#DataManager#0" expanded="true" />
+            <element signature="method#loadKit#1;class#KitData#0;class#DataManager#0" expanded="true" />
+            <element signature="method#loadKit#2;class#KitData#0;class#DataManager#0" expanded="true" />
+            <element signature="method#loadKits#0;class#KitData#0;class#DataManager#0" expanded="true" />
+            <element signature="method#removeKit#0;class#KitData#0;class#DataManager#0" expanded="true" />
+            <element signature="method#reloadKits#0;class#KitData#0;class#DataManager#0" expanded="true" />
+            <element signature="class#PointData#0;class#DataManager#0" expanded="true" />
+            <element signature="method#loadPoint#0;class#PointData#0;class#DataManager#0" expanded="true" />
+            <element signature="method#savePoint#0;class#PointData#0;class#DataManager#0" expanded="true" />
+            <element signature="method#saveAllPoints#0;class#PointData#0;class#DataManager#0" expanded="true" />
+            <element signature="method#loadllPoints#0;class#PointData#0;class#DataManager#0" expanded="true" />
+            <element signature="method#validateTrue#0;class#DataManager#0" expanded="true" />
+            <element signature="class#CoreFile#0;class#DataManager#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$USER_HOME$/Desktop/Spigot Stuff/1.11.2/Spigot/Spigot-API/src/main/java/org/bukkit/Bukkit.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="386">
+          <caret line="907" column="28" lean-forward="false" selection-start-line="907" selection-start-column="28" selection-end-line="907" selection-end-column="28" />
+          <folding>
+            <element signature="method#createInventory#2;class#Bukkit#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$USER_HOME$/Desktop/Spigot Stuff/1.11.2/Spigot/Spigot-API/src/main/java/org/bukkit/inventory/Inventory.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="305">
+          <caret line="396" column="22" lean-forward="true" selection-start-line="396" selection-start-column="22" selection-end-line="396" selection-end-column="23" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/me/varmetek/munchymc/commands/CommandCheckInv.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="440">
+          <caret line="204" column="0" lean-forward="false" selection-start-line="204" selection-start-column="0" selection-end-line="204" selection-end-column="0" />
+          <folding>
+            <element signature="imports" expanded="true" />
+            <element signature="e#1012#1013#0" expanded="true" />
+            <element signature="e#1035#1036#0" expanded="true" />
+            <element signature="method#clean#0;class#CommandCheckInv#0" expanded="true" />
+            <element signature="method#supplyCmd#0;class#CommandCheckInv#0" expanded="true" />
+            <element signature="method#workInv#0;class#CommandCheckInv#0" expanded="true" />
+            <element signature="method#invClose#0;class#2863:6781" expanded="true" />
+            <element signature="method#onInvClick#0;class#2863:6781" expanded="true" />
+            <element signature="method#onInvPickUp#0;class#2863:6781" expanded="true" />
+            <element signature="method#onHandSwitch#0;class#2863:6781" expanded="true" />
+            <element signature="method#onKick#0;class#2863:6781" expanded="true" />
+            <element signature="method#onLeave#0;class#2863:6781" expanded="true" />
+            <element signature="method#onItemDrop#0;class#2863:6781" expanded="true" />
+            <element signature="method#onItemPick#0;class#2863:6781" expanded="true" />
+            <element signature="method#onHandSwap#0;class#2863:6781" expanded="true" />
+            <element signature="method#onHandSwap#1;class#2863:6781" expanded="true" />
+            <element signature="method#onHandSwap#2;class#2863:6781" expanded="true" />
+            <element signature="method#onHandSwap#3;class#2863:6781" expanded="true" />
+            <element signature="method#onHandSwap#4;class#2863:6781" expanded="true" />
+            <element signature="method#onHandSwap#5;class#2863:6781" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -2384,7 +2527,7 @@
       </state>
       <state key="ProjectLibrariesConfigurable.UI">
         <settings>
-          <last-edited>spigot-1.11.2</last-edited>
+          <last-edited>PermissionsEx-1.23.4</last-edited>
           <splitter-proportions>
             <option name="proportions">
               <list>

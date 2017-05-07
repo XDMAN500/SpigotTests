@@ -47,7 +47,7 @@ public class PointManager
 	public Optional<Point> getPoint(String name){
     isValid(name);
 
-		return  Optional.of(POINTS.get(name));
+		return  Optional.ofNullable(POINTS.get(name));
 
 
 	}

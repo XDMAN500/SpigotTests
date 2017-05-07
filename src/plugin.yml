@@ -4,7 +4,7 @@ version: 1.0.0
 description: A MunchyPrison plugin made by Varmetek
 authors:
   - Varmetek
-depend: [ProtocolLib]
+depend: [ProtocolLib, PermissionsEx, Vault]
 commands:
   rares: null
   test: null
@@ -20,3 +20,7 @@ commands:
   r: null
   warp: null
   editpoint: null
+  rank: null
+  confirm: null
+  cancel: null
+  spawn: null

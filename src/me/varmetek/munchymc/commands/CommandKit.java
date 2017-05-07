@@ -6,8 +6,8 @@ import me.varmetek.core.util.Cleanable;
 import me.varmetek.core.util.Messenger;
 import me.varmetek.munchymc.Main;
 import me.varmetek.munchymc.backend.User;
-import me.varmetek.munchymc.backend.kit.Kit;
-import me.varmetek.munchymc.backend.kit.KitHandler;
+import me.varmetek.munchymc.backend.Kit;
+import me.varmetek.munchymc.backend.KitHandler;
 import me.varmetek.munchymc.util.Utils;
 import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.chat.BaseComponent;
@@ -29,6 +29,7 @@ public class CommandKit implements Element, Cleanable
   private static final String prefMal = "&4&l> &r";
   private static final String prefBen = "&2&l> &r";
   private final CmdCommand[] commands;
+
   public CommandKit (Main main){
     this.main = main;
     kitHandler = main.getKitHandler();
@@ -54,30 +55,25 @@ public class CommandKit implements Element, Cleanable
           switch (args[0]) {
             case "save":
               if (length == 2){
+
                 String name = args[1];
-                if (kitHandler.isRegistered(name)){
+
+                if (kitHandler.isKit(name)){
                   Messenger.send(pl, prefBen + "&aOverwriting kit " + name);
-                  kitHandler.unregister(name);
-                }
 
-                Kit k = null;
-
-                if (kitHandler.isRegistered(name)){
-
-
-                  Messenger.send(pl, prefMal + "&cKit is already registered");
-                  return;
                 } else {
-                  kitHandler.register(k = new Kit.Builder(name, pl).build());
+                  Messenger.send(pl, prefBen + "&aKit " + name + " has been set");
                 }
 
                 try {
-                  main.getDataManager().asKitData().saveKit(k);
+                  Kit k = new Kit.Builder().fromPlayer(pl).build();
+                  kitHandler.setKit(name, k);
+                  main.getDataManager().asKitData().saveKit(name);
                 } catch (IOException e) {
                   e.printStackTrace();
                   Messenger.send(pl, prefMal + "&cError saving kit");
                 }
-                Messenger.send(pl, prefBen + "&aKit " + name + " has been set");
+
 
               } else {
                 Messenger.send(pl, prefMal + "&a/Kit save <name>");
@@ -87,9 +83,9 @@ public class CommandKit implements Element, Cleanable
             case "load":
               if (length == 2){
                 String name = args[1];
-                if (kitHandler.isRegistered(name)){
+                if (kitHandler.isKit(name)){
                   Messenger.send(pl, prefBen + "&aLoading kit " + name);
-                  kitHandler.get(name).get().apply(pl);
+                  kitHandler.getKit(name).get().apply(pl);
                 } else {
                   Messenger.send(pl, prefMal + "&cKit " + name + " doesn't exist");
 
@@ -105,9 +101,9 @@ public class CommandKit implements Element, Cleanable
                   "&bListing kits",
                   "&b============",
                   " ");
-                for (Kit k : main.getKitHandler().values()) {
+                for (String name : main.getKitHandler().getKits().keySet()) {
 
-                  pl.spigot().sendMessage(forKit(k.ID()));
+                  pl.spigot().sendMessage(forKit(name));
                 }
 
                 Messenger.send(pl,
@@ -118,24 +114,26 @@ public class CommandKit implements Element, Cleanable
               }
               break;
             case "remove":
-              if (length == 2){
-                String name = args[1];
-                if (kitHandler.isRegistered(name)){
-                  Messenger.send(pl, "Removing kit " + name);
-                  kitHandler.unregister(name);
-                  try {
-                    main.getDataManager().asKitData().removeKit(name);
-                  } catch (IOException e) {
-                    e.printStackTrace();
-                    Messenger.send(pl, "&cError removing kit");
-                  }
-                } else {
-                  Messenger.send(pl, "Kit " + name + " doesn't exist");
-                }
-
-              } else {
+              if (length <= 1){
                 Messenger.send(pl, "/Kit remove <name>");
               }
+              String name = args[1];
+              if (!kitHandler.isKit(name)){
+                Messenger.send(pl, "Kit " + name + " doesn't exist");
+                return;
+              }
+
+              Messenger.send(pl, "&aRemoving kit " + name);
+
+              try {
+                main.getDataManager().asKitData().removeKit(name);
+                kitHandler.delKit(name);
+              } catch (IOException e) {
+                e.printStackTrace();
+                Messenger.send(pl, "&cError removing kit");
+              }
+
+
               break;
             case "help":
               Messenger.send(pl,
@@ -158,7 +156,7 @@ public class CommandKit implements Element, Cleanable
           }
         }
 
-      }).setTabLogic((sender, alias, args, length) -> {
+      }).setTab((sender, alias, args, length) -> {
         switch (length) {
           case 1:
             return Arrays.asList("save", "load", "remove", "list", "clear", "help");
@@ -167,10 +165,10 @@ public class CommandKit implements Element, Cleanable
               case "save":
               case "load":
               case "remove":
-                return Utils.toStringList(main.getKitHandler().values(), (Kit k) ->
+                return Utils.toStringList(main.getKitHandler().getKits().keySet(), (String s) ->
                 {
 
-                  return k.ID();
+                  return s;
                 });
             }
           default:
@@ -180,8 +178,6 @@ public class CommandKit implements Element, Cleanable
       }).build()
     };
   }
-
-
 
 
   private BaseComponent[] forKit (String id){
@@ -209,7 +205,7 @@ public class CommandKit implements Element, Cleanable
 
 
   @Override
-  public Listener supplyListener(){
+  public Listener supplyListener (){
     return null;
   }
 }

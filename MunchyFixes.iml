@@ -28,8 +28,6 @@
     <orderEntry type="library" name="spigot-1.11.2" level="project" />
     <orderEntry type="library" name="ProtocolLib" level="project" />
     <orderEntry type="library" name="Vault" level="project" />
-    <orderEntry type="library" name="EssentialsGroupManager" level="project" />
-    <orderEntry type="library" name="zPermissions-1.2a" level="project" />
     <orderEntry type="library" name="PermissionsEx-1.23.4" level="project" />
   </component>
 </module>

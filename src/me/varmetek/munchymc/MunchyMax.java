@@ -1,12 +1,11 @@
 package me.varmetek.munchymc;
 
 import me.varmetek.core.item.ItemMap;
-import me.varmetek.core.service.ElementService;
 import me.varmetek.core.util.TaskHandler;
 import me.varmetek.munchymc.backend.ChatPlaceholderMap;
 import me.varmetek.munchymc.backend.DataManager;
 import me.varmetek.munchymc.backend.UserHandler;
-import me.varmetek.munchymc.backend.kit.KitHandler;
+import me.varmetek.munchymc.backend.KitHandler;
 import org.apache.commons.lang.Validate;
 import org.bukkit.command.ConsoleCommandSender;
 
@@ -46,11 +45,6 @@ public final class MunchyMax
 		return main.get().getUserHandler();
 	}
 
-	public ElementService getElementService ()
-	{
-		Validate.isTrue(this.main.isPresent(),"Singleton has not been set");
-		return main.get().getElementService();
-	}
 
 	public TaskHandler getTaskHandler ()
 	{

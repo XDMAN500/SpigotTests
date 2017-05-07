@@ -7,6 +7,7 @@ import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.inventory.EquipmentSlot;
 
@@ -28,25 +29,34 @@ public class RareArtemisPlate extends RareItemListener
 	}
 
 
-	@EventHandler
-	public void onDamage(EntityDamageByEntityEvent ev){
-		Entity damager = ev.getDamager();
-		Entity damagee = ev.getEntity();
-		if(!(damagee instanceof LivingEntity))return;
-		if((damagee instanceof Player))return;
-		if(!(damager instanceof Player))return;
-		Player pl = (Player)damager;
-		if(!check(pl))return;
-		LivingEntity target = (LivingEntity)damagee;
-		ev.setDamage(target.getMaxHealth()* (target.getMaxHealth()/Math.max(ev.getFinalDamage(),0.01d)));
-		
-		pl.setSaturation(20);
-		pl.setFoodLevel(20);
-		
 
-	
-		
-				
+
+	@Override
+	public void clean (){
+
 	}
 
+	@Override
+	public Listener supplyListener (){
+		return new Listener(){	@EventHandler
+		public void onDamage(EntityDamageByEntityEvent ev){
+			Entity damager = ev.getDamager();
+			Entity damagee = ev.getEntity();
+			if(!(damagee instanceof LivingEntity))return;
+			if((damagee instanceof Player))return;
+			if(!(damager instanceof Player))return;
+			Player pl = (Player)damager;
+			if(!check(pl))return;
+			LivingEntity target = (LivingEntity)damagee;
+			ev.setDamage(target.getMaxHealth()* (target.getMaxHealth()/Math.max(ev.getFinalDamage(),0.01d)));
+
+			pl.setSaturation(20);
+			pl.setFoodLevel(20);
+
+
+
+
+
+		}};
+	}
 }

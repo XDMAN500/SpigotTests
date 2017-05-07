@@ -13,6 +13,7 @@ import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Snowball;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEntityEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
@@ -86,73 +87,7 @@ public class RareZuesBolt extends RareItemListener
 		Messenger.send(player,"&1Zues &7Eye Valid &r" + inline1);
 		Messenger.send(player,"&1Zues &7Foot Valid &r" + inline0);*/
 	}
-	@EventHandler
-	public void onClick(PlayerInteractEvent ev){
-		Player pl = (Player)ev.getPlayer();
-		if(!check(pl))return;
-		if( (ev.getAction().equals(Action.LEFT_CLICK_AIR) ||ev.getAction().equals(Action.LEFT_CLICK_BLOCK))  )
-		{
-			Vector vec = pl.getLocation().getDirection();
-			List<Entity> list = pl.getNearbyEntities(range, range, range);
-			pl.getNearbyEntities(range, range, range).forEach(entity ->
-			{
 
-
-				if (entity instanceof LivingEntity)
-				{
-					{
-						LivingEntity le = (LivingEntity) entity;
-						if (inSight(pl, le))
-						{
-							le.setGlowing(true);
-							le.setCustomNameVisible(true);
-							double dmg = pl.getAttribute(Attribute.GENERIC_ATTACK_DAMAGE).getValue();
-							le.damage(dmg, pl);
-							//Messenger.send( pl,"Damage:"+ decimalF.format(dmg));
-							///le.setHealth(0.0);
-							//le.damage(1,pl);
-							plugin.getTaskHandler().runTask(() ->
-							{
-								le.setGlowing(false);
-								le.setCustomNameVisible(false);
-
-
-							}, 1L);
-						}
-
-
-					}
-				}
-
-
-			});
-		}else{
-			if( (ev.getAction().equals(Action.RIGHT_CLICK_AIR) ||ev.getAction().equals(Action.RIGHT_CLICK_BLOCK))  )
-			{
-				Snowball e = pl.launchProjectile(Snowball.class, pl.getLocation().getDirection().multiply(5));
-				//e.setGlowing(true);
-				//e.setCritical(true);
-				e.setBounce(false);
-			//	e.setGlowingTicks(2);
-				e.setGravity(false);
-			}
-		}
-		/*for(Entity e: list){
-			if(e instanceof LivingEntity){
-				{
-					LivingEntity le = (LivingEntity)e;
-					if(inSight(pl, le)){
-						le.setGlowing(true);
-						le.setHealth(0.0);
-						le.damage(1,pl);
-					}
-
-
-				}
-			}
-		}*/
-
-	}
 	private boolean inSight(Player player, LivingEntity entity)
 	{
 
@@ -220,5 +155,83 @@ public class RareZuesBolt extends RareItemListener
 	public boolean check (Player pl)
 	{
 		return isEquiped(pl, EquipmentSlot.HAND);
+	}
+
+	@Override
+	public void clean (){
+
+	}
+
+	@Override
+	public Listener supplyListener (){
+		return new Listener(){
+			@EventHandler
+			public void onClick(PlayerInteractEvent ev){
+				Player pl = (Player)ev.getPlayer();
+				if(!check(pl))return;
+				if( (ev.getAction().equals(Action.LEFT_CLICK_AIR) ||ev.getAction().equals(Action.LEFT_CLICK_BLOCK))  )
+				{
+					Vector vec = pl.getLocation().getDirection();
+					List<Entity> list = pl.getNearbyEntities(range, range, range);
+					pl.getNearbyEntities(range, range, range).forEach(entity ->
+					{
+
+
+						if (entity instanceof LivingEntity)
+						{
+							{
+								LivingEntity le = (LivingEntity) entity;
+								if (inSight(pl, le))
+								{
+									le.setGlowing(true);
+									le.setCustomNameVisible(true);
+									double dmg = pl.getAttribute(Attribute.GENERIC_ATTACK_DAMAGE).getValue();
+									le.damage(dmg, pl);
+									//Messenger.send( pl,"Damage:"+ decimalF.format(dmg));
+									///le.setHealth(0.0);
+									//le.damage(1,pl);
+									plugin.getTaskHandler().runTask(() ->
+									{
+										le.setGlowing(false);
+										le.setCustomNameVisible(false);
+
+
+									}, 1L);
+								}
+
+
+							}
+						}
+
+
+					});
+				}else{
+					if( (ev.getAction().equals(Action.RIGHT_CLICK_AIR) ||ev.getAction().equals(Action.RIGHT_CLICK_BLOCK))  )
+					{
+						Snowball e = pl.launchProjectile(Snowball.class, pl.getLocation().getDirection().multiply(5));
+						//e.setGlowing(true);
+						//e.setCritical(true);
+						e.setBounce(false);
+						//	e.setGlowingTicks(2);
+						e.setGravity(false);
+					}
+				}
+		/*for(Entity e: list){
+			if(e instanceof LivingEntity){
+				{
+					LivingEntity le = (LivingEntity)e;
+					if(inSight(pl, le)){
+						le.setGlowing(true);
+						le.setHealth(0.0);
+						le.damage(1,pl);
+					}
+
+
+				}
+			}
+		}*/
+
+			}
+		};
 	}
 }

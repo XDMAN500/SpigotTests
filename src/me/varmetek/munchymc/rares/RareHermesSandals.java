@@ -6,6 +6,7 @@ import me.varmetek.munchymc.backend.RareItemListener;
 import me.varmetek.munchymc.backend.test.CustomItemRare;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerToggleSprintEvent;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.potion.PotionEffect;
@@ -55,28 +56,41 @@ public class RareHermesSandals extends RareItemListener{
 		if(pl.getInventory().getBoots()!= null)return;
 		pl.addPotionEffect(new PotionEffect(PotionEffectType.SPEED,Integer.MAX_VALUE, 1, true,false));
 	}*/
-	@EventHandler
-	public void onSprint(PlayerToggleSprintEvent ev){
-		Player pl = (Player)ev.getPlayer();
-		if(!check(pl))return;
-		if(!ev.isSprinting()){
-			ev.setCancelled(true);
-			pl.setSprinting(true);
-		}
-	}
-	
-	@EventHandler
-	public void onEquip(ArmorEquipEvent ev){
-		Player pl = (Player)ev.getPlayer();
 
-		plugin.getTaskHandler().run(() ->{
-			if(check(pl)){
-			
-				pl.addPotionEffect(new PotionEffect(PotionEffectType.SPEED,Integer.MAX_VALUE, 1, true,false));
-			}else{
-				pl.removePotionEffect(PotionEffectType.SPEED);
+	@Override
+	public void clean (){
+
+	}
+
+	@Override
+	public Listener supplyListener (){
+		return new Listener()
+		{
+			@EventHandler
+			public void onSprint(PlayerToggleSprintEvent ev){
+				Player pl = (Player)ev.getPlayer();
+				if(!check(pl))return;
+				if(!ev.isSprinting()){
+					ev.setCancelled(true);
+					pl.setSprinting(true);
+				}
 			}
 
-		});
+			@EventHandler
+			public void onEquip(ArmorEquipEvent ev){
+				Player pl = (Player)ev.getPlayer();
+
+				plugin.getTaskHandler().run(() ->{
+					if(check(pl)){
+
+						pl.addPotionEffect(new PotionEffect(PotionEffectType.SPEED,Integer.MAX_VALUE, 1, true,false));
+					}else{
+						pl.removePotionEffect(PotionEffectType.SPEED);
+					}
+
+				});
+			}
+
+		};
 	}
 }

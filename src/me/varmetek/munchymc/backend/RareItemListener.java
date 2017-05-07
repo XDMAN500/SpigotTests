@@ -1,13 +1,14 @@
 package me.varmetek.munchymc.backend;
 
+import me.varmetek.core.commands.CmdCommand;
+import me.varmetek.core.service.Element;
 import me.varmetek.munchymc.Main;
 import me.varmetek.munchymc.backend.test.CustomItemRare;
 import org.bukkit.entity.Player;
-import org.bukkit.event.Listener;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
 
-public  abstract class RareItemListener implements Listener{
+public  abstract class RareItemListener implements Element{
 
 
 	protected final CustomItemRare item;
@@ -44,5 +45,9 @@ public  abstract class RareItemListener implements Listener{
 
 	public  abstract boolean check(Player pl);
 
+	@Override
+  public CmdCommand[] supplyCmd(){
+	  return null;
+  }
 }
 

@@ -5,6 +5,7 @@ import me.varmetek.munchymc.backend.RareItemListener;
 import me.varmetek.munchymc.backend.test.CustomItemRare;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerExpChangeEvent;
 import org.bukkit.inventory.EquipmentSlot;
 
@@ -26,10 +27,23 @@ public class RareHanSoloPants extends RareItemListener
 		return isEquiped(pl, EquipmentSlot.LEGS);
 	}
 
-	@EventHandler
-	public void exp(PlayerExpChangeEvent ev)
-	{
-		if(check(ev.getPlayer()))
-		ev.setAmount(ev.getAmount()*20);
+
+	@Override
+	public void clean (){
+
+	}
+
+	@Override
+	public Listener supplyListener (){
+		return new Listener()
+		{
+			@EventHandler
+			public void exp(PlayerExpChangeEvent ev)
+			{
+				if(check(ev.getPlayer()))
+					ev.setAmount(ev.getAmount()*20);
+			}
+
+		};
 	}
 }
