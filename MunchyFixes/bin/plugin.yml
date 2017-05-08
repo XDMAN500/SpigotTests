@@ -1,0 +1,28 @@
+name: MunchyMax
+main: me.varmetek.munchymc.Main
+version: 1.0.0
+description: A MunchyPrison plugin made by Varmetek
+authors:
+  - Varmetek
+depend: [ProtocolLib, PermissionsEx, Vault]
+commands:
+  rares: null
+  test: null
+  save: null
+  load: null
+  kit: null
+  openinv: null
+  run: null
+  shop: null
+  join: null
+  leave: null
+  msg: null
+  r: null
+  warp: null
+  editpoint: null
+  rank: null
+  confirm: null
+  cancel: null
+  spawn: null
+  checkinv: null
+  editkit: null
