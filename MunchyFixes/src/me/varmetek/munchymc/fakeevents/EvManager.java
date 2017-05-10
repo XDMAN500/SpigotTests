@@ -12,32 +12,30 @@ import java.util.Map;
  */
 public class EvManager
 {
-  private  Map<Class<? extends Event>,HandlerList<? extends Event>>  regis;
+  private  Map<Class<? extends Event>,HandlerList>  regis;
 
   public <T extends Event> void register( EvListener<T>  list){
     Validate.notNull(list);
-    regis.entrySet().forEach( (entry)->{
-     // C
-     // if(entry.getKey().isAssignableFrom( Class<T> ))
+    if(!regis.containsKey(list.getEventType())){
+      regis.put(list.getEventType(),new HandlerList());
+    }
 
-
-    });
-
+    regis.get(list.getEventType()).register(list);
   }
-  private class HandlerList<T extends Event>{
-    private List<EvListener<T>> list ;
+  private class HandlerList{
+    private List<EvListener> list ;
 
     protected HandlerList(){
       list = new LinkedList<>();
     }
 
-    private void register( EvListener<T>  listener){
+    private void register( EvListener  listener){
       Validate.notNull(listener);
       list.add(listener);
     }
 
-    private void registerall(EvListener<T>... listener){
-      for(EvListener<T>  list : listener){
+    private void registerall(EvListener... listener){
+      for(EvListener  list : listener){
         if(list == null)continue;
         register(list);
       }

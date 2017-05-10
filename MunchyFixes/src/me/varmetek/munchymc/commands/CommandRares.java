@@ -4,8 +4,8 @@ import me.varmetek.core.commands.CmdCommand;
 import me.varmetek.core.item.CustomItem;
 import me.varmetek.core.service.Element;
 import me.varmetek.munchymc.Main;
+import me.varmetek.munchymc.backend.PlayerSession;
 import me.varmetek.munchymc.backend.Rares;
-import me.varmetek.munchymc.backend.User;
 import me.varmetek.munchymc.backend.test.CustomItemRare;
 import me.varmetek.munchymc.backend.test.EnumCustomItem;
 import me.varmetek.munchymc.util.UtilInventory;
@@ -106,7 +106,7 @@ public class CommandRares implements Element
 
 
         Player pl = (Player) ev.getWhoClicked();
-        User user = plugin.getUserHandler().getUser(pl);
+        PlayerSession user = plugin.getPlayerHandler().getSession(pl);
         if (!pl.getOpenInventory().getTopInventory().equals(gui)) return;
 
 

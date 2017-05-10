@@ -2,7 +2,7 @@ package me.varmetek.munchymc.backend;
 
 import me.varmetek.core.commands.CmdCommand;
 import me.varmetek.core.service.Element;
-import me.varmetek.core.user.BaseUserHandler;
+import me.varmetek.core.user.BasePlayerHandler;
 import me.varmetek.core.util.PluginMain;
 import me.varmetek.munchymc.Main;
 import me.varmetek.munchymc.listeners.TickListener;
@@ -17,21 +17,22 @@ import java.util.UUID;
 /**
  * Created by XDMAN500 on 12/31/2016.
  */
-public class UserHandler extends BaseUserHandler<User> implements TickListener, Element
+public class PlayerHandler extends BasePlayerHandler<PlayerSession> implements TickListener, Element
 {
 
 	private Main main;
+	private PlayerHandler handle = this;
 	private Listener listen = new Listener(){
 		@EventHandler(priority = EventPriority.LOW)
 		public void onLogin(PlayerJoinEvent ev){
 
-			User user = main.getUserHandler().renewUser(ev.getPlayer());
+			PlayerSession user = handle.renewSession(ev.getPlayer());
 			ev.getPlayer().setInvulnerable(false);
 			try
 			{
 				main.getDataManager().asUserData().loadUser(user);
 			}catch(Exception e){
-				plugin.getLogger().warning("Could not load player "+ user.getName());
+				plugin.getLogger().warning("Could not load player" + " \"" + user.getName() + "\".");
 			}
 
 
@@ -40,14 +41,14 @@ public class UserHandler extends BaseUserHandler<User> implements TickListener, 
 		@EventHandler(priority = EventPriority.LOW)
 		public void onLeave0(org.bukkit.event.player.PlayerQuitEvent ev){
 
-			User user = main.getUserHandler().renewUser(ev.getPlayer());
+			PlayerSession user = handle.renewSession(ev.getPlayer());
 			ev.getPlayer().setInvulnerable(false);
 
 			try
 			{
 				main.getDataManager().asUserData().saveUser(user);
 			}catch(Exception e){
-				plugin.getLogger().warning("Could not save player "+ user.getName());
+				plugin.getLogger().warning("Could not save player" + " \"" + user.getName() + "\".");
 			}
 
 
@@ -56,15 +57,15 @@ public class UserHandler extends BaseUserHandler<User> implements TickListener, 
 		@EventHandler(priority = EventPriority.LOW)
 		public void onLeave2(org.bukkit.event.player.PlayerKickEvent ev){
 
-			User user = main.getUserHandler().renewUser(ev.getPlayer());
+			PlayerSession user = handle.renewSession(ev.getPlayer());
 			ev.getPlayer().setInvulnerable(false);
 
 			try
 			{
 				main.getDataManager().asUserData().saveUser(user);
 			}catch(Exception e){
-				plugin.getLogger().warning("Could not save player "+ user.getName());
-			};
+				plugin.getLogger().warning("Could not save player" + " \"" + user.getName() + "\".");
+			}
 
 
 		}
@@ -73,7 +74,7 @@ public class UserHandler extends BaseUserHandler<User> implements TickListener, 
 
 
 
-	public UserHandler (PluginMain plugin)
+	public PlayerHandler (PluginMain plugin)
 	{
 		super(plugin);
 		main = (Main)plugin;
@@ -86,7 +87,7 @@ public class UserHandler extends BaseUserHandler<User> implements TickListener, 
 	public void slimList(){
 		Set<UUID> ids = this.registry.keySet();
 		ids.forEach( (id)->{
-			User user = registry.get(id);
+			PlayerSession user = registry.get(id);
 			if(!user.isOnline()){
 				remove(user);
 				main.getLogger().info("Cleaning user ("+ user.getName()+")");
@@ -95,21 +96,21 @@ public class UserHandler extends BaseUserHandler<User> implements TickListener, 
 
 	}
 	@Override
-	protected User _createUser(UUID pl)
+	protected PlayerSession _createUser(UUID pl)
 	{
-		return new User(pl,this);
+		return new PlayerSession(pl,this);
 	}
 	@Override
-	protected User _createUser(User pl)
+	protected PlayerSession _createUser(PlayerSession pl)
 	{
-		return new User(pl,this);
+		return new PlayerSession(pl);
 	}
 
 
 	@Override
 	public void tick ()
 	{
-		registry.values().forEach(User::tick);
+		registry.values().forEach(PlayerSession::tick);
 	}
 
 

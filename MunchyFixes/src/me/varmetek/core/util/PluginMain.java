@@ -2,8 +2,9 @@ package me.varmetek.core.util;
 
 import me.varmetek.core.item.ItemMap;
 import me.varmetek.core.service.ElementManager;
-import me.varmetek.core.user.BaseUser;
-import me.varmetek.core.user.BaseUserHandler;
+import me.varmetek.core.user.BasePlayerData;
+import me.varmetek.core.user.BasePlayerHandler;
+import me.varmetek.core.user.BasePlayerSession;
 import org.bukkit.plugin.java.JavaPlugin;
 
 /**
@@ -22,7 +23,7 @@ public abstract class PluginMain extends JavaPlugin
 	@Override
 	public abstract void onEnable();
 
-	public abstract <T extends BaseUser> BaseUserHandler<T> getUserHandler ();
+	public abstract <T extends BasePlayerSession<D>, D extends BasePlayerData> BasePlayerHandler<T,D> getPlayerHandler ();
 
 
 	public abstract ElementManager getElementManager ();

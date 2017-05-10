@@ -1,19 +1,18 @@
 package me.varmetek.munchymc.listeners;
 
+import me.varmetek.munchymc.backend.PlayerSession;
 import org.bukkit.event.Cancellable;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
 
-import me.varmetek.munchymc.backend.User;
-
 public class UserTestModeChangeEvent extends Event implements Cancellable{
  private static final HandlerList  handles = new HandlerList();
  
- private User user;
+ private PlayerSession user;
  private boolean mode;
  private boolean cancelled = false;
  
- public UserTestModeChangeEvent(User argUser, boolean argMode){
+ public UserTestModeChangeEvent(PlayerSession argUser, boolean argMode){
 	 user = argUser;
 	 mode = argMode;
  }
@@ -25,7 +24,7 @@ public class UserTestModeChangeEvent extends Event implements Cancellable{
 		return handles;
 	}
 	
-	public User getUser(){return user;}
+	public PlayerSession getSession(){return user;}
 	public boolean nextMode(){return mode;}
 
 	@Override

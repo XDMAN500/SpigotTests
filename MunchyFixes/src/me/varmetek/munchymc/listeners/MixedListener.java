@@ -6,8 +6,8 @@ import me.varmetek.core.scoreboard.SidebarHandler;
 import me.varmetek.core.service.Element;
 import me.varmetek.core.util.Messenger;
 import me.varmetek.munchymc.Main;
+import me.varmetek.munchymc.backend.PlayerSession;
 import me.varmetek.munchymc.backend.Rares;
-import me.varmetek.munchymc.backend.User;
 import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.chat.ClickEvent;
 import net.md_5.bungee.api.chat.ComponentBuilder;
@@ -171,13 +171,13 @@ public class MixedListener implements Element
     }*/
     @EventHandler
     public void login(PlayerJoinEvent ev){
-      User user = plugin.getUserHandler().getUser(ev.getPlayer());
+      PlayerSession user = plugin.getPlayerHandler().getSession(ev.getPlayer());
       ev.setJoinMessage(user.compileJoinMessage());
     }
 
     @EventHandler
     public void logout(PlayerQuitEvent ev){
-      User user = plugin.getUserHandler().getUser(ev.getPlayer());
+      PlayerSession user = plugin.getPlayerHandler().getSession(ev.getPlayer());
       ev.setQuitMessage(user.compileLeaveMessage());
     }
 
@@ -186,7 +186,7 @@ public class MixedListener implements Element
       if((ev.getEntity().getType() != EntityType.PLAYER )) return;
       Player player = (Player)ev.getEntity();
 
-      User user =  plugin.getUserHandler().getUser(player);
+      PlayerSession user =  plugin.getPlayerHandler().getSession(player);
       if(user.isDead())ev.setCancelled(true);
     }
     @EventHandler
@@ -195,7 +195,7 @@ public class MixedListener implements Element
 
       if((ev.getEntity().getType() != EntityType.PLAYER )) return;
       Player player = (Player)ev.getEntity();
-      User user =  plugin.getUserHandler().getUser(player);
+      PlayerSession user =  plugin.getPlayerHandler().getSession(player);
       if(!user.getScoreBoard().isPresent())return;
 
       if(player.getHealth() >  ev.getFinalDamage()){return;	}

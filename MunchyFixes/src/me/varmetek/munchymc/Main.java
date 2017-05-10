@@ -28,6 +28,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.Color;
 import org.bukkit.Material;
 import org.bukkit.command.ConsoleCommandSender;
+import org.bukkit.configuration.serialization.ConfigurationSerialization;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.event.Listener;
 import org.bukkit.inventory.EquipmentSlot;
@@ -46,7 +47,7 @@ public final class Main extends PluginMain implements Cleanable
 	private ItemMap itemMap;
 	private HookManager hookManager;
 	private PointManager pointManager;
-	private UserHandler userHandler;
+	private PlayerHandler playerHandler;
 	private TaskHandler taskHandler;
 	private DataManager dataManager;
 	private ElementManager elementManager;
@@ -64,33 +65,20 @@ public final class Main extends PluginMain implements Cleanable
 		dataManager = new DataManager(this);
 		taskHandler = new TaskHandler(this);
 		//chatPlaceholderMap = new ChatPlaceholderMap("&8<&b"+Utils.placeholder("playerName")+"&8> &7"+Utils.placeholder("playerMessage"));
-		userHandler = new UserHandler(this);
+    playerHandler = new PlayerHandler(this);
 		hookManager = new HookManager(this);
 		pointManager = new PointManager(this);
 
 	}
 
 
-	public void onEnable ()
-	{
+	public void onEnable (){
 
-
-
-
-		plugin = this;
+    plugin = this;
     dataManager.createCoreFiles();
-		/*chatPlaceholderMap.forMessage().register( new ChatPlaceholder("item", (ev)-> {
-					Player pl = ev.getPlayer();
-					if(pl.getItemInHand() != null){
-						return pl.getName();
-					}
-					return "";
-				}));
-		taskHandler.run(() ->{
-			userHandler.refreshList();
-
-		});*/
 		checkDepends();
+
+		ConfigurationSerialization.registerClass(UserData.class);
 
 		tickLoop = taskHandler.runTimer(()->{
 			tickListeners.forEach((t)->
@@ -142,9 +130,9 @@ public final class Main extends PluginMain implements Cleanable
 		return getServer().getConsoleSender();
 	}
 
-	public UserHandler getUserHandler ()
+	public PlayerHandler getPlayerHandler ()
 	{
-		return userHandler;
+		return playerHandler;
 	}
 
 	public TaskHandler getTaskHandler ()
@@ -206,14 +194,14 @@ public final class Main extends PluginMain implements Cleanable
 	public void clean ()
 	{
 		tickLoop.cancel();
-		userHandler.clean();
+		playerHandler.clean();
 		elementManager.clean();
 		dataManager.clean();
 		taskHandler.clean();
 		itemMap.clean();
 		kitHandler.clean();
 		kitHandler = null;
-		userHandler = null;
+		playerHandler = null;
 		elementManager = null;
 		taskHandler = null;
 		dataManager = null;
@@ -241,7 +229,7 @@ public final class Main extends PluginMain implements Cleanable
       new ChatListener(this),
       new ElytraListener(),
       new MixedListener(this),
-      userHandler,
+      playerHandler,
       shop,
       new Element(){
         @Override

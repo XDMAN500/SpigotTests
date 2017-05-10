@@ -5,7 +5,7 @@ import me.varmetek.core.commands.CmdSender;
 import me.varmetek.core.service.Element;
 import me.varmetek.core.util.Messenger;
 import me.varmetek.munchymc.Main;
-import me.varmetek.munchymc.backend.User;
+import me.varmetek.munchymc.backend.PlayerSession;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Listener;
@@ -65,11 +65,11 @@ public class CommandRank implements Element
 							*/
         boolean isPlayer = sender.isPlayer();
         Player player;
-        User user;
+        PlayerSession user;
 
         if (isPlayer){
           player = sender.asPlayer();
-          user = main.getUserHandler().getUser(player);
+          user = main.getPlayerHandler().getSession(player);
 
 
         } else {

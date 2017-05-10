@@ -5,7 +5,6 @@ import me.varmetek.core.service.Element;
 import me.varmetek.core.util.Cleanable;
 import me.varmetek.core.util.Messenger;
 import me.varmetek.munchymc.Main;
-import me.varmetek.munchymc.backend.User;
 import me.varmetek.munchymc.backend.Kit;
 import me.varmetek.munchymc.backend.KitHandler;
 import me.varmetek.munchymc.util.Utils;
@@ -38,11 +37,11 @@ public class CommandKit implements Element, Cleanable
     commands = new CmdCommand[]{
       new CmdCommand.Builder("kit").setLogic((sender,alias,args,length)->{
         Player pl;
-        User user;
+
 
         if (sender.isPlayer()){
           pl = sender.asPlayer();
-          user = main.getUserHandler().getUser(pl);
+
         } else {
           Messenger.send(sender.asSender(), prefBen + "&aCommand is only for players");
           return;
@@ -87,11 +86,11 @@ public class CommandKit implements Element, Cleanable
 
 
         Player pl;
-        User user;
+
 
         if (sender.isPlayer()){
           pl = sender.asPlayer();
-          user = main.getUserHandler().getUser(pl);
+
         } else {
           Messenger.send(sender.asSender(), prefBen + "&aCommand is only for players");
           return;

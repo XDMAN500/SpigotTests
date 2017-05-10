@@ -1,6 +1,5 @@
 package me.varmetek.core.user;
 
-import me.varmetek.core.scoreboard.Scoreboardx;
 import me.varmetek.core.util.Cleanable;
 import me.varmetek.munchymc.listeners.TickListener;
 import org.apache.commons.lang.Validate;
@@ -14,18 +13,19 @@ import java.util.UUID;
 /**
  * Created by XDMAN500 on 12/31/2016.
  */
-public abstract class BaseUser implements Cleanable, TickListener
+public abstract class BasePlayerSession<D extends BasePlayerData> implements Cleanable, TickListener
 {
 	protected OfflinePlayer profile;
-	protected  BaseUserHandler handler;
+	protected  BasePlayerHandler handler;
+	protected D playerData;
 
 	protected Optional<Player> player ;
-	protected Optional<Scoreboardx> board ;
 
 
-	protected BaseUser (UUID profile,  BaseUserHandler  handler){
+
+	protected BasePlayerSession (UUID profile, BasePlayerHandler  handler){
 		Validate.notNull(profile,"Player profile cannot be null");
-		Validate.notNull(handler,"Player profile cannot be null");
+		Validate.notNull(handler,"Player handler cannot be null");
 
 		this.handler = handler;
 
@@ -34,15 +34,7 @@ public abstract class BaseUser implements Cleanable, TickListener
 		this.profile = player.isPresent() ?   player.get() :Bukkit.getOfflinePlayer(profile) ;
 
 
-		board = Optional.empty();
 
-		if(player.isPresent())
-		{
-			handler.getPlugin().getLogger().info( "Creating Profile ("+ this.profile.getName()+") "+  this.profile.getUniqueId() );
-			board = Optional.of(new Scoreboardx());
-			board.get().apply(player.get());
-
-		}
 
 		//updateProfile(profile.getUniqueId(),true);
 		//updateProfile(profile);
@@ -53,19 +45,16 @@ public abstract class BaseUser implements Cleanable, TickListener
 	 * This contructor is used for renewing or refreshing a user.
 	 */
 
-	protected BaseUser(BaseUser old, BaseUserHandler  handler){
-		Validate.notNull(old,"Player profile cannot be null");
-		(this.handler = handler).getPlugin().getLogger().info( "Updating Profile ("+ old.profile.getName()+") "+  old.profile.getUniqueId() );
+	protected BasePlayerSession (BasePlayerSession old){
+		Validate.notNull(profile,"Player profile cannot be null");
+		Validate.notNull(handler,"Player handler cannot be null");
+		(this.handler = old.handler).getPlugin().getLogger().info( "Updating Profile ("+ old.profile.getName()+") "+  old.profile.getUniqueId() );
 
-		board = old.board;
+
 		player = Optional.ofNullable(Bukkit.getPlayer(old.getUUID()));
 
 		profile = player.isPresent() ?   player.get() :Bukkit.getOfflinePlayer(old.getUUID());
 
-		if(player.isPresent())
-		{
-			board.get().apply(player.get());
-		}
 	}
 
 
@@ -97,6 +86,13 @@ public abstract class BaseUser implements Cleanable, TickListener
 		return player.isPresent();
 	}
 
+	public D getPlayerData(){
+		return playerData;
+	}
+
+	public void setPlayerData(D data){
+		playerData = data;
+	}
 
 
 
@@ -111,10 +107,7 @@ public abstract class BaseUser implements Cleanable, TickListener
 
 
 
-	public Optional<Scoreboardx> getScoreBoard(){
-		return board;
 
-	}
 
 
 
@@ -130,7 +123,7 @@ public abstract class BaseUser implements Cleanable, TickListener
 		handler = null;
 		profile = null;
 		player = null;
-		board = null;
+
 	}
 
 

@@ -14,23 +14,23 @@ import java.util.UUID;
 /**
  * Created by XDMAN500 on 12/31/2016.
  */
-public abstract class BaseUserHandler<T extends BaseUser> implements Cleanable
+public abstract class BasePlayerHandler<T extends BasePlayerSession<? extends BasePlayerData>> implements Cleanable
 {
 
 
 	protected  PluginMain plugin;
 	protected  Map<UUID, T> registry = new HashMap<>();
 
-	public BaseUserHandler (PluginMain plugin){
+	public BasePlayerHandler (PluginMain plugin){
 		this.plugin = plugin;
 	}
 
 	public void refreshList(){
 		registry.clear();
-		Bukkit.getOnlinePlayers().forEach( (p)-> getUser(p.getUniqueId()));
+		Bukkit.getOnlinePlayers().forEach( (p)-> getSession(p.getUniqueId()));
 	}
 
-	public T getUser(UUID pl)
+	public T getSession(UUID pl)
 	{
 		Validate.notNull(pl,"The player profile cannot be null");
 		T i;
@@ -40,9 +40,9 @@ public abstract class BaseUserHandler<T extends BaseUser> implements Cleanable
 		return  i;
 	}
 
-	public T getUser(OfflinePlayer pl)
+	public T getSession(OfflinePlayer pl)
 	{
-		return getUser( pl.getUniqueId());
+		return getSession( pl.getUniqueId());
 
 	}
 
@@ -56,7 +56,7 @@ public abstract class BaseUserHandler<T extends BaseUser> implements Cleanable
 
 	}
 
-	public T renewUser(UUID id){
+	public T renewSession(UUID id){
 		if(exists(id)){
 			T e = registry.get(id);
 
@@ -65,13 +65,13 @@ public abstract class BaseUserHandler<T extends BaseUser> implements Cleanable
 			return newU;
 
 		}else{
-			return getUser(id);
+			return getSession(id);
 		}
 
 	}
 
-	public T renewUser(OfflinePlayer id){
-		return renewUser(id.getUniqueId());
+	public T renewSession(OfflinePlayer id){
+		return renewSession(id.getUniqueId());
 
 	}
 
@@ -109,7 +109,7 @@ public abstract class BaseUserHandler<T extends BaseUser> implements Cleanable
 	public void remove(OfflinePlayer id){
 		remove(id.getUniqueId());
 	}
-	public void remove(BaseUser id){
+	public void remove(BasePlayerSession id){
 		remove(id.getUUID());
 	}
 	public T add(T bu){

@@ -3,7 +3,7 @@ package me.varmetek.munchymc.commands;
 import me.varmetek.core.commands.CmdCommand;
 import me.varmetek.core.service.Element;
 import me.varmetek.munchymc.Main;
-import me.varmetek.munchymc.backend.User;
+import me.varmetek.munchymc.backend.PlayerSession;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Listener;
 
@@ -21,7 +21,7 @@ public class CommandProvisions implements Element
       new CmdCommand.Builder("run",(sender, alias, args[], length) -> {
         if(!sender.isPlayer() || args.length == 0)return;
         Player pl = sender.asPlayer();
-        User user = main.getUserHandler().getUser(pl);
+        PlayerSession user = main.getPlayerHandler().getSession(pl);
         switch (args[0]){
           case "respawn":
             user.revive();

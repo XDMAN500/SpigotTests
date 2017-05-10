@@ -8,22 +8,40 @@ import org.bukkit.event.Event;
 public class EvListener<T extends Event>
 {
   private final EvLogic<T> logic;
-  private int priority = 0;
+  private Class<T> event;
+  private byte priority = 0;
   private boolean runIfCanceled;
 
-  private EvListener (EvLogic<T> ev){
+
+  private  EvListener (Class<T> eventType,EvLogic<T> ev){
+
     logic = ev;
+    event = eventType;
   }
 
-  public static class Builder<T extends Event>{
-    private EvLogic<T> logic;
-    private int priority = 0;
+  public byte getPriority(){
+    return priority;
+  }
+
+  public boolean runIfCanceled(){
+    return runIfCanceled;
+  }
+
+  public Class<T> getEventType(){
+    return event;
+  }
+
+  public static class Builder{
+    private final EvLogic logic;
+    private Class eventType;
+    private byte priority = 0;
     private boolean runIfCanceled;
 
-   private Builder(EvLogic<T> ev){
+   private <E extends Event> Builder (Class<E> eventType,EvLogic<E> ev){
       logic = ev;
+      this.eventType = eventType;
     }
-    public Builder setPriority(int priority){
+    public Builder setPriority(byte priority){
      this.priority = priority;
      return this;
     }
@@ -33,8 +51,8 @@ public class EvListener<T extends Event>
       return this;
     }
 
-    public EvListener<T> build(){
-      EvListener<T> ev = new EvListener<T>(logic);
+    public EvListener build(){
+      EvListener ev = new EvListener(eventType,logic);
       ev.priority = this.priority;
       ev.runIfCanceled = this.runIfCanceled;
       return ev;

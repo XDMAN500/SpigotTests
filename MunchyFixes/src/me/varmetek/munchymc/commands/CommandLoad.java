@@ -21,13 +21,13 @@ public class CommandLoad implements Element
 
       new CmdCommand.Builder("load", (sender, alias, ags, length) -> {
         if (!sender.isPlayer()) return;
-        plugin.getDataManager().asUserData().readInventory(plugin.getUserHandler().getUser((Player) sender));
+        plugin.getDataManager().asUserData().readInventory(plugin.getPlayerHandler().getSession((Player) sender));
 
       }).build(),
 
       new CmdCommand.Builder("save", (sender, alias, ags, length) -> {
         if (!sender.isPlayer()) return;
-        plugin.getDataManager().asUserData().writeInventory(plugin.getUserHandler().getUser(sender.asPlayer()));
+        plugin.getDataManager().asUserData().writeInventory(plugin.getPlayerHandler().getSession(sender.asPlayer()));
 
 
       }).build(),

@@ -4,7 +4,7 @@ import me.varmetek.core.commands.CmdCommand;
 import me.varmetek.core.service.Element;
 import me.varmetek.core.util.Messenger;
 import me.varmetek.munchymc.Main;
-import me.varmetek.munchymc.backend.User;
+import me.varmetek.munchymc.backend.PlayerSession;
 import me.varmetek.munchymc.util.UtilInventory;
 import me.varmetek.munchymc.util.Utils;
 import org.bukkit.Bukkit;
@@ -36,11 +36,11 @@ public class CommandOpenInv implements Element
     commands = new CmdCommand[]{
       new CmdCommand.Builder("openinv" , (sender,alias,args,length) -> {
         Player player;
-        User user;
+        PlayerSession user;
 
         if(sender.isPlayer()){
           player = sender.asPlayer();
-          user =  main.getUserHandler().getUser(player);
+          user =  main.getPlayerHandler().getSession(player);
         }else{
           //send a message
           return;
@@ -93,7 +93,7 @@ public class CommandOpenInv implements Element
       ItemStack item = ev.getCurrentItem();
       if(UtilInventory.isItemEmpty(item))return;
       Player player = (Player)ev.getWhoClicked();
-      User user =  main.getUserHandler().getUser(player);
+      PlayerSession user =  main.getPlayerHandler().getSession(player);
 
       switch (item.getType()){
         case WORKBENCH: player.performCommand("openinv "+ InventoryType.WORKBENCH.name());break;

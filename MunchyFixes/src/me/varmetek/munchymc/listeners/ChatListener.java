@@ -6,7 +6,7 @@ import me.varmetek.core.placeholder.FormatHandlePlayer;
 import me.varmetek.core.service.Element;
 import me.varmetek.core.util.Messenger;
 import me.varmetek.munchymc.Main;
-import me.varmetek.munchymc.backend.User;
+import me.varmetek.munchymc.backend.PlayerSession;
 import me.varmetek.munchymc.util.Container;
 import me.varmetek.munchymc.util.Utils;
 import net.md_5.bungee.api.ChatColor;
@@ -46,7 +46,7 @@ public class ChatListener implements Element
 			@EventHandler (priority =  EventPriority.LOW)
 			public void chat(AsyncPlayerChatEvent ev)
 			{
-				User user = plugin.getUserHandler().getUser(ev.getPlayer());
+				PlayerSession user = plugin.getPlayerHandler().getSession(ev.getPlayer());
 				//plugin.getUserHandler().getUser(ev.getPlayer());
 
 				//Player pl = ev.getPlayer();

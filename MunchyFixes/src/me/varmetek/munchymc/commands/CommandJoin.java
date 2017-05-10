@@ -4,7 +4,7 @@ import me.varmetek.core.commands.CmdCommand;
 import me.varmetek.core.service.Element;
 import me.varmetek.core.util.Messenger;
 import me.varmetek.munchymc.Main;
-import me.varmetek.munchymc.backend.User;
+import me.varmetek.munchymc.backend.PlayerSession;
 import org.apache.commons.lang.Validate;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Listener;
@@ -35,7 +35,7 @@ public class CommandJoin implements Element
           return;
         }
         int len = args.length;
-        User user = main.getUserHandler().getUser(player);
+        PlayerSession user = main.getPlayerHandler().getSession(player);
         if (len == 0){
 
           Messenger.send(player,
@@ -50,11 +50,11 @@ public class CommandJoin implements Element
               ;
               break;
             case "getraw":
-              player.sendMessage(Messenger.color("&b Your join message: &r") + user.getJoinMessage());
+              player.sendMessage(Messenger.color("&b Your join message: &r") + user.getPlayerData().getJoinMessage());
               break;
             case "set":
               if (args.length > 1){
-                user.setJoinMessage(condense(Arrays.copyOfRange(args, 1, len), " "));
+                user.getPlayerData().setJoinMessage(condense(Arrays.copyOfRange(args, 1, len), " "));
                 Messenger.send(player, "&bJoin message set to:&r " + user.compileJoinMessage());
               } else {
                 Messenger.send(player, "&b/" + label + " set <msg> &7- sets the join message");
@@ -76,7 +76,7 @@ public class CommandJoin implements Element
           return;
         }
         int len = args.length;
-        User user = main.getUserHandler().getUser(player);
+        PlayerSession user = main.getPlayerHandler().getSession(player);
         if (len == 0){
 
           Messenger.send(player,
@@ -89,11 +89,11 @@ public class CommandJoin implements Element
               Messenger.send(player, "&b Your leave message: &r" + user.compileLeaveMessage());
               break;
             case "getraw":
-              player.sendMessage(Messenger.color("&b Your leave message: &r") + user.getLeaveMessage());
+              player.sendMessage(Messenger.color("&b Your leave message: &r") + user.getPlayerData().getLeaveMessage());
               break;
             case "set":
               if (args.length > 1){
-                user.setLeaveMessage(condense(Arrays.copyOfRange(args, 1, len), " "));
+                user.getPlayerData().setLeaveMessage(condense(Arrays.copyOfRange(args, 1, len), " "));
                 Messenger.send(player, "&bLeave message set to :&r" + user.compileLeaveMessage());
               } else {
                 Messenger.send(player, "&b/" + label + " set <msg> &7- sets the leave message");

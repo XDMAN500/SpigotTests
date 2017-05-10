@@ -126,29 +126,29 @@ public final class DataManager implements Cleanable
     }
 
 
-    public String getUserFolderName (User user){
+    public String getUserFolderName (PlayerSession user){
       return user.getUUID().toString();
     }
 
-    public String getUserDataFileName (User user){
+    public String getUserDataFileName (PlayerSession user){
       return getUserFolderName(user) + __ + "data.yml";
     }
 
 
-    public File getUserFile (User user) throws IllegalArgumentException, IOException{
+    public File getUserFile (PlayerSession user) throws IllegalArgumentException, IOException{
       return getUserFile(user, "data.yml");
     }
 
-    public File createUserFile (User user) throws IllegalArgumentException, IOException{
+    public File createUserFile (PlayerSession user) throws IllegalArgumentException, IOException{
       return createUserFile(user, "data.yml");
     }
 
-    public File createUserFile (User user, String extra) throws IllegalArgumentException, IOException{
+    public File createUserFile (PlayerSession user, String extra) throws IllegalArgumentException, IOException{
       return UtilFile.create(getUserFile(user, extra));
     }
 
 
-    public File getUserFile (User user, String extra) throws IllegalArgumentException, IOException{
+    public File getUserFile (PlayerSession user, String extra) throws IllegalArgumentException, IOException{
       String currentPath = getUserFolderName(user);
 
 			/*FileConfiguration  regis = YamlConfiguration.loadConfiguration(UtilFile.getFile(CoreFile.USERREG.getDirectory()));
@@ -180,12 +180,11 @@ public final class DataManager implements Cleanable
     // User
 
 
-    public void saveUser (User user) throws IOException{
+    public void saveUser (PlayerSession user) throws IOException{
 
       File file = createUserFile(user, "user.yml");
       FileConfiguration config = YamlConfiguration.loadConfiguration(file);
-      config.set("joinMsg", user.getJoinMessage());
-      config.set("leaveMsg", user.getLeaveMessage());
+      config.set("data",user.getPlayerData());
       config.save(file);
       plugin.getLogger().info("Saving user (" + user.getName() + ")");
 
@@ -194,14 +193,14 @@ public final class DataManager implements Cleanable
 
 
     public void savePlayer (OfflinePlayer p) throws IOException{
-      saveUser(plugin.getUserHandler().getUser(p));
+      saveUser(plugin.getPlayerHandler().getSession(p));
 
     }
 
 
     public void saveAllUsers () throws IOException{
 
-      for (User user : plugin.getUserHandler().getAllUsers()) {
+      for (PlayerSession user : plugin.getPlayerHandler().getAllUsers()) {
         try {
 
           saveUser(user);
@@ -224,28 +223,27 @@ public final class DataManager implements Cleanable
     }
 
 
-    public void loadUser (User user) throws IOException{
+    public void loadUser (PlayerSession user) throws IOException{
 
 
       File file = getUserFile(user, "user.yml");
       FileConfiguration config = YamlConfiguration.loadConfiguration(file);
-      user.setJoinMessage(config.getString("joinMsg", user.getJoinMessage()));
-      user.setLeaveMessage(config.getString("leaveMsg", user.getLeaveMessage()));
-      //config.save(file);
+      PlayerData data  = (PlayerData) config.get("data");
+      user.setPlayerData(data);
 
       plugin.getLogger().info("Loading user (" + user.getName() + ")");
 
     }
 
     public void loadPlayer (Player user) throws IOException{
-      loadUser(plugin.getUserHandler().getUser(user));
+      loadUser(plugin.getPlayerHandler().getSession(user));
     }
 
 
     public void loadAll (){
       for (Player p : Bukkit.getOnlinePlayers()) {
         try {
-          loadUser(plugin.getUserHandler().getUser(p));
+          loadUser(plugin.getPlayerHandler().getSession(p));
         } catch (IOException e) {
           Bukkit.getLogger().warning("Could not load player " + p.getName() + " :" + e.getMessage());
         }
@@ -265,7 +263,7 @@ public final class DataManager implements Cleanable
     /**
      * Write the inventory of a player to a file.
      */
-    public void writeInventory (User user){
+    public void writeInventory (PlayerSession user){
       if (!user.isOnline()) return;
 
 
@@ -292,7 +290,7 @@ public final class DataManager implements Cleanable
     }
 
 
-    public void readInventory (User user){
+    public void readInventory (PlayerSession user){
       if (!user.isOnline()) return;
 
 

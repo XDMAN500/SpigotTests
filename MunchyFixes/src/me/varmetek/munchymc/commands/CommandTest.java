@@ -4,7 +4,7 @@ import me.varmetek.core.commands.CmdCommand;
 import me.varmetek.core.service.Element;
 import me.varmetek.core.util.Messenger;
 import me.varmetek.munchymc.Main;
-import me.varmetek.munchymc.backend.User;
+import me.varmetek.munchymc.backend.PlayerSession;
 import me.varmetek.munchymc.listeners.UserTestModeChangeEvent;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
@@ -22,7 +22,7 @@ public class CommandTest implements Element
 			new CmdCommand.Builder("test", (sender,alias,args,length) ->{
 				if(!sender.isPlayer())return ;
 				Player pl = sender.asPlayer();
-				User user = plugin.getUserHandler().getUser(pl);
+				PlayerSession user = plugin.getPlayerHandler().getSession(pl);
 
 				UserTestModeChangeEvent event = new UserTestModeChangeEvent(user,!user.isTesting());
 				Bukkit.getServer().getPluginManager().callEvent(event);

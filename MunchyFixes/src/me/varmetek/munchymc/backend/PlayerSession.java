@@ -1,20 +1,18 @@
 package me.varmetek.munchymc.backend;
 
 import com.google.common.collect.ImmutableSet;
-import com.google.common.collect.Maps;
 import com.google.common.collect.UnmodifiableIterator;
 import me.varmetek.core.placeholder.FormatHandleGeneric;
+import me.varmetek.core.scoreboard.Scoreboardx;
 import me.varmetek.core.scoreboard.Sidebar;
 import me.varmetek.core.scoreboard.SidebarHandler;
-import me.varmetek.core.user.BaseUser;
-import me.varmetek.core.user.BaseUserHandler;
+import me.varmetek.core.user.BasePlayerSession;
 import me.varmetek.core.util.Messenger;
 import me.varmetek.munchymc.Main;
 import org.apache.commons.lang3.Validate;
 import org.bukkit.Bukkit;
 import org.bukkit.Color;
 import org.bukkit.Sound;
-import org.bukkit.configuration.serialization.ConfigurationSerializable;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.inventory.Inventory;
@@ -26,12 +24,13 @@ import java.time.LocalTime;
 import java.util.*;
 
 
-public class User extends BaseUser implements ConfigurationSerializable
+public class PlayerSession extends BasePlayerSession<PlayerData>
 {
 
   private Main main;
+  protected Optional<Scoreboardx> board ;
 
-  public User (UUID name, final UserHandler handler){
+  public PlayerSession (UUID name, final PlayerHandler handler){
     super(name, handler);
 
     main = (Main) this.handler.getPlugin();
@@ -40,14 +39,30 @@ public class User extends BaseUser implements ConfigurationSerializable
       board.get().getSidebarHandler().add("default");
     }
 
+    board = Optional.empty();
+
+    if(player.isPresent())
+    {
+      handler.getPlugin().getLogger().info( "Creating Profile ("+ this.profile.getName()+") "+  this.profile.getUniqueId() );
+      board = Optional.of(new Scoreboardx());
+      board.get().apply(player.get());
+
+    }
+
     //main.addTickListener(this);
   }
 
-  public User (User name, BaseUserHandler handler){
-    super(name, handler);
+  public PlayerSession (PlayerSession old){
+    super(old);
 
     main = (Main) this.handler.getPlugin();
     dead = !profile.isOnline();
+
+    board = old.board;
+    if(player.isPresent())
+    {
+      board.get().apply(player.get());
+    }
     if (board.isPresent() && !board.get().getSidebarHandler().has("default")){
       board.get().getSidebarHandler().add("default");
     }
@@ -55,7 +70,10 @@ public class User extends BaseUser implements ConfigurationSerializable
 
     //main.addTickListener(this);
   }
+  public Optional<Scoreboardx> getScoreBoard(){
+    return board;
 
+  }
 
   @Override
   public void clean (){
@@ -64,6 +82,7 @@ public class User extends BaseUser implements ConfigurationSerializable
       //board.get().getSidebarHandler().clear();
     }
     super.clean();
+    board = null;
 
   }
 
@@ -77,40 +96,26 @@ public class User extends BaseUser implements ConfigurationSerializable
                                                     InventoryType.CHEST,
                                                     InventoryType.WORKBENCH);
 
-  protected String joinMessage = "&b{PLAYER} &7has joined the game";
-  protected String leaveMessage = "&b{PLAYER} &7has left the game";
+
   protected String msgReply = "";
   protected long lastMsgReply = 0l;
 
-  private static final FormatHandleGeneric<User> formater = new FormatHandleGeneric<>();
+
+
+  private static final FormatHandleGeneric<PlayerSession> formater = new FormatHandleGeneric<>();
 
   static{
-    formater.register("{PLAYER}", User::getName);
+    formater.register("{PLAYER}", PlayerSession::getName);
   }
 
 
-  public void setJoinMessage (String msg){
-    joinMessage = msg;
-  }
-
-  public void setLeaveMessage (String msg){
-    leaveMessage = msg;
-  }
-
-  public String getJoinMessage (){
-    return joinMessage;
-  }
-
-  public String getLeaveMessage (){
-    return leaveMessage;
-  }
 
   public String compileJoinMessage (){
-    return Messenger.color(formater.apply(joinMessage, this));
+    return Messenger.color(formater.apply(playerData.joinMessage, this));
   }
 
   public String compileLeaveMessage (){
-    return Messenger.color(formater.apply(leaveMessage, this));
+    return Messenger.color(formater.apply(playerData.leaveMessage, this));
   }
 
 
@@ -118,7 +123,7 @@ public class User extends BaseUser implements ConfigurationSerializable
     return testMode;
   }
 
-  public User setTestMode (boolean val){
+  public PlayerSession setTestMode (boolean val){
     testMode = val;
     return this;
   }
@@ -236,14 +241,6 @@ public class User extends BaseUser implements ConfigurationSerializable
     }
   }
 
-  @Override
-  public Map<String,Object> serialize (){
-    Map<String,Object> output = Maps.newHashMap();
-    output.put("joinMessage", joinMessage);
-    output.put("leaveMessage", leaveMessage);
-    output.put("player", profile.getUniqueId());
-    return output;
-  }
 
 
 

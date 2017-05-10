@@ -4,7 +4,7 @@ import me.varmetek.core.commands.CmdCommand;
 import me.varmetek.core.service.Element;
 import me.varmetek.core.util.Messenger;
 import me.varmetek.munchymc.Main;
-import me.varmetek.munchymc.backend.User;
+import me.varmetek.munchymc.backend.PlayerSession;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Listener;
@@ -46,8 +46,8 @@ public class CommandMsg implements Element
               Messenger.send(pl, "&c Player \"" + args[0] + "\" is not online");
               return;
             }
-            User plUser = main.getUserHandler().getUser(pl);
-            User targUser = main.getUserHandler().getUser(target);
+            PlayerSession plUser = main.getPlayerHandler().getSession(pl);
+            PlayerSession targUser = main.getPlayerHandler().getSession(target);
 
 
             plUser.setMsgReply(target.getName());
@@ -71,7 +71,7 @@ public class CommandMsg implements Element
           if (len == 0){
             Messenger.send(pl, "&cUsage: /r <text>");
           } else {
-            User plUser = main.getUserHandler().getUser(pl);
+            PlayerSession plUser = main.getPlayerHandler().getSession(pl);
 
             Player target = Bukkit.getPlayer(plUser.getMsgReply());
             if (target == null){
