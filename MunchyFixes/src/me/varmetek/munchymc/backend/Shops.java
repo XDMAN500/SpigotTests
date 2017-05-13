@@ -1,7 +1,7 @@
 package me.varmetek.munchymc.backend;
 
 import me.varmetek.core.util.Messenger;
-import me.varmetek.munchymc.Main;
+import me.varmetek.munchymc.MunchyMax;
 import me.varmetek.munchymc.util.BlockLoc;
 import me.varmetek.munchymc.util.UtilInventory;
 import me.varmetek.munchymc.util.Utils;
@@ -143,7 +143,7 @@ public enum Shops implements Listener
 		furn.setFacingDirection(signData.getFacing());
 		org.bukkit.block.Furnace furnaceState = 	(org.bukkit.block.Furnace)behind.getState();
 
-		Main.get().getTaskHandler().run( () ->{
+		MunchyMax.getTaskHandler().run( () ->{
 		Error error = validateSign( player.getUniqueId(),sign);
 		switch (error){
 

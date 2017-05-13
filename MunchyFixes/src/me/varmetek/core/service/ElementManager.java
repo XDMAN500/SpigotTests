@@ -2,14 +2,13 @@ package me.varmetek.core.service;
 
 import com.google.common.collect.Maps;
 import me.varmetek.core.commands.CmdCommand;
-import me.varmetek.core.commands.CmdSender;
 import me.varmetek.core.commands.CmdSupplier;
 import me.varmetek.core.util.Cleanable;
 import me.varmetek.core.util.PluginCore;
 import org.apache.commons.lang.Validate;
 import org.bukkit.Bukkit;
 import org.bukkit.Server;
-import org.bukkit.command.*;
+import org.bukkit.command.CommandMap;
 import org.bukkit.event.Listener;
 
 import java.lang.reflect.Method;
@@ -18,24 +17,19 @@ import java.util.*;
 /**
  * Created by XDMAN500 on 3/5/2017.
  */
-public class ElementManager implements CommandExecutor, TabCompleter, Cleanable
+public class ElementManager implements Cleanable
 {
   private PluginCore plugin;
+  private final String commandPrefix;
   private Map<String,CmdCommand> commands = Maps.newHashMap();
   private Map<Class<? extends Element>,Element> elementRegisty = new HashMap<>();
 
   private CommandMap cmdMap = null;
 
-  public void findCommandMap() throws Exception{
-    Server server = Bukkit.getServer();
-    Method getCommandMap = server.getClass().getDeclaredMethod("getCommandMap");
-    getCommandMap.setAccessible(true);
-    cmdMap = (CommandMap) getCommandMap.invoke( server);
 
-  }
-
-  public ElementManager (PluginCore plugin){
+  public ElementManager (PluginCore plugin, String commandPrefix){
     this.plugin = plugin;
+    this.commandPrefix = commandPrefix;
     try{
       findCommandMap();
     }catch(Exception e){
@@ -44,6 +38,46 @@ public class ElementManager implements CommandExecutor, TabCompleter, Cleanable
       Bukkit.getServer().getPluginManager().disablePlugin(plugin);
     }
 
+  }
+
+
+  public void findCommandMap() throws Exception{
+    Server server = Bukkit.getServer();
+    Method getCommandMap = server.getClass().getDeclaredMethod("getCommandMap");
+    getCommandMap.setAccessible(true);
+    cmdMap = (CommandMap) getCommandMap.invoke( server);
+    plugin.getLogger().warning("[!!!!] The command map has been tampered with. Hopefully commands still work.");
+
+  }
+
+
+  public ElementManager registerListener(Listener list){
+    Validate.notNull(list);
+    register(new Element(){
+
+      @Override
+      public Listener supplyListener (){
+        return list;
+      }
+
+      @Override
+      public CmdCommand[] supplyCmd (){
+        return null;
+      }
+
+      @Override
+      public void clean (){
+
+      }
+    });
+    return this;
+  }
+  public ElementManager registerAllListener(Listener... list){
+    Validate.notNull(list);
+    for(Listener i : list){
+      registerListener(i);
+    }
+    return this;
   }
 
   public ElementManager register (Element ele){
@@ -78,14 +112,15 @@ public class ElementManager implements CommandExecutor, TabCompleter, Cleanable
 
 
   private void registerCmd (CmdCommand cmd){
-    PluginCommand command = Bukkit.getPluginCommand(cmd.getName());
+  /*  PluginCommand command = Bukkit.getPluginCommand(cmd.getName());
     Validate.notNull(command, "Command \"" + cmd.getName() + "\" is not registered in the plugin.yml");
 
 
     commands.put(cmd.getName(), cmd);
     command.setExecutor(this);
     command.setTabCompleter(this);
-    if (cmd.hasAliases()) command.setAliases(cmd.getAliases());
+    if (cmd.hasAliases()) command.setAliases(cmd.getAliases());*/
+  cmdMap.register(commandPrefix, cmd);
 
   }
 
@@ -111,7 +146,7 @@ public class ElementManager implements CommandExecutor, TabCompleter, Cleanable
 
   }
 
-  @Override
+ /* @Override
   public boolean onCommand (CommandSender sender, org.bukkit.command.Command command, String label, String[] args){
     CmdCommand cc = commands.get(command.getName());
     if (cc != null){
@@ -129,7 +164,7 @@ public class ElementManager implements CommandExecutor, TabCompleter, Cleanable
     }
     return null;
 
-  }
+  }*/
 
   @Override
   public void clean (){
@@ -139,4 +174,6 @@ public class ElementManager implements CommandExecutor, TabCompleter, Cleanable
     elementRegisty.clear();
     elementRegisty = null;
   }
+
+
 }

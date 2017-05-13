@@ -3,81 +3,60 @@ package me.varmetek.core.commands;
 import com.google.common.collect.ImmutableList;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.Validate;
+import org.bukkit.command.Command;
+import org.bukkit.command.CommandSender;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
 /**
- * Created by XDMAN500 on 3/17/2017.
+ * Created by XDMAN500 on 5/11/2017.
  */
-public class CmdCommand
+public final class CmdCommand extends Command
 {
+ private final CmdLogic logic;
+ private final CmdTab tab;
 
-	private  String name;
-	private  CmdLogic cmd;
-	private  CmdTab tab = null;
-	private ImmutableList<String> aliases = null;
-	private String desc = null;
-	private String perm = null;
-	private CmdCommand (){ }
+ private CmdCommand (Builder builder){
+    super(builder.name);
+    logic = builder.cmd;
+    tab = builder.tab;
+    this.setAliases(builder.aliases);
+    this.setDescription(builder.desc);
+    this.setPermission(builder.perm);
+  }
 
-	public String getName(){
-		return name;
-	}
+  @Override
+  public boolean execute (CommandSender sender, String commandLabel, String[] args){
+   logic.execute( new CmdSender(sender),commandLabel,args,args.length);
+    return false;
+  }
 
-	public CmdLogic getCmdLogic(){
-		return cmd;
-	}
+  @Override
+  public List<String> tabComplete(CommandSender sender, String commandLabel, String[] args){
+    return tab.execute( new CmdSender(sender),commandLabel,args,args.length);
+  }
 
-	public CmdTab getTabLogic(){
-		return tab;
-	}
-
-	public ImmutableList<String> getAliases(){
-		return aliases;
-	}
-
-	public String getDescription(){
-		return desc;
-	}
-
-	public boolean  hasTabCompleter(){
-		return tab != null;
-	}
-
-	public boolean hasAliases(){
-		return aliases != null;
-	}
-
-	public String getPermission(){
-		return perm;
-	}
-
-	public static CmdCommand[] PackCmd(CmdCommand... containers)
-	{
-		return containers;
-	}
-
-	public static class Builder
-	{
-		public static final ImmutableList<String> emptyAlias = ImmutableList.copyOf(Collections.EMPTY_LIST);
-		public static final CmdLogic defaultLogic =  (sender,alias,args,legnth)->{ sender.asSender().sendMessage("Empty command");};
+  public static class Builder
+  {
+    public static final ImmutableList<String> emptyAlias = ImmutableList.copyOf(Collections.EMPTY_LIST);
+    public static final CmdLogic defaultLogic =  (sender,alias,args,legnth)->{ sender.asSender().sendMessage("Empty command");};
     public static final CmdTab defaultTab =  (sender,alias,args,legnth)->{ return Collections.EMPTY_LIST;};
 
-		private final String name;
-		private CmdLogic cmd = defaultLogic;
-		private CmdTab tab = defaultTab;
+    private final String name;
+    private CmdLogic cmd = defaultLogic;
+    private CmdTab tab = defaultTab;
 
-		private List<String> aliases = null;
-		private String desc = null;
-		private String perm = null;
+    private List<String> aliases = null;
+    private String desc = "";
+    private String perm = null;
 
-		public Builder (String name, CmdLogic cmd)
-		{
-			this(name);
-			setLogic(cmd);
-		}
+    public Builder (String name, CmdLogic cmd)
+    {
+      this(name);
+      setLogic(cmd);
+    }
     public Builder (String name)
     {
       Validate.notNull(name, "Command name cannot be null");
@@ -87,70 +66,62 @@ public class CmdCommand
 
     }
 
-		public Builder setLogic(CmdLogic cmd){
+    public Builder setLogic(CmdLogic cmd){
       this.cmd = cmd == null ?  defaultLogic : cmd;
       return this;
-		  }
-		public Builder setTab (CmdTab tab)
-		{
+    }
+    public Builder setTab (CmdTab tab)
+    {
       this.tab = tab == null ?  defaultTab : tab;
-			return this;
-		}
+      return this;
+    }
 
-		public Builder addAlias (String name)
-		{
-			Validate.notNull(name, "Command alias cannot be null");
-			Validate.isTrue(StringUtils.isNotBlank(name), "Command alias cannot be empty");
-			aliases().add(name);
-			return this;
-		}
-
-
-		public Builder addAliases (String... names)
-		{
-
-			for (String e : names)
-			{
-				try
-				{
-					addAlias(name);
-				} catch (Exception ex)
-				{
-					continue;
-				}
-			}
-			return this;
-		}
+    public Builder addAlias (String name)
+    {
+      Validate.notNull(name, "Command alias cannot be null");
+      Validate.isTrue(StringUtils.isNotBlank(name), "Command alias cannot be empty");
+      aliases().add(name);
+      return this;
+    }
 
 
-		private List<String> aliases ()
-		{
-			return aliases == null ? new ArrayList<>() : aliases;
-		}
+    public Builder addAliases (String... names)
+    {
 
-		public Builder setDescription (String description)
-		{
-			desc = description;
-			return this;
-		}
-		public  Builder setPermission(String permission){
-			perm = permission;
-			return this;
-		}
+      for (String e : names)
+      {
+        try
+        {
+          addAlias(name);
+        } catch (Exception ex)
+        {
+          continue;
+        }
+      }
+      return this;
+    }
 
-		public CmdCommand build(){
+
+    private List<String> aliases ()
+    {
+      return aliases == null ? new ArrayList<>() : aliases;
+    }
+
+    public Builder setDescription (String description)
+    {
+      desc = description;
+      return this;
+    }
+    public Builder setPermission(String permission){
+      perm = permission;
+      return this;
+    }
+
+    public CmdCommand build(){
       Validate.notNull(cmd, "Command logic cannot be null");
-			CmdCommand out = new CmdCommand();
-			out.cmd = this.cmd;
-			out.name = this.name;
-			out.tab = this.tab;
+      return new CmdCommand(this);
 
-			out.aliases = aliases != null ? ImmutableList.copyOf(this.aliases ) : emptyAlias;
-			out.desc = this.desc;
-			out.perm = this.perm;
-			return out;
+    }
 
-		}
-
-	}
+  }
 }

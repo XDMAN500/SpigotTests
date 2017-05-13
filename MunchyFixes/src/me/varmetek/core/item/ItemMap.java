@@ -1,7 +1,7 @@
 package me.varmetek.core.item;
 
+import me.varmetek.core.util.PluginCore;
 import me.varmetek.core.util.SimpleMap;
-import me.varmetek.munchymc.Main;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 
@@ -12,9 +12,10 @@ import java.util.Collection;
  */
 public class ItemMap extends SimpleMap<CustomItem>
 {
-
-	public ItemMap(){
+	protected PluginCore plugin;
+	public ItemMap(PluginCore plugin){
 		super();
+		this.plugin = plugin;
 
 	}
 
@@ -34,7 +35,7 @@ public class ItemMap extends SimpleMap<CustomItem>
 	}
 	public  void registerItemEvent()
 	{
-		Main.get().getLogger().info("[CustomItems] Loading Item events");
+		plugin.getLogger().info("[CustomItems] Loading Item events");
 		Collection<CustomItem> collect = map.values();
 		for(CustomItem ci :collect )
 		{
@@ -42,5 +43,10 @@ public class ItemMap extends SimpleMap<CustomItem>
 		}
 	}
 
+	@Override
+	public void clean(){
+		super.clean();
+		plugin = null;
+	}
 
 }

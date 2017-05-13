@@ -61,6 +61,8 @@ public final class MunchyMax extends PluginCore
 	Chat chat;
 	Permission permission;
 
+
+
 	private boolean dirty = false;
 
 	public MunchyMax (){
@@ -83,13 +85,27 @@ public final class MunchyMax extends PluginCore
 	}
 
 
-	@Override
+
+
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/*
+
+	SERVER EVENTS
+
+*/
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+
+
+
+  @Override
 	public void onLoad ()
 	{
 		if(dirty)return;
 
 		ConfigurationSerialization.registerClass(PlayerData.class);
-		elementManager = new ElementManager(this);
+		elementManager = new ElementManager(this,"MM");
 		kitHandler = new KitHandler();
 		itemMap = new ItemMap();
 		dataManager = new DataManager();
@@ -101,6 +117,8 @@ public final class MunchyMax extends PluginCore
 		shop = new ShopView();
 		tickListeners = new ConcurrentSet<>();
 	}
+
+
 	public void onEnable (){
 		if(dirty){
 			getLogger().warning("Plugin could not enable correctly");
@@ -171,6 +189,9 @@ public final class MunchyMax extends PluginCore
 
 
 	}
+
+
+
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /*
@@ -325,7 +346,8 @@ public final class MunchyMax extends PluginCore
       new CommandAction(),
       new CommandMsg(),
       new CommandWarps(),
-      new CommandOpenInv()
+      new CommandOpenInv(),
+      new CommandMines()
 
     )
 

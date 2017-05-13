@@ -1,6 +1,6 @@
 package me.varmetek.munchymc.util;
 
-import me.varmetek.munchymc.Main;
+import me.varmetek.munchymc.MunchyMax;
 import org.apache.commons.lang.Validate;
 
 import java.io.File;
@@ -16,7 +16,7 @@ public final class UtilFile
 
 	private final static String __ = File.separator;
 	public static File getFile(String name){
-		return new  File(Main.get().getDataFolder(),name);
+		return new  File(MunchyMax.getInstance().getDataFolder(),name);
 	}
 
 	public static File getFile(String... path){
@@ -26,7 +26,7 @@ public final class UtilFile
 			for(int i = 0; i< path.length; i++){
 				e.append(__+path[i]);
 			}
-		return new  File(Main.get().getDataFolder(),e.toString());
+		return new  File(MunchyMax.getInstance().getDataFolder(),e.toString());
 	}
 	public static boolean isFile(String name){
 		return name.contains(".");

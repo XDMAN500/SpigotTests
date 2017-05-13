@@ -2,7 +2,7 @@ package me.varmetek.munchymc.backend;
 
 import me.varmetek.core.util.Cleanable;
 import me.varmetek.core.util.Messenger;
-import me.varmetek.munchymc.Main;
+
 import me.varmetek.munchymc.MunchyMax;
 import me.varmetek.munchymc.util.UtilFile;
 import me.varmetek.munchymc.util.UtilInventory;
@@ -649,7 +649,7 @@ public final class DataManager implements Cleanable
       public File getFile (){
         return file == null ?
                  (isFile()
-                    ? new File(Main.get().getDataFolder(), getDirectory()) : null) : file;
+                    ? new File(MunchyMax.getInstance().getDataFolder(), getDirectory()) : null) : file;
       }
 
 

@@ -1,10 +1,10 @@
 name: MunchyMax
-main: me.varmetek.munchymc.Main
+main: me.varmetek.munchymc.MunchyMax
 version: 1.0.0
 description: A MunchyPrison plugin made by Varmetek
 authors:
   - Varmetek
-depend: [ProtocolLib, PermissionsEx, Vault]
+depend: [ProtocolLib, PermissionsEx, Vault, WorldEdit, WorldGuard]
 commands:
   rares: null
   test: null

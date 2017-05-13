@@ -1,6 +1,6 @@
 package me.varmetek.munchymc.util;
 
-import me.varmetek.munchymc.Main;
+import me.varmetek.munchymc.MunchyMax;
 import org.apache.commons.lang.Validate;
 import org.bukkit.Material;
 import org.bukkit.configuration.MemorySection;
@@ -46,7 +46,7 @@ public final class UtilInventory
 		Validate.notNull(ev);
 		if(ev.getClick() != ClickType.NUMBER_KEY)return;
 		ev.setCancelled(true);
-		Main.get().getTaskHandler().run(()->{
+		MunchyMax.getTaskHandler().run(()->{
 
 			ev.getWhoClicked().getInventory().setItem(ev.getHotbarButton(),ev.getClickedInventory().getItem(ev.getSlot()));
 			ev.getClickedInventory().setItem(ev.getSlot(),null);

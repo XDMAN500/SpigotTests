@@ -40,10 +40,11 @@ import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.scheduler.BukkitTask;
 
 import java.util.Set;
+
 @Deprecated
-public final class Main extends PluginMain implements Cleanable
+public final class __Main extends PluginMain implements Cleanable
 {
-	private static Main plugin;
+	private static __Main plugin;
 
 	private ItemMap itemMap;
 	private HookManager hookManager;
@@ -60,7 +61,7 @@ public final class Main extends PluginMain implements Cleanable
 	Economy economy;
 	Chat chat;
 	Permission permission;
-	public Main(){
+	public __Main (){
 		elementManager = new ElementManager(this);
 		kitHandler = new KitHandler();
 		itemMap = new ItemMap();
@@ -220,9 +221,9 @@ public final class Main extends PluginMain implements Cleanable
 	public void removeTickListener(TickListener e){
 		tickListeners.remove(e);
 	}
-	public static Main get ()
+	public static __Main get ()
 	{
-		return getPlugin(Main.class);
+		return getPlugin(__Main.class);
 	}
 
 	protected void registerElements ()
@@ -296,7 +297,7 @@ public final class Main extends PluginMain implements Cleanable
 
 	private boolean setupPermissions()
 	{
-		RegisteredServiceProvider<Permission> permissionProvider = getServer().getServicesManager().getRegistration(net.milkbowl.vault.permission.Permission.class);
+		RegisteredServiceProvider<Permission> permissionProvider = getServer().getServicesManager().getRegistration(Permission.class);
 		if (permissionProvider != null) {
 			permission = permissionProvider.getProvider();
 		}
@@ -305,7 +306,7 @@ public final class Main extends PluginMain implements Cleanable
 
 	private boolean setupChat()
 	{
-		RegisteredServiceProvider<Chat> chatProvider = getServer().getServicesManager().getRegistration(net.milkbowl.vault.chat.Chat.class);
+		RegisteredServiceProvider<Chat> chatProvider = getServer().getServicesManager().getRegistration(Chat.class);
 		if (chatProvider != null) {
 			chat = chatProvider.getProvider();
 		}
@@ -315,7 +316,7 @@ public final class Main extends PluginMain implements Cleanable
 
 	private boolean setupEconomy()
 	{
-		RegisteredServiceProvider<Economy> economyProvider = getServer().getServicesManager().getRegistration(net.milkbowl.vault.economy.Economy.class);
+		RegisteredServiceProvider<Economy> economyProvider = getServer().getServicesManager().getRegistration(Economy.class);
 		if (economyProvider != null) {
 			economy = economyProvider.getProvider();
 		}
@@ -323,7 +324,7 @@ public final class Main extends PluginMain implements Cleanable
 		return (economy != null);
 	}
 
-	private  void registerItems (Main plug)
+	private  void registerItems (__Main plug)
 	{
 		itemMap
 				.register(

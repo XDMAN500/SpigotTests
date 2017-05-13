@@ -2,7 +2,7 @@ package me.varmetek.munchymc.backend.mines;
 
 
 import com.sk89q.worldguard.protection.regions.ProtectedRegion;
-import me.varmetek.munchymc.Main;
+import me.varmetek.munchymc.MunchyMax;
 import org.bukkit.World;
 import org.bukkit.material.MaterialData;
 import org.bukkit.scheduler.BukkitRunnable;
@@ -63,7 +63,7 @@ public class MineGenerator
           }
           y++;
         }
-      }.runTaskTimer(Main.get(), 5L, 0L);
+      }.runTaskTimer(MunchyMax.getInstance(), 5L, 0L);
 	 /*     for (int y = minY; y <= maxY; y++) {
 	        for (int z = minZ; z <= maxZ; z++) {
 	          for (int x = minX; x <= maxX; x++) {
@@ -79,7 +79,7 @@ public class MineGenerator
 	      }*/
     }
     catch(NullPointerException e){
-      Main.get().getLogger().warning("Mine \"" + mine.getName() + " \" could not reset properly");
+      MunchyMax.getInstance().getLogger().warning("Mine \"" + mine.getName() + " \" could not reset properly");
       e.printStackTrace();
     }
 

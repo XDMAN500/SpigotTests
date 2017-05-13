@@ -61,7 +61,9 @@ public class Mine
 
 
   }
-
+  public Map<MaterialData,Integer> getRawBlockData(){
+     return blocks;
+  }
   public boolean hasEmptyData(){
      return blocks.isEmpty();
   }

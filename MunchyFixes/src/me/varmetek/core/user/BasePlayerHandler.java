@@ -1,6 +1,7 @@
 package me.varmetek.core.user;
 
 import me.varmetek.core.util.Cleanable;
+import me.varmetek.core.util.PluginCore;
 import org.apache.commons.lang.Validate;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
@@ -17,10 +18,11 @@ public abstract class BasePlayerHandler<T extends BasePlayerSession<? extends Ba
 {
 
 
-
+	protected PluginCore plugin;
 	protected  Map<UUID, T> registry = new HashMap<>();
 
-	public BasePlayerHandler (){
+	public BasePlayerHandler (PluginCore plugin ){
+		this.plugin = plugin;
 
 	}
 
@@ -119,9 +121,14 @@ public abstract class BasePlayerHandler<T extends BasePlayerSession<? extends Ba
 		registry.values().forEach( (E)->E.clean());
 		registry.clear();
 		registry = null;
+		plugin = null;
 
 
 	}
+
+	public PluginCore  getPlugin(){
+	  return  plugin;
+  }
 
 
 

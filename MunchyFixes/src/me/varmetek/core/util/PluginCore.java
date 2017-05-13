@@ -5,7 +5,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 /**
  * Created by XDMAN500 on 5/13/2017.
  */
-public abstract class PluginCore<T extends PluginAPI> extends JavaPlugin implements Cleanable
+public abstract class PluginCore extends JavaPlugin implements Cleanable
 {
 
 

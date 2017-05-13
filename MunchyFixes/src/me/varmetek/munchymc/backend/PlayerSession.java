@@ -8,7 +8,7 @@ import me.varmetek.core.scoreboard.Sidebar;
 import me.varmetek.core.scoreboard.SidebarHandler;
 import me.varmetek.core.user.BasePlayerSession;
 import me.varmetek.core.util.Messenger;
-import me.varmetek.munchymc.Main;
+import me.varmetek.core.util.PluginCore;
 import org.apache.commons.lang3.Validate;
 import org.bukkit.Bukkit;
 import org.bukkit.Color;
@@ -27,13 +27,13 @@ import java.util.*;
 public class PlayerSession extends BasePlayerSession<PlayerData>
 {
 
-  private Main main;
+  ;
   protected Optional<Scoreboardx> board ;
-
+  protected PluginCore plugin;
   public PlayerSession (UUID name, final PlayerHandler handler){
     super(name, handler);
 
-    main = (Main) this.handler.getPlugin();
+    plugin  = handler.getPlugin();
     dead = !profile.isOnline();
     if (board.isPresent() && !board.get().getSidebarHandler().has("default")){
       board.get().getSidebarHandler().add("default");
@@ -55,7 +55,7 @@ public class PlayerSession extends BasePlayerSession<PlayerData>
   public PlayerSession (PlayerSession old){
     super(old);
 
-    main = (Main) this.handler.getPlugin();
+   plugin = this.handler.getPlugin();
     dead = !profile.isOnline();
 
     board = old.board;
@@ -235,7 +235,7 @@ public class PlayerSession extends BasePlayerSession<PlayerData>
 
     } catch (Exception e) {
       e.printStackTrace();
-      main.getLogger().warning("Failed to edit sb: " + sb.ID());
+      plugin.getLogger().warning("Failed to edit sb: " + sb.ID());
     } finally {
       sb.getHandle().render();
     }
