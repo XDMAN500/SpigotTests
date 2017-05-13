@@ -1,5 +1,6 @@
 package me.varmetek.munchymc.backend.hooks;
 
+import com.sk89q.worldedit.bukkit.WorldEditPlugin;
 import me.varmetek.munchymc.Main;
 import net.milkbowl.vault.chat.Chat;
 import net.milkbowl.vault.economy.Economy;
@@ -21,7 +22,7 @@ public class HookManager
 	public Chat chat = null;
 
 	public HookPerm  permHook = null;
-
+	public HookWorldEdit weHook = null;
 
 
 	public HookManager(Main main){
@@ -32,7 +33,7 @@ public class HookManager
 
 		ServicesManager sm = Bukkit.getServicesManager();
 
-
+		weHook = new HookWorldEdit((WorldEditPlugin) Bukkit.getPluginManager().getPlugin("PermissionsEx"),true);
 		permHook = new HookPerm((PermissionsEx)Bukkit.getPluginManager().getPlugin("PermissionsEx"),false);
 
 			RegisteredServiceProvider<Permission> permissionProvider = sm.getRegistration(net.milkbowl.vault.permission.Permission.class);

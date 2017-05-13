@@ -7,8 +7,7 @@ import me.varmetek.core.item.CustomItem;
 import me.varmetek.core.item.ItemMap;
 import me.varmetek.core.service.Element;
 import me.varmetek.core.service.ElementManager;
-import me.varmetek.core.util.Cleanable;
-import me.varmetek.core.util.PluginMain;
+import me.varmetek.core.util.PluginCore;
 import me.varmetek.core.util.TaskHandler;
 import me.varmetek.munchymc.backend.*;
 import me.varmetek.munchymc.backend.hooks.HookManager;
@@ -39,11 +38,12 @@ import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.scheduler.BukkitTask;
 
+import java.util.Optional;
 import java.util.Set;
 
-public final class Main extends PluginMain implements Cleanable
+public final class MainMunchyMax extends PluginCore
 {
-	private static Main plugin;
+	private static Optional<MainMunchyMax> instance = Optional.empty();
 
 	private ItemMap itemMap;
 	private HookManager hookManager;
@@ -54,29 +54,56 @@ public final class Main extends PluginMain implements Cleanable
 	private ElementManager elementManager;
 	private KitHandler kitHandler;
 	private BukkitTask tickLoop;
-	private Set<TickListener> tickListeners = new ConcurrentSet<>();
-	public ShopView shop = new ShopView(this);
-	private MineManager mineManager = new MineManager(this);
+	private Set<TickListener> tickListeners;
+	public ShopView shop;
+	private MineManager mineManager;
 	Economy economy;
 	Chat chat;
 	Permission permission;
-	public Main(){
+
+	private boolean dirty = false;
+
+	public MainMunchyMax (){
+		boolean dirty = instance.isPresent() && this != instance.get();
+
+		if(dirty){
+			throw new IllegalStateException("Singleton has already been set");
+		}else{
+			instance = Optional.of(this);
+		}
+
+	}
+
+	public static MainMunchyMax getInstance(){
+		return instance.orElseThrow( ()->{ return new IllegalStateException("Singleton has not been set");});
+	}
+
+
+	@Override
+	public void onLoad ()
+	{
+		if(dirty)return;
+
+		ConfigurationSerialization.registerClass(PlayerData.class);
 		elementManager = new ElementManager(this);
 		kitHandler = new KitHandler();
 		itemMap = new ItemMap();
 		dataManager = new DataManager(this);
 		taskHandler = new TaskHandler(this);
-		//chatPlaceholderMap = new ChatPlaceholderMap("&8<&b"+Utils.placeholder("playerName")+"&8> &7"+Utils.placeholder("playerMessage"));
-    playerHandler = new PlayerHandler(this);
+		playerHandler = new PlayerHandler(this);
 		hookManager = new HookManager(this);
 		pointManager = new PointManager(this);
-
+		mineManager = new MineManager(this);
+		shop = new ShopView(this);
+		tickListeners = new ConcurrentSet<>();
 	}
-
-
 	public void onEnable (){
+		if(dirty){
+			getLogger().warning("Plugin could not enable correctly");
+			getServer().getPluginManager().disablePlugin(this);
+			return;
+		}
 
-    plugin = this;
     dataManager.createCoreFiles();
 		checkDepends();
 
@@ -115,81 +142,108 @@ public final class Main extends PluginMain implements Cleanable
 
 	}
 
-	private void checkDepends(){
 
-
-
-
-
-	}
-
-	public MineManager getMineManager(){
-		return mineManager;
-	}
-	public PointManager getPointManager(){ return pointManager;}
-	public ChatPlaceholderMap getChatPlaceholderMap(){return null;}//chatPlaceholderMap;}
-
-	public ConsoleCommandSender getConsole ()
-	{
-		return getServer().getConsoleSender();
-	}
-
-	public PlayerHandler getPlayerHandler ()
-	{
-		return playerHandler;
-	}
-
-	public TaskHandler getTaskHandler ()
-	{
-		return taskHandler;
-	}
-
-	public ItemMap getItemMap ()
-	{
-		return itemMap;
-	}
-
-	public DataManager getDataManager ()
-	{
-		return dataManager;
-	}
-
-	public KitHandler getKitHandler ()
-	{
-		return kitHandler;
-	}
-
-	public ElementManager getElementManager(){ return elementManager;}
-
-	public HookManager getHookManager(){
-		return hookManager;
-	}
-
-	@Override
-	public void onLoad ()
-	{
-		ConfigurationSerialization.registerClass(PlayerData.class);
-	}
 
 	@Override
 	public void onDisable ()
 	{
-	  try {
-      dataManager.asKitData().saveKits();
-    }catch(Exception e){
-      getLogger().warning("Failed saving kits");
-	    e.printStackTrace();
-    }
+		if(dirty)return;
+		try {
+			dataManager.asKitData().saveKits();
+		}catch(Exception e){
+			getLogger().warning("Failed saving kits");
+			e.printStackTrace();
+		}
 
-    try {
-      dataManager.asPointData().saveAllPoints();
+		try {
+			dataManager.asPointData().saveAllPoints();
 
-    }catch(Exception e){
-      getLogger().warning("Failed Saving points");
-      e.printStackTrace();
-    }
+		}catch(Exception e){
+			getLogger().warning("Failed Saving points");
+			e.printStackTrace();
+		}
 		dataManager.asUserData().saveAll();
 		clean();
+
+
+	}
+
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/*
+
+	GETTERS AND SETTERS
+
+*/
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+
+
+
+	public static MineManager getMineManager(){
+		return getInstance().mineManager;
+	}
+
+	public static PointManager getPointManager(){
+		return getInstance().pointManager;
+	}
+
+	public static ChatPlaceholderMap getChatPlaceholderMap(){return null;}//chatPlaceholderMap;}
+
+	public static ConsoleCommandSender getConsole ()
+	{
+		return Bukkit.getServer().getConsoleSender();
+	}
+
+	public static PlayerHandler getPlayerHandler ()
+	{
+		return getInstance().playerHandler;
+	}
+
+	public static TaskHandler getTaskHandler ()
+	{
+
+		return getInstance().taskHandler;
+	}
+
+	public static ItemMap getItemMap ()
+	{
+
+		return getInstance().itemMap;
+	}
+
+
+
+
+	public static DataManager getDataManager ()
+	{
+		return getInstance().dataManager;
+	}
+
+	public static KitHandler getKitHandler ()
+	{
+		return getInstance().kitHandler;
+	}
+
+	public static ElementManager getElementManager(){ return getInstance().elementManager;}
+
+	public static HookManager getHookManager(){
+		return getInstance().hookManager;
+	}
+
+
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/*
+
+	Utility Methods
+
+*/
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+	private void checkDepends(){
+
+
+
 
 
 	}
@@ -210,7 +264,8 @@ public final class Main extends PluginMain implements Cleanable
 		taskHandler = null;
 		dataManager = null;
 		itemMap = null;
-		plugin = null;
+		instance = Optional.empty();
+
 	}
 
 	public void addTickListener(TickListener e){
@@ -220,9 +275,9 @@ public final class Main extends PluginMain implements Cleanable
 	public void removeTickListener(TickListener e){
 		tickListeners.remove(e);
 	}
-	public static Main get ()
+	public static MainMunchyMax get ()
 	{
-		return getPlugin(Main.class);
+		return getPlugin(MainMunchyMax.class);
 	}
 
 	protected void registerElements ()
@@ -296,7 +351,7 @@ public final class Main extends PluginMain implements Cleanable
 
 	private boolean setupPermissions()
 	{
-		RegisteredServiceProvider<Permission> permissionProvider = getServer().getServicesManager().getRegistration(net.milkbowl.vault.permission.Permission.class);
+		RegisteredServiceProvider<Permission> permissionProvider = getServer().getServicesManager().getRegistration(Permission.class);
 		if (permissionProvider != null) {
 			permission = permissionProvider.getProvider();
 		}
@@ -305,7 +360,7 @@ public final class Main extends PluginMain implements Cleanable
 
 	private boolean setupChat()
 	{
-		RegisteredServiceProvider<Chat> chatProvider = getServer().getServicesManager().getRegistration(net.milkbowl.vault.chat.Chat.class);
+		RegisteredServiceProvider<Chat> chatProvider = getServer().getServicesManager().getRegistration(Chat.class);
 		if (chatProvider != null) {
 			chat = chatProvider.getProvider();
 		}
@@ -315,7 +370,7 @@ public final class Main extends PluginMain implements Cleanable
 
 	private boolean setupEconomy()
 	{
-		RegisteredServiceProvider<Economy> economyProvider = getServer().getServicesManager().getRegistration(net.milkbowl.vault.economy.Economy.class);
+		RegisteredServiceProvider<Economy> economyProvider = getServer().getServicesManager().getRegistration(Economy.class);
 		if (economyProvider != null) {
 			economy = economyProvider.getProvider();
 		}
@@ -323,7 +378,7 @@ public final class Main extends PluginMain implements Cleanable
 		return (economy != null);
 	}
 
-	private  void registerItems (Main plug)
+	private  void registerItems (MainMunchyMax plug)
 	{
 		itemMap
 				.register(
