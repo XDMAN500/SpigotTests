@@ -3,8 +3,7 @@ package me.varmetek.munchymc.backend;
 import me.varmetek.core.commands.CmdCommand;
 import me.varmetek.core.service.Element;
 import me.varmetek.core.user.BasePlayerHandler;
-import me.varmetek.core.util.PluginMain;
-import me.varmetek.munchymc.Main;
+import me.varmetek.munchymc.MunchyMax;
 import me.varmetek.munchymc.listeners.TickListener;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -20,65 +19,16 @@ import java.util.UUID;
 public class PlayerHandler extends BasePlayerHandler<PlayerSession> implements TickListener, Element
 {
 
-	private Main main;
 	private PlayerHandler handle = this;
-	private Listener listen = new Listener(){
-		@EventHandler(priority = EventPriority.LOW)
-		public void onLogin(PlayerJoinEvent ev){
-
-			PlayerSession user = handle.renewSession(ev.getPlayer());
-			ev.getPlayer().setInvulnerable(false);
-			try
-			{
-				main.getDataManager().asUserData().loadUser(user);
-			}catch(Exception e){
-				plugin.getLogger().warning("Could not load player" + " \"" + user.getName() + "\".");
-			}
-
-
-		}
-
-		@EventHandler(priority = EventPriority.LOW)
-		public void onLeave0(org.bukkit.event.player.PlayerQuitEvent ev){
-
-			PlayerSession user = handle.renewSession(ev.getPlayer());
-			ev.getPlayer().setInvulnerable(false);
-
-			try
-			{
-				main.getDataManager().asUserData().saveUser(user);
-			}catch(Exception e){
-				plugin.getLogger().warning("Could not save player" + " \"" + user.getName() + "\".");
-			}
-
-
-		}
-
-		@EventHandler(priority = EventPriority.LOW)
-		public void onLeave2(org.bukkit.event.player.PlayerKickEvent ev){
-
-			PlayerSession user = handle.renewSession(ev.getPlayer());
-			ev.getPlayer().setInvulnerable(false);
-
-			try
-			{
-				main.getDataManager().asUserData().saveUser(user);
-			}catch(Exception e){
-				plugin.getLogger().warning("Could not save player" + " \"" + user.getName() + "\".");
-			}
-
-
-		}
-
-	};
 
 
 
-	public PlayerHandler (PluginMain plugin)
+
+	public PlayerHandler ()
 	{
-		super(plugin);
-		main = (Main)plugin;
-		main.addTickListener(this);
+
+
+		MunchyMax.addTickListener(this);
 
 
 	}
@@ -90,7 +40,7 @@ public class PlayerHandler extends BasePlayerHandler<PlayerSession> implements T
 			PlayerSession user = registry.get(id);
 			if(!user.isOnline()){
 				remove(user);
-				main.getLogger().info("Cleaning user ("+ user.getName()+")");
+				MunchyMax.getInstance().getLogger().info("Cleaning user ("+ user.getName()+")");
 			}
 		});
 
@@ -121,6 +71,54 @@ public class PlayerHandler extends BasePlayerHandler<PlayerSession> implements T
 
 	@Override
 	public Listener supplyListener (){
-		return listen;
+		return new Listener(){
+			@EventHandler(priority = EventPriority.LOW)
+			public void onLogin(PlayerJoinEvent ev){
+
+				PlayerSession user = handle.renewSession(ev.getPlayer());
+				ev.getPlayer().setInvulnerable(false);
+				try
+				{
+					MunchyMax.getDataManager().asUserData().loadUser(user);
+				}catch(Exception e){
+					MunchyMax.getInstance().getLogger().warning("Could not load player" + " \"" + user.getName() + "\".");
+				}
+
+
+			}
+
+			@EventHandler(priority = EventPriority.LOW)
+			public void onLeave0(org.bukkit.event.player.PlayerQuitEvent ev){
+
+				PlayerSession user = handle.renewSession(ev.getPlayer());
+				ev.getPlayer().setInvulnerable(false);
+
+				try
+				{
+					MunchyMax.getDataManager().asUserData().saveUser(user);
+				}catch(Exception e){
+					MunchyMax.getInstance().getLogger().warning("Could not save player" + " \"" + user.getName() + "\".");
+				}
+
+
+			}
+
+			@EventHandler(priority = EventPriority.LOW)
+			public void onLeave2(org.bukkit.event.player.PlayerKickEvent ev){
+
+				PlayerSession user = handle.renewSession(ev.getPlayer());
+				ev.getPlayer().setInvulnerable(false);
+
+				try
+				{
+					MunchyMax.getDataManager().asUserData().saveUser(user);
+				}catch(Exception e){
+					MunchyMax.getInstance().getLogger().warning("Could not save player" + " \"" + user.getName() + "\".");
+				}
+
+
+			}
+
+		};
 	}
 }

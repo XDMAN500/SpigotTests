@@ -2,7 +2,7 @@ package me.varmetek.munchymc.commands;
 
 import me.varmetek.core.commands.CmdCommand;
 import me.varmetek.core.service.Element;
-import me.varmetek.munchymc.Main;
+import me.varmetek.munchymc.MunchyMax;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Listener;
@@ -14,11 +14,11 @@ import org.bukkit.inventory.meta.SkullMeta;
  */
 public class CommandShop implements Element
 {
-	private Main plugin;
+
 	private CmdCommand[] commands;
 
-	public CommandShop (Main main){
-		plugin = main;
+	public CommandShop (){
+
 
 		commands = new CmdCommand[]{
 		  new CmdCommand.Builder("shop",(sender,alias,args,length) -> {
@@ -32,7 +32,7 @@ public class CommandShop implements Element
         //Bukkit.getServer().getOnlinePlayers().forEach(  (u) -> {inv.addItem(getHead(u));});
         //inv.addItem(getHead(pl));
         //pl.openInventory(inv);
-        plugin.shop.open(pl, ShopView.View.MAIN);
+        MunchyMax.getShop().open(pl, ShopView.View.MAIN);
       }).build()
 		};
 	}
@@ -49,7 +49,7 @@ public class CommandShop implements Element
 
   @Override
 	public void clean (){
-		plugin = null;
+
 	}
 
 

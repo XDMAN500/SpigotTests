@@ -5,7 +5,7 @@ import me.varmetek.core.commands.CmdCommand;
 import me.varmetek.core.commands.CmdSender;
 import me.varmetek.core.commands.CmdSupplier;
 import me.varmetek.core.util.Cleanable;
-import me.varmetek.core.util.PluginMain;
+import me.varmetek.core.util.PluginCore;
 import org.apache.commons.lang.Validate;
 import org.bukkit.Bukkit;
 import org.bukkit.Server;
@@ -20,7 +20,7 @@ import java.util.*;
  */
 public class ElementManager implements CommandExecutor, TabCompleter, Cleanable
 {
-  private PluginMain plugin;
+  private PluginCore plugin;
   private Map<String,CmdCommand> commands = Maps.newHashMap();
   private Map<Class<? extends Element>,Element> elementRegisty = new HashMap<>();
 
@@ -34,7 +34,7 @@ public class ElementManager implements CommandExecutor, TabCompleter, Cleanable
 
   }
 
-  public ElementManager (PluginMain plugin){
+  public ElementManager (PluginCore plugin){
     this.plugin = plugin;
     try{
       findCommandMap();

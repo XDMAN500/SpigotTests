@@ -5,7 +5,7 @@ import me.varmetek.core.placeholder.FormatHandleChat;
 import me.varmetek.core.placeholder.FormatHandlePlayer;
 import me.varmetek.core.service.Element;
 import me.varmetek.core.util.Messenger;
-import me.varmetek.munchymc.Main;
+import me.varmetek.munchymc.MunchyMax;
 import me.varmetek.munchymc.backend.PlayerSession;
 import me.varmetek.munchymc.util.Container;
 import me.varmetek.munchymc.util.Utils;
@@ -30,13 +30,13 @@ public class ChatListener implements Element
 
 	private static final String  permPrefix = "ench.look.bs." ;
 
-	private final Main plugin;
+
 	private final FormatHandlePlayer formatHandle = new FormatHandlePlayer();
 	private final FormatHandleChat chatFormatHandle = new FormatHandleChat("&8<&b"+Utils.placeholder("playerName")+"&8> &7"+Utils.placeholder("playerMessage"), Utils.placeholder("playerMessage"));
 	private final Listener listener;
 
-	public ChatListener(Main plugin){
-		this.plugin = plugin;
+	public ChatListener(){
+
 
 		formatHandle.register("%playerName%", (p)->{return p.getName();});
 		chatFormatHandle.register(Utils.placeholder("playerName"),(ev)->{return ev.getPlayer().getName();});
@@ -46,7 +46,7 @@ public class ChatListener implements Element
 			@EventHandler (priority =  EventPriority.LOW)
 			public void chat(AsyncPlayerChatEvent ev)
 			{
-				PlayerSession user = plugin.getPlayerHandler().getSession(ev.getPlayer());
+				PlayerSession user = MunchyMax.getPlayerHandler().getSession(ev.getPlayer());
 				//plugin.getUserHandler().getUser(ev.getPlayer());
 
 				//Player pl = ev.getPlayer();

@@ -1,7 +1,7 @@
 package me.varmetek.munchymc.rares;
 
 import ca.thederpygolems.armorequip.ArmorEquipEvent;
-import me.varmetek.munchymc.Main;
+import me.varmetek.munchymc.MunchyMax;
 import me.varmetek.munchymc.backend.RareItemListener;
 import me.varmetek.munchymc.backend.test.CustomItemRare;
 import org.bukkit.entity.Player;
@@ -14,9 +14,9 @@ import org.bukkit.potion.PotionEffectType;
 
 public class RareHermesSandals extends RareItemListener{
 
-	public  RareHermesSandals (CustomItemRare rare, Main plugin){
+	public  RareHermesSandals (CustomItemRare rare){
 
-		super(rare,plugin);
+		super(rare);
 	}
 
 
@@ -80,7 +80,7 @@ public class RareHermesSandals extends RareItemListener{
 			public void onEquip(ArmorEquipEvent ev){
 				Player pl = (Player)ev.getPlayer();
 
-				plugin.getTaskHandler().run(() ->{
+				MunchyMax.getTaskHandler().run(() ->{
 					if(check(pl)){
 
 						pl.addPotionEffect(new PotionEffect(PotionEffectType.SPEED,Integer.MAX_VALUE, 1, true,false));

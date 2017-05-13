@@ -2,7 +2,6 @@ package me.varmetek.munchymc.backend;
 
 
 import me.varmetek.core.util.Cleanable;
-import me.varmetek.munchymc.Main;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.Validate;
 
@@ -13,12 +12,13 @@ import java.util.*;
  */
 public class PointManager implements Cleanable
 {
-	private Main main;
-	private final Map<String, Point> POINTS = new HashMap<>();
-	private final List<String> WARPS = new LinkedList<>();
 
-	public PointManager(Main plugin){
-	  main = plugin;
+	private Map<String, Point> POINTS;
+	private List<String> WARPS;
+
+	public PointManager(){
+		POINTS = new HashMap<>();
+		WARPS = new LinkedList<>();
   }
 
 	public List<String> getWarps(){
@@ -27,6 +27,7 @@ public class PointManager implements Cleanable
 
   public Map<String, Point> getPoints(){
     return new HashMap<>(POINTS);
+
   }
 
 	public Point setPoint(String name, Point p){
@@ -93,6 +94,8 @@ public class PointManager implements Cleanable
 	public void clean (){
 		POINTS.clear();
 		WARPS.clear();
-		main = null;
+		POINTS = null;
+		WARPS = null;
+
 	}
 }

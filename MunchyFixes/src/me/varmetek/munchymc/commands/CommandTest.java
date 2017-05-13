@@ -3,7 +3,7 @@ package me.varmetek.munchymc.commands;
 import me.varmetek.core.commands.CmdCommand;
 import me.varmetek.core.service.Element;
 import me.varmetek.core.util.Messenger;
-import me.varmetek.munchymc.Main;
+import me.varmetek.munchymc.MunchyMax;
 import me.varmetek.munchymc.backend.PlayerSession;
 import me.varmetek.munchymc.listeners.UserTestModeChangeEvent;
 import org.bukkit.Bukkit;
@@ -12,17 +12,16 @@ import org.bukkit.event.Listener;
 
 public class CommandTest implements Element
 {
-	private Main plugin;
+
 	private final CmdCommand[]  commands;
 
-	public CommandTest(Main plugin){
-		this.plugin = plugin;
+	public CommandTest(){
 
 		commands = new CmdCommand[]{
 			new CmdCommand.Builder("test", (sender,alias,args,length) ->{
 				if(!sender.isPlayer())return ;
 				Player pl = sender.asPlayer();
-				PlayerSession user = plugin.getPlayerHandler().getSession(pl);
+				PlayerSession user = MunchyMax.getPlayerHandler().getSession(pl);
 
 				UserTestModeChangeEvent event = new UserTestModeChangeEvent(user,!user.isTesting());
 				Bukkit.getServer().getPluginManager().callEvent(event);
@@ -47,7 +46,7 @@ public class CommandTest implements Element
 
 	@Override
 	public void clean(){
-		plugin = null;
+
 	}
 
 	@Override

@@ -3,7 +3,7 @@ package me.varmetek.munchymc.commands;
 import me.varmetek.core.commands.CmdCommand;
 import me.varmetek.core.service.Element;
 import me.varmetek.core.util.Messenger;
-import me.varmetek.munchymc.Main;
+import me.varmetek.munchymc.MunchyMax;
 import me.varmetek.munchymc.backend.Point;
 import me.varmetek.munchymc.backend.PointManager;
 import org.bukkit.entity.Player;
@@ -18,13 +18,12 @@ import java.util.*;
 public class CommandWarps implements Element
 {
 
-  private Main main;
 
   private Map<UUID,String> confirm = new HashMap<UUID,String>();
 
 
-  public CommandWarps (Main main){
-    this.main = main;
+  public CommandWarps (){
+
 
 
 
@@ -32,7 +31,7 @@ public class CommandWarps implements Element
 
   public boolean hasPermission (Player pl, String warp){
     if(pl.isOp())return true;
-    PermissionUser pu = main.getHookManager().permHook.getManager().getUser(pl);
+    PermissionUser pu = MunchyMax.getHookManager().permHook.getManager().getUser(pl);
     return pu.has("munchymax.warps." + warp) || pu.has("munchymax.warps.*");
   }
 
@@ -62,7 +61,7 @@ public class CommandWarps implements Element
           }
 
           Player pl = sender.asPlayer();
-          PointManager manager = main.getPointManager();
+          PointManager manager = MunchyMax.getPointManager();
 
           if (length == 0){
             List<String> warps = manager.getWarps();
@@ -98,8 +97,8 @@ public class CommandWarps implements Element
             return;
           }
           Player pl = sender.asPlayer();
-          PointManager manager = main.getPointManager();
-          PermissionUser pu = main.getHookManager().permHook.getManager().getUser(pl);
+          PointManager manager = MunchyMax.getPointManager();
+          PermissionUser pu = MunchyMax.getHookManager().permHook.getManager().getUser(pl);
 
           if (!pu.has("munchymax.editpoint")){
             Messenger.send(pl, "&4@&c You do not have permission for this command.");
@@ -131,7 +130,7 @@ public class CommandWarps implements Element
                   String name = args[1];
                   Optional<Point> point = manager.getPoint(name);
                   if (point.isPresent()){
-                    Optional<CommandAction> op = main.getElementManager().getElement(CommandAction.class);
+                    Optional<CommandAction> op = MunchyMax.getElementManager().getElement(CommandAction.class);
                     if (op.isPresent()){
                       Messenger.send(pl, "&cWarp \"" + name + "\" already exists. &bDo /confirm to overwrite it.");
                       CommandAction ca = op.get();
@@ -235,7 +234,7 @@ public class CommandWarps implements Element
                   switch (args[1]) {
                     case "save": {
                       try {
-                        main.getDataManager().asPointData().saveAllPoints();
+                        MunchyMax.getDataManager().asPointData().saveAllPoints();
                         Messenger.send(pl, "&A&l> &7All points have been saved to disk");
                       } catch (Exception e) {
                         Messenger.send(pl, "&c&l> &7An error occured while saving points");
@@ -247,7 +246,7 @@ public class CommandWarps implements Element
 
                     case "load": {
                       try {
-                        main.getDataManager().asPointData().loadllPoints();
+                        MunchyMax.getDataManager().asPointData().loadllPoints();
                         Messenger.send(pl, "&A&l> &7All points have been loaded from disk");
                       } catch (Exception e) {
                         Messenger.send(pl, "&c&l> &7An error occured while loading points");

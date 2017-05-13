@@ -3,7 +3,7 @@ package me.varmetek.munchymc.commands;
 import me.varmetek.core.commands.CmdCommand;
 import me.varmetek.core.service.Element;
 import me.varmetek.core.util.Messenger;
-import me.varmetek.munchymc.Main;
+import me.varmetek.munchymc.MunchyMax;
 import me.varmetek.munchymc.backend.PlayerSession;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
@@ -16,16 +16,16 @@ import java.util.Arrays;
  */
 public class CommandMsg implements Element
 {
-  private Main main;
 
 
-  public CommandMsg (Main main){
-    this.main = main;
+
+  public CommandMsg (){
+
   }
 
   @Override
   public void clean (){
-    main = null;
+
   }
 
   @Override
@@ -46,8 +46,8 @@ public class CommandMsg implements Element
               Messenger.send(pl, "&c Player \"" + args[0] + "\" is not online");
               return;
             }
-            PlayerSession plUser = main.getPlayerHandler().getSession(pl);
-            PlayerSession targUser = main.getPlayerHandler().getSession(target);
+            PlayerSession plUser = MunchyMax.getPlayerHandler().getSession(pl);
+            PlayerSession targUser = MunchyMax.getPlayerHandler().getSession(target);
 
 
             plUser.setMsgReply(target.getName());
@@ -71,7 +71,7 @@ public class CommandMsg implements Element
           if (len == 0){
             Messenger.send(pl, "&cUsage: /r <text>");
           } else {
-            PlayerSession plUser = main.getPlayerHandler().getSession(pl);
+            PlayerSession plUser = MunchyMax.getPlayerHandler().getSession(pl);
 
             Player target = Bukkit.getPlayer(plUser.getMsgReply());
             if (target == null){

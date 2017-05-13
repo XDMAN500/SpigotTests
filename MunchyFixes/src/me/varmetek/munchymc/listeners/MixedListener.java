@@ -5,7 +5,7 @@ import me.varmetek.core.scoreboard.Sidebar;
 import me.varmetek.core.scoreboard.SidebarHandler;
 import me.varmetek.core.service.Element;
 import me.varmetek.core.util.Messenger;
-import me.varmetek.munchymc.Main;
+import me.varmetek.munchymc.MunchyMax;
 import me.varmetek.munchymc.backend.PlayerSession;
 import me.varmetek.munchymc.backend.Rares;
 import net.md_5.bungee.api.ChatColor;
@@ -37,7 +37,7 @@ import java.util.Random;
  */
 public class MixedListener implements Element
 {
-	private final Main plugin;
+
 	private final Listener listen= new Listener(){
     @EventHandler
     public void ultraCraft(InventoryClickEvent ev){
@@ -60,7 +60,7 @@ public class MixedListener implements Element
       if(ci.getResult() == null)
       {
 
-        plugin.getTaskHandler().run(() ->
+        MunchyMax.getTaskHandler().run(() ->
         {
           ItemStack[] stuff = tryCraftingRare(ci);
 
@@ -86,7 +86,7 @@ public class MixedListener implements Element
         for(int i = 0; i < size;  i++)
         {
           ItemStack item = ci.getMatrix()[i];
-          if( plugin.getItemMap().getByItem(item) == null){
+          if( MunchyMax.getItemMap().getByItem(item) == null){
             items[i] = null;
             continue;
           }
@@ -101,7 +101,7 @@ public class MixedListener implements Element
         }
         final ItemStack[] e = items;
 
-        plugin.getTaskHandler().run(() ->
+       MunchyMax.getTaskHandler().run(() ->
         {
 
           if (e != null)
@@ -129,7 +129,7 @@ public class MixedListener implements Element
       {
 
         ItemStack item = ci.getMatrix()[i];
-        boolean invalid = plugin.getItemMap().getByItem(item) == null;
+        boolean invalid = MunchyMax.getItemMap().getByItem(item) == null;
 
         if(invalid) continue;
 
@@ -171,13 +171,13 @@ public class MixedListener implements Element
     }*/
     @EventHandler
     public void login(PlayerJoinEvent ev){
-      PlayerSession user = plugin.getPlayerHandler().getSession(ev.getPlayer());
+      PlayerSession user = MunchyMax.getPlayerHandler().getSession(ev.getPlayer());
       ev.setJoinMessage(user.compileJoinMessage());
     }
 
     @EventHandler
     public void logout(PlayerQuitEvent ev){
-      PlayerSession user = plugin.getPlayerHandler().getSession(ev.getPlayer());
+      PlayerSession user = MunchyMax.getPlayerHandler().getSession(ev.getPlayer());
       ev.setQuitMessage(user.compileLeaveMessage());
     }
 
@@ -186,7 +186,7 @@ public class MixedListener implements Element
       if((ev.getEntity().getType() != EntityType.PLAYER )) return;
       Player player = (Player)ev.getEntity();
 
-      PlayerSession user =  plugin.getPlayerHandler().getSession(player);
+      PlayerSession user =  MunchyMax.getPlayerHandler().getSession(player);
       if(user.isDead())ev.setCancelled(true);
     }
     @EventHandler
@@ -195,7 +195,7 @@ public class MixedListener implements Element
 
       if((ev.getEntity().getType() != EntityType.PLAYER )) return;
       Player player = (Player)ev.getEntity();
-      PlayerSession user =  plugin.getPlayerHandler().getSession(player);
+      PlayerSession user =  MunchyMax.getPlayerHandler().getSession(player);
       if(!user.getScoreBoard().isPresent())return;
 
       if(player.getHealth() >  ev.getFinalDamage()){return;	}
@@ -217,6 +217,7 @@ public class MixedListener implements Element
       sb.set("spc3","&5 ",1);
       sb.set("spc4","&7=============",0);
       sb.setVisible(true);
+
 
       new BukkitRunnable(){
         Sidebar dd = sb;
@@ -241,7 +242,7 @@ public class MixedListener implements Element
 
         }
 
-      }.runTaskTimer(plugin,1,20);
+      }.runTaskTimer(MunchyMax.getInstance(),1,20);
 
 
     }
@@ -299,9 +300,8 @@ public class MixedListener implements Element
 
 
 
-	public MixedListener(Main plugin){
+	public MixedListener(){
 
-		this.plugin = plugin;
 
 
 	}

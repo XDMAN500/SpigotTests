@@ -3,7 +3,6 @@ package me.varmetek.munchymc.commands;
 import me.varmetek.core.commands.CmdCommand;
 import me.varmetek.core.service.Element;
 import me.varmetek.core.util.Messenger;
-import me.varmetek.munchymc.Main;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -25,12 +24,12 @@ import java.util.UUID;
  */
 public class ShopView implements Element
 {
-	private Main plugin;
+
 	private Map<UUID,Entry> menu = new HashMap<>();
 
 	private final Listener event;
-	public ShopView(Main main){
-		this.plugin = main;
+	public ShopView(){
+
 
 		event = new Listener()
 		{
@@ -73,7 +72,7 @@ public class ShopView implements Element
 
 	@Override
 	public void clean (){
-		plugin = null;
+
 		menu.clear();
 		menu = null;
 	}
@@ -101,7 +100,7 @@ public class ShopView implements Element
 	}
 
 	public void openShopMenu(Player player){
-		Inventory inv = plugin.getServer().createInventory(null,54, "Shop");
+		Inventory inv = Bukkit.getServer().createInventory(null,54, "Shop");
 
 		Bukkit.getServer().getOnlinePlayers().forEach(  (u) -> {inv.addItem(getHead(u));});
 		//inv.addItem(getHead(pl));
@@ -113,7 +112,7 @@ public class ShopView implements Element
 		Bukkit.getServer().getLogger().info("On list : in Player shop");
 		menu.put(viewer.getUniqueId(), new Entry(View.PLAYERSHOP_MAIN, owner));
 
-		Inventory inv = plugin.getServer().createInventory(null,9, "Shop > " + owner.getName());
+		Inventory inv = Bukkit.getServer().createInventory(null,9, "Shop > " + owner.getName());
 		ItemStack item = new ItemStack(Material.EMERALD_BLOCK);
 		ItemMeta im = item.getItemMeta();
 		im.setDisplayName(Messenger.color("&ABuying"));

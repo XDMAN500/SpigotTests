@@ -1,6 +1,6 @@
 package me.varmetek.munchymc.rares;
 
-import me.varmetek.munchymc.Main;
+import me.varmetek.munchymc.MunchyMax;
 import me.varmetek.munchymc.backend.RareItemListener;
 import me.varmetek.munchymc.backend.test.CustomItemRare;
 import org.bukkit.Bukkit;
@@ -31,9 +31,9 @@ public  final class RareParkourBoots extends RareItemListener
 
 
 
-	public RareParkourBoots(CustomItemRare rare, Main plugin){
+	public RareParkourBoots(CustomItemRare rare){
 
-		super(rare,plugin);
+		super(rare);
 	}
 	private static final Map<UUID, Set<BlockVector>> blocks = new HashMap<>();
 	
@@ -190,7 +190,7 @@ public  final class RareParkourBoots extends RareItemListener
 				if(!inv.equals(pl.getInventory()))return;
 
 				if(ev.getSlotType() !=  InventoryType.SlotType.ARMOR)return;
-				plugin.getTaskHandler().run(()->{
+				MunchyMax.getTaskHandler().run(()->{
 					if(check(pl)){
 
 						blocks.put(pl.getUniqueId(), new HashSet<BlockVector>() );
@@ -242,7 +242,7 @@ public  final class RareParkourBoots extends RareItemListener
 			public void onTeleport(PlayerTeleportEvent ev){
 				final Player pl = ev.getPlayer();
 				clearBlocks(pl.getUniqueId());
-				plugin.getTaskHandler().run(()->{
+				MunchyMax.getTaskHandler().run(()->{
 					makeFloor(pl.getUniqueId());
 
 				});

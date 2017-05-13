@@ -2,7 +2,7 @@ package me.varmetek.munchymc.backend;
 
 import me.varmetek.core.commands.CmdCommand;
 import me.varmetek.core.service.Element;
-import me.varmetek.munchymc.Main;
+import me.varmetek.munchymc.MunchyMax;
 import me.varmetek.munchymc.backend.test.CustomItemRare;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.EquipmentSlot;
@@ -12,11 +12,10 @@ public  abstract class RareItemListener implements Element{
 
 
 	protected final CustomItemRare item;
-	protected final Main plugin;
-	protected RareItemListener (CustomItemRare ci, Main plugin)
+	protected RareItemListener (CustomItemRare ci)
 	{
 		item = ci;
-		this.plugin = plugin;
+
 	}
 
 
@@ -25,7 +24,7 @@ public  abstract class RareItemListener implements Element{
 	public String getID(){ return item.ID();}
 	public boolean isEquiped(Player pl, EquipmentSlot slot)
 	{
-		return Rares.checkItem(getSlot(pl,slot), item , plugin.getUserHandler().getUser(pl).isTesting());
+		return Rares.checkItem(getSlot(pl,slot), item , MunchyMax.getPlayerHandler().getSession(pl).isTesting());
 	}
 
 	public ItemStack getSlot(Player pl, EquipmentSlot slot)

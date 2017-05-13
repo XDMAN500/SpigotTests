@@ -1,6 +1,5 @@
 package me.varmetek.munchymc.rares;
 
-import me.varmetek.munchymc.Main;
 import me.varmetek.munchymc.backend.RareItemListener;
 import me.varmetek.munchymc.backend.test.CustomItemRare;
 import me.varmetek.munchymc.util.Utils;
@@ -14,9 +13,9 @@ import org.bukkit.inventory.EquipmentSlot;
 public class RareSuperChest extends RareItemListener implements Listener
 {
 
-	public RareSuperChest(CustomItemRare rare, Main plugin){
+	public RareSuperChest(CustomItemRare rare){
 
-		super(rare,plugin);
+		super(rare);
 	}
 
 	@Override

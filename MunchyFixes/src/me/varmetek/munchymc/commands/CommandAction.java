@@ -4,7 +4,6 @@ import jdk.nashorn.internal.ir.Block;
 import me.varmetek.core.commands.CmdCommand;
 import me.varmetek.core.service.Element;
 import me.varmetek.core.util.Messenger;
-import me.varmetek.munchymc.Main;
 import org.apache.commons.lang.Validate;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
@@ -20,12 +19,10 @@ import java.util.UUID;
 public class CommandAction implements Element
 {
   private final CmdCommand[] commands ;
-  private Main main;
 
   private Map<UUID,Action> maps = new HashMap<>(10);
 
-  public CommandAction(Main plugin){
-    main = plugin;
+  public CommandAction(){
     commands = new CmdCommand[]{
       new CmdCommand.Builder("confirm", (sender,alias,args,length) ->{
         if(!sender.isPlayer()){

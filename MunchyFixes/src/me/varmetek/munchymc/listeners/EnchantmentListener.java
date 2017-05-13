@@ -2,7 +2,7 @@ package me.varmetek.munchymc.listeners;
 
 import me.varmetek.core.commands.CmdCommand;
 import me.varmetek.core.service.Element;
-import me.varmetek.munchymc.Main;
+import me.varmetek.munchymc.MunchyMax;
 import me.varmetek.munchymc.util.UtilInventory;
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
@@ -26,12 +26,12 @@ public class EnchantmentListener implements Element
 
   private static final boolean replaceEnchants = true;
 
-	private final Main plugin;
+
 	private final Listener listen;
 
-	public EnchantmentListener(Main plugin)
+	public EnchantmentListener()
 	{
-		this.plugin = plugin;
+
 
 		listen = new Listener()
     {
@@ -89,7 +89,7 @@ public class EnchantmentListener implements Element
           }
         }
 
-        plugin.getTaskHandler().runTask(() ->
+        MunchyMax.getTaskHandler().runTask(() ->
         {
           doSwap(inv);
         },1l);
@@ -110,7 +110,7 @@ public class EnchantmentListener implements Element
         doSwap(inv);
 
 
-        plugin.getTaskHandler().runTask(() ->
+        MunchyMax.getTaskHandler().runTask(() ->
         {
 
           //inv.setItem(0,item);

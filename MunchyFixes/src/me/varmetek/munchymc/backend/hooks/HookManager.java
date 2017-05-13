@@ -1,7 +1,6 @@
 package me.varmetek.munchymc.backend.hooks;
 
 import com.sk89q.worldedit.bukkit.WorldEditPlugin;
-import me.varmetek.munchymc.Main;
 import net.milkbowl.vault.chat.Chat;
 import net.milkbowl.vault.economy.Economy;
 import net.milkbowl.vault.permission.Permission;
@@ -15,7 +14,7 @@ import ru.tehkode.permissions.bukkit.PermissionsEx;
  */
 public class HookManager
 {
-	public Main main;
+
 
 	public Permission permission = null;
 	public Economy economy = null;
@@ -25,8 +24,8 @@ public class HookManager
 	public HookWorldEdit weHook = null;
 
 
-	public HookManager(Main main){
-		this.main = main;
+	public HookManager(){
+
 	}
 
 	public void load(){

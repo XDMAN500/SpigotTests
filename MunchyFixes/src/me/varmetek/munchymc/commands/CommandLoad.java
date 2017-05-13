@@ -2,7 +2,7 @@ package me.varmetek.munchymc.commands;
 
 import me.varmetek.core.commands.CmdCommand;
 import me.varmetek.core.service.Element;
-import me.varmetek.munchymc.Main;
+import me.varmetek.munchymc.MunchyMax;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Listener;
 
@@ -11,23 +11,22 @@ import org.bukkit.event.Listener;
  */
 public class CommandLoad implements Element
 {
-  private Main plugin;
   private final CmdCommand[] commands;
 
-  public CommandLoad (Main plugin){
-    this.plugin = plugin;
+  public CommandLoad (){
+
 
     commands = new CmdCommand[]{
 
       new CmdCommand.Builder("load", (sender, alias, ags, length) -> {
         if (!sender.isPlayer()) return;
-        plugin.getDataManager().asUserData().readInventory(plugin.getPlayerHandler().getSession((Player) sender));
+        MunchyMax.getDataManager().asUserData().readInventory(MunchyMax.getPlayerHandler().getSession((Player) sender));
 
       }).build(),
 
       new CmdCommand.Builder("save", (sender, alias, ags, length) -> {
         if (!sender.isPlayer()) return;
-        plugin.getDataManager().asUserData().writeInventory(plugin.getPlayerHandler().getSession(sender.asPlayer()));
+        MunchyMax.getDataManager().asUserData().writeInventory(MunchyMax.getPlayerHandler().getSession(sender.asPlayer()));
 
 
       }).build(),
@@ -38,7 +37,6 @@ public class CommandLoad implements Element
 
   @Override
   public void clean (){
-    plugin = null;
   }
 
 

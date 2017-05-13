@@ -3,7 +3,7 @@ package me.varmetek.munchymc.commands;
 import me.varmetek.core.commands.CmdCommand;
 import me.varmetek.core.service.Element;
 import me.varmetek.core.util.Messenger;
-import me.varmetek.munchymc.Main;
+import me.varmetek.munchymc.MunchyMax;
 import me.varmetek.munchymc.backend.PlayerSession;
 import org.apache.commons.lang.Validate;
 import org.bukkit.entity.Player;
@@ -16,14 +16,39 @@ import java.util.Arrays;
  */
 public class CommandJoin implements Element
 {
-  private Main main;
-  private final CmdCommand[] commands;
 
 
-  public CommandJoin (Main main){
-    this.main = main;
 
-    commands = new CmdCommand[]{
+
+  public CommandJoin (){
+
+
+
+  }
+
+  private String condense (String[] stuff, String separator){
+    Validate.notNull(stuff);
+    Validate.notEmpty(stuff);
+    Validate.noNullElements(stuff);
+    Validate.notNull(separator);
+
+    StringBuilder b = new StringBuilder(stuff[0]);
+    if (stuff.length > 1){
+      for (int i = 1; i < stuff.length; i++) {
+        b.append(separator).append(stuff[i]);
+      }
+    }
+    return b.toString();
+  }
+
+  @Override
+  public void clean (){
+
+  }
+
+  @Override
+  public CmdCommand[] supplyCmd (){
+    return new CmdCommand[]{
 
       new CmdCommand.Builder("join", (sender, label, args, length) ->{
 
@@ -35,7 +60,7 @@ public class CommandJoin implements Element
           return;
         }
         int len = args.length;
-        PlayerSession user = main.getPlayerHandler().getSession(player);
+        PlayerSession user = MunchyMax.getPlayerHandler().getSession(player);
         if (len == 0){
 
           Messenger.send(player,
@@ -76,7 +101,7 @@ public class CommandJoin implements Element
           return;
         }
         int len = args.length;
-        PlayerSession user = main.getPlayerHandler().getSession(player);
+        PlayerSession user = MunchyMax.getPlayerHandler().getSession(player);
         if (len == 0){
 
           Messenger.send(player,
@@ -102,33 +127,8 @@ public class CommandJoin implements Element
           }
         }
 
-      }).build()};
-
-  }
-
-  private String condense (String[] stuff, String separator){
-    Validate.notNull(stuff);
-    Validate.notEmpty(stuff);
-    Validate.noNullElements(stuff);
-    Validate.notNull(separator);
-
-    StringBuilder b = new StringBuilder(stuff[0]);
-    if (stuff.length > 1){
-      for (int i = 1; i < stuff.length; i++) {
-        b.append(separator).append(stuff[i]);
-      }
-    }
-    return b.toString();
-  }
-
-  @Override
-  public void clean (){
-    main = null;
-  }
-
-  @Override
-  public CmdCommand[] supplyCmd (){
-    return commands;
+      }).build()
+    };
   }
 
   @Override

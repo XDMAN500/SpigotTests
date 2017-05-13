@@ -4,7 +4,7 @@ import me.varmetek.core.commands.CmdCommand;
 import me.varmetek.core.commands.CmdSender;
 import me.varmetek.core.service.Element;
 import me.varmetek.core.util.Messenger;
-import me.varmetek.munchymc.Main;
+import me.varmetek.munchymc.MunchyMax;
 import me.varmetek.munchymc.backend.PlayerSession;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
@@ -18,13 +18,13 @@ import ru.tehkode.permissions.PermissionUser;
  */
 public class CommandRank implements Element
 {
-  private Main main;
 
 
 
 
-  public CommandRank (Main main){
-    this.main = main;
+
+  public CommandRank (){
+
 
 
   }
@@ -69,7 +69,7 @@ public class CommandRank implements Element
 
         if (isPlayer){
           player = sender.asPlayer();
-          user = main.getPlayerHandler().getSession(player);
+          user = MunchyMax.getPlayerHandler().getSession(player);
 
 
         } else {
@@ -129,7 +129,7 @@ public class CommandRank implements Element
     int len = args.length;
     if (len > 2){
 
-      PermissionManager manager = main.getHookManager().permHook.getManager();
+      PermissionManager manager = MunchyMax.getHookManager().permHook.getManager();
       switch (args[2]) {
         case "join":///////////////////////////////////////////////////////
           if (len > 4){
@@ -244,7 +244,7 @@ public class CommandRank implements Element
     int len = args.length;
     if (len > 2){
 
-      PermissionManager manager = main.getHookManager().permHook.getManager();
+      PermissionManager manager = MunchyMax.getHookManager().permHook.getManager();
       switch (args[2]) {
         case "add":///////////////////////////////////////////////////////
           if (len > 4){
@@ -323,6 +323,6 @@ public class CommandRank implements Element
 
   @Override
   public void clean (){
-    main = null;
+
   }
 }

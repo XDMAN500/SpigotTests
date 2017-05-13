@@ -3,7 +3,7 @@ package me.varmetek.munchymc.commands;
 import me.varmetek.core.commands.CmdCommand;
 import me.varmetek.core.service.Element;
 import me.varmetek.core.util.Messenger;
-import me.varmetek.munchymc.Main;
+import me.varmetek.munchymc.MunchyMax;
 import me.varmetek.munchymc.backend.PlayerSession;
 import me.varmetek.munchymc.util.UtilInventory;
 import me.varmetek.munchymc.util.Utils;
@@ -26,12 +26,12 @@ import java.util.*;
 public class CommandOpenInv implements Element
 {
 
-	private Main main;
+
 	private Map<UUID,Inventory> invs = new HashMap<>();
   private final CmdCommand[] commands;
 
-  public CommandOpenInv(Main main){
-		this.main = main;
+  public CommandOpenInv(){
+
 
     commands = new CmdCommand[]{
       new CmdCommand.Builder("openinv" , (sender,alias,args,length) -> {
@@ -40,7 +40,7 @@ public class CommandOpenInv implements Element
 
         if(sender.isPlayer()){
           player = sender.asPlayer();
-          user =  main.getPlayerHandler().getSession(player);
+          user =  MunchyMax.getPlayerHandler().getSession(player);
         }else{
           //send a message
           return;
@@ -93,7 +93,7 @@ public class CommandOpenInv implements Element
       ItemStack item = ev.getCurrentItem();
       if(UtilInventory.isItemEmpty(item))return;
       Player player = (Player)ev.getWhoClicked();
-      PlayerSession user =  main.getPlayerHandler().getSession(player);
+      PlayerSession user =  MunchyMax.getPlayerHandler().getSession(player);
 
       switch (item.getType()){
         case WORKBENCH: player.performCommand("openinv "+ InventoryType.WORKBENCH.name());break;
@@ -142,6 +142,6 @@ public class CommandOpenInv implements Element
   @Override
   public void clean(){
     invs = null;
-    main = null;
+
   }
 }

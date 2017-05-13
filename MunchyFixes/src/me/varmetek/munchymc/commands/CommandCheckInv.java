@@ -3,7 +3,6 @@ package me.varmetek.munchymc.commands;
 import me.varmetek.core.commands.CmdCommand;
 import me.varmetek.core.service.Element;
 import me.varmetek.core.util.Messenger;
-import me.varmetek.munchymc.Main;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.HumanEntity;
@@ -28,11 +27,10 @@ import java.util.UUID;
  */
 public class CommandCheckInv implements Element
 {
-  private Main main;
+
   private Map<UUID,Inventory> targets = new HashMap<>();
   private static final ItemStack AIR = new ItemStack(Material.AIR);
-  public CommandCheckInv(Main plugin){
-    main = plugin;
+  public CommandCheckInv(){
   }
   @Override
   public void clean (){

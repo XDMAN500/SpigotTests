@@ -40,7 +40,7 @@ import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.scheduler.BukkitTask;
 
 import java.util.Set;
-
+@Deprecated
 public final class Main extends PluginMain implements Cleanable
 {
 	private static Main plugin;

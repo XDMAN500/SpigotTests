@@ -1,7 +1,7 @@
 package me.varmetek.munchymc.rares;
 
 import me.varmetek.core.util.Messenger;
-import me.varmetek.munchymc.Main;
+import me.varmetek.munchymc.MunchyMax;
 import me.varmetek.munchymc.backend.RareItemListener;
 import me.varmetek.munchymc.backend.test.CustomItemRare;
 import me.varmetek.munchymc.util.UtilInventory;
@@ -33,9 +33,9 @@ public class RareOptimizer extends RareItemListener
 
 	private static final  String KEY  = "Optimized";
 	private static final List<Material> optimizable = Arrays.asList(Material.HOPPER,Material.BURNING_FURNACE);
-	public RareOptimizer(CustomItemRare rare, Main plugin){
+	public RareOptimizer(CustomItemRare rare){
 
-		super(rare,plugin);
+		super(rare);
 	}
 
 	//public final Map<BlockVector, Long> enchantedFurnaces  = new HashMap<>();
@@ -115,7 +115,7 @@ public class RareOptimizer extends RareItemListener
 		if (isSrcEmpty)
 		{
 		//	Messenger.sendAll("Hopper" + " Source is Empty");
-			bs.removeMetadata(KEY, plugin);
+			bs.removeMetadata(KEY, MunchyMax.getInstance());
 			return false;
 		}
 		//Messenger.sendAll("hopper" + " - " +source.getName());
@@ -158,7 +158,7 @@ public class RareOptimizer extends RareItemListener
 				return false;
 
 		}
-		ih.setMetadata(KEY, new FixedMetadataValue(plugin,true));
+		ih.setMetadata(KEY, new FixedMetadataValue(MunchyMax.getInstance(),true));
 		return true;
 	}
 	private BlockState getState(InventoryHolder ih)
@@ -203,7 +203,7 @@ public class RareOptimizer extends RareItemListener
 				{
 					if(isOptimized(ih))
 					{
-						ih.removeMetadata(KEY, plugin);
+						ih.removeMetadata(KEY, MunchyMax.getInstance());
 						Messenger.send(pl, " &7This container has been Unoptimized");
 						ev.setCancelled(true);
 						return;
@@ -234,7 +234,7 @@ public class RareOptimizer extends RareItemListener
 				Furnace furn = (Furnace)ev.getBlock().getState();
 				if(furn.hasMetadata(KEY) && furn.getInventory().getViewers().isEmpty())
 				{
-					furn.removeMetadata(KEY, plugin);
+					furn.removeMetadata(KEY, MunchyMax.getInstance());
 				}
 
 			}
@@ -256,7 +256,7 @@ public class RareOptimizer extends RareItemListener
 				BlockState bs = ev.getBlock().getState();
 
 
-				bs.removeMetadata(KEY,plugin);
+				bs.removeMetadata(KEY,MunchyMax.getInstance());
 			}
 
 			@EventHandler
@@ -272,7 +272,7 @@ public class RareOptimizer extends RareItemListener
 				if(dest.hasMetadata("HopTime"))
 				{
 					((BukkitRunnable) dest.getMetadata("HopTime").get(0).value()).cancel();
-					dest.removeMetadata("HopTime", plugin);
+					dest.removeMetadata("HopTime", MunchyMax.getInstance());
 				}
 				//Messenger.sendAll(ev.getEventName());
 				if(isOptimized(bs))
@@ -280,7 +280,7 @@ public class RareOptimizer extends RareItemListener
 
 					//Messenger.sendAll(ev.getEventName() +" - is Optimized");
 					boolean isSource = ev.getSource().equals(ev.getInitiator());
-					dest.setMetadata("HopTime", new FixedMetadataValue(plugin,
+					dest.setMetadata("HopTime", new FixedMetadataValue(MunchyMax.getInstance(),
 						                                                  new BukkitRunnable(){
 							                                                  public void run(){
 								                                                  if(!optimizeHopper(ev.getSource(),ev.getDestination(),bs))
@@ -289,7 +289,7 @@ public class RareOptimizer extends RareItemListener
 							                                                  }
 						                                                  }));
 					(
-						(BukkitRunnable)dest.getMetadata("HopTime").get(0).value()).runTaskTimer(plugin,0,1L);
+						(BukkitRunnable)dest.getMetadata("HopTime").get(0).value()).runTaskTimer(MunchyMax.getInstance(),0,1L);
 
 				}
 			}

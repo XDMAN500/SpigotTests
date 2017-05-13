@@ -1,6 +1,5 @@
 package me.varmetek.munchymc.rares;
 
-import me.varmetek.munchymc.Main;
 import me.varmetek.munchymc.backend.RareItemListener;
 import me.varmetek.munchymc.backend.test.CustomItemRare;
 import org.bukkit.entity.Entity;
@@ -18,10 +17,10 @@ public class RareHawkEye extends RareItemListener{
 
 
 
-	public RareHawkEye(CustomItemRare rare, Main plugin)
+	public RareHawkEye(CustomItemRare rare)
 	{
 
-		super(rare, plugin);
+		super(rare);
 	}
 
 

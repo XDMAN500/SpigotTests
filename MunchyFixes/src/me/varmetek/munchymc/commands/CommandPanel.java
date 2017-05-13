@@ -3,7 +3,6 @@ package me.varmetek.munchymc.commands;
 import me.varmetek.core.commands.CmdCommand;
 import me.varmetek.core.service.Element;
 import me.varmetek.core.util.Messenger;
-import me.varmetek.munchymc.Main;
 import org.bukkit.command.CommandSender;
 import org.bukkit.event.Listener;
 
@@ -12,10 +11,9 @@ import org.bukkit.event.Listener;
  */
 public class CommandPanel implements Element
 {
-  private Main main;
 
-  public CommandPanel(Main plugin){
-    main = plugin;
+  public CommandPanel(){
+
   }
 
   @Override

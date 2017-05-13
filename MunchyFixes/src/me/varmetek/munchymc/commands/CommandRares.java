@@ -3,7 +3,7 @@ package me.varmetek.munchymc.commands;
 import me.varmetek.core.commands.CmdCommand;
 import me.varmetek.core.item.CustomItem;
 import me.varmetek.core.service.Element;
-import me.varmetek.munchymc.Main;
+import me.varmetek.munchymc.MunchyMax;
 import me.varmetek.munchymc.backend.PlayerSession;
 import me.varmetek.munchymc.backend.Rares;
 import me.varmetek.munchymc.backend.test.CustomItemRare;
@@ -26,12 +26,12 @@ import java.util.List;
 public class CommandRares implements Element
 {
   private Inventory gui = Bukkit.createInventory(null, 9 * 6, "Rares");
-  private Main plugin;
+
   private final CmdCommand[] commands;
 
-  public CommandRares (Main plugin){
+  public CommandRares (){
 
-    this.plugin = plugin;
+
     makeGUI();
     commands = new CmdCommand[]{
       new CmdCommand.Builder("rares", (sender, alias, args, length) -> {
@@ -52,7 +52,7 @@ public class CommandRares implements Element
 
     }
     while (gui.firstEmpty() != -1) {
-      CustomItem slot = plugin.getItemMap()
+      CustomItem slot = MunchyMax.getItemMap()
                           .get(EnumCustomItem.SLOT_PLACEHOLDER.name()).get();
       //Bukkit.getLogger().warning("Is slot null? "+ (slot == null));
       //Bukkit.getLogger().warning("Has an item? "+ (slot.getItem() != null));
@@ -65,7 +65,7 @@ public class CommandRares implements Element
 
 
   public void clean (){
-    plugin = null;
+
     gui = null;
   }
 
@@ -88,7 +88,7 @@ public class CommandRares implements Element
         if (clicked == null) return;
         if (clickedInv == null) return;
 
-        CustomItem id = plugin.getItemMap().getByItem(clicked);
+        CustomItem id = MunchyMax.getItemMap().getByItem(clicked);
 
 
         if (clicked == null) return;
@@ -106,7 +106,7 @@ public class CommandRares implements Element
 
 
         Player pl = (Player) ev.getWhoClicked();
-        PlayerSession user = plugin.getPlayerHandler().getSession(pl);
+        PlayerSession user = MunchyMax.getPlayerHandler().getSession(pl);
         if (!pl.getOpenInventory().getTopInventory().equals(gui)) return;
 
 

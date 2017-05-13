@@ -1,6 +1,5 @@
 package me.varmetek.munchymc.rares;
 
-import me.varmetek.munchymc.Main;
 import me.varmetek.munchymc.backend.RareItemListener;
 import me.varmetek.munchymc.backend.test.CustomItemRare;
 import org.bukkit.entity.Entity;
@@ -15,10 +14,10 @@ public class RareArtemisPlate extends RareItemListener
 {
 
 
-	public RareArtemisPlate(CustomItemRare rare, Main plugin)
+	public RareArtemisPlate(CustomItemRare rare)
 	{
 
-		super(rare,plugin);
+		super(rare);
 
 	}
 	@Override

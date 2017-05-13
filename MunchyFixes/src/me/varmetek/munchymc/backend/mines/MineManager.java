@@ -1,7 +1,6 @@
 package me.varmetek.munchymc.backend.mines;
 
 import com.sk89q.worldedit.BlockVector;
-import me.varmetek.munchymc.Main;
 import org.apache.commons.lang3.Validate;
 import org.bukkit.World;
 
@@ -14,11 +13,11 @@ import java.util.Optional;
  */
 public class MineManager
 {
-  Main main;
+
   private Map<String,Mine> mines = new HashMap<>();
 
-  public  MineManager(Main plugin){
-    main = plugin;
+  public  MineManager(){
+
   }
 
   public Optional<Mine> getMine(int x, int y, int z){

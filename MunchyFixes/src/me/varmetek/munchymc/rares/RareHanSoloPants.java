@@ -1,6 +1,5 @@
 package me.varmetek.munchymc.rares;
 
-import me.varmetek.munchymc.Main;
 import me.varmetek.munchymc.backend.RareItemListener;
 import me.varmetek.munchymc.backend.test.CustomItemRare;
 import org.bukkit.entity.Player;
@@ -15,9 +14,9 @@ import org.bukkit.inventory.EquipmentSlot;
 public class RareHanSoloPants extends RareItemListener
 {
 
-	public RareHanSoloPants(CustomItemRare rare, Main plugin){
+	public RareHanSoloPants(CustomItemRare rare){
 
-		super(rare,plugin);
+		super(rare);
 
 	}
 

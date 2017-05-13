@@ -6,7 +6,7 @@ import me.varmetek.core.commands.CmdCommand;
 import me.varmetek.core.commands.CmdSender;
 import me.varmetek.core.service.Element;
 import me.varmetek.core.util.Messenger;
-import me.varmetek.munchymc.Main;
+import me.varmetek.munchymc.MunchyMax;
 import me.varmetek.munchymc.backend.mines.LocalBlock;
 import me.varmetek.munchymc.backend.mines.Mine;
 import org.bukkit.entity.Player;
@@ -24,15 +24,15 @@ public class CommandMines implements Element
   private static final String NEG = "&4&l > &c";
   private static final String POS = "&2&l > &a";
 
-  private Main main;
 
-  public CommandMines(Main plugin){
-    main = plugin;
+
+  public CommandMines(){
+
   }
 
   @Override
   public void clean (){
-    main = null;
+
   }
 
   @Override
@@ -64,7 +64,7 @@ public class CommandMines implements Element
                    Messenger.send(pl,NEG + "/"+alias + " " + args[0] + " " + "<name>" );
 
                    }else{
-                     Optional<Mine> mine =  main.getMineManager().getMine(args[1]);
+                     Optional<Mine> mine =  MunchyMax.getMineManager().getMine(args[1]);
                      if(!mine.isPresent()){
                        Messenger.send(pl,NEG +"Mine \"&7"+ args[1] +"&c\" does not exist.");
                        return;
@@ -104,13 +104,13 @@ public class CommandMines implements Element
                 if(len <=1){
                   Messenger.send(pl, NEG + "/"+alias + " " + args[0] + " " + "<name>" );
                 }else{
-                  Optional<Mine> mine =  main.getMineManager().getMine(args[1]);
+                  Optional<Mine> mine = MunchyMax.getMineManager().getMine(args[1]);
                   if(mine.isPresent()){
                     Messenger.send(pl,NEG +"Mine \"&7"+ args[1] +"&c\" already exists.");
                     return;
                   }
 
-                 main.getHookManager();
+                 MunchyMax.getHookManager();
                 }
 
               }break;

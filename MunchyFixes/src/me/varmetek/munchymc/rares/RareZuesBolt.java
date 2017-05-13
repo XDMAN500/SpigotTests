@@ -1,7 +1,7 @@
 package me.varmetek.munchymc.rares;
 
 import me.varmetek.core.util.Messenger;
-import me.varmetek.munchymc.Main;
+import me.varmetek.munchymc.MunchyMax;
 import me.varmetek.munchymc.backend.RareItemListener;
 import me.varmetek.munchymc.backend.test.CustomItemRare;
 import net.minecraft.server.v1_11_R1.AxisAlignedBB;
@@ -36,9 +36,9 @@ public class RareZuesBolt extends RareItemListener
 	private static final double bulletSize = 0.2;
 	private static final boolean useRayCollision = true;
 	private static final DecimalFormat decimalF = new DecimalFormat("#.###");
-	public RareZuesBolt(CustomItemRare rare, Main plugin){
+	public RareZuesBolt(CustomItemRare rare){
 
-		super(rare,plugin);
+		super(rare);
 
 	}
 
@@ -190,7 +190,7 @@ public class RareZuesBolt extends RareItemListener
 									//Messenger.send( pl,"Damage:"+ decimalF.format(dmg));
 									///le.setHealth(0.0);
 									//le.damage(1,pl);
-									plugin.getTaskHandler().runTask(() ->
+									MunchyMax.getTaskHandler().runTask(() ->
 									{
 										le.setGlowing(false);
 										le.setCustomNameVisible(false);

@@ -3,6 +3,7 @@ package me.varmetek.munchymc.backend;
 import me.varmetek.core.util.Cleanable;
 import me.varmetek.core.util.Messenger;
 import me.varmetek.munchymc.Main;
+import me.varmetek.munchymc.MunchyMax;
 import me.varmetek.munchymc.util.UtilFile;
 import me.varmetek.munchymc.util.UtilInventory;
 import org.apache.commons.lang.Validate;
@@ -30,13 +31,12 @@ public final class DataManager implements Cleanable
 
   private final static String __ = File.separator;
   private final Random rand = new Random();
-  protected Main plugin;
+
   private UserData userData;
   private KitData kitData;
   private PointData pointData;
 
-  public DataManager (Main plugin){
-    this.plugin = plugin;
+  public DataManager (){
     userData = new UserData();
     kitData = new KitData();
     pointData = new PointData();
@@ -55,7 +55,6 @@ public final class DataManager implements Cleanable
   }
 
   public void clean (){
-    plugin = null;
     userData = null;
 
   }
@@ -186,21 +185,21 @@ public final class DataManager implements Cleanable
       FileConfiguration config = YamlConfiguration.loadConfiguration(file);
       config.set("data",user.getPlayerData());
       config.save(file);
-      plugin.getLogger().info("Saving user (" + user.getName() + ")");
+      MunchyMax.getInstance().getLogger().info("Saving user (" + user.getName() + ")");
 
 
     }
 
 
     public void savePlayer (OfflinePlayer p) throws IOException{
-      saveUser(plugin.getPlayerHandler().getSession(p));
+      saveUser(MunchyMax.getPlayerHandler().getSession(p));
 
     }
 
 
     public void saveAllUsers () throws IOException{
 
-      for (PlayerSession user : plugin.getPlayerHandler().getAllUsers()) {
+      for (PlayerSession user : MunchyMax.getPlayerHandler().getAllUsers()) {
         try {
 
           saveUser(user);
@@ -231,19 +230,19 @@ public final class DataManager implements Cleanable
       PlayerData data  = (PlayerData) config.get("data");
       user.setPlayerData(data);
 
-      plugin.getLogger().info("Loading user (" + user.getName() + ")");
+      MunchyMax.getInstance().getLogger().info("Loading user (" + user.getName() + ")");
 
     }
 
     public void loadPlayer (Player user) throws IOException{
-      loadUser(plugin.getPlayerHandler().getSession(user));
+      loadUser(MunchyMax.getPlayerHandler().getSession(user));
     }
 
 
     public void loadAll (){
       for (Player p : Bukkit.getOnlinePlayers()) {
         try {
-          loadUser(plugin.getPlayerHandler().getSession(p));
+          loadUser(MunchyMax.getPlayerHandler().getSession(p));
         } catch (IOException e) {
           Bukkit.getLogger().warning("Could not load player " + p.getName() + " :" + e.getMessage());
         }
@@ -360,8 +359,8 @@ public final class DataManager implements Cleanable
       if (!f.exists()){
         UtilFile.create(f);
       }
-      Validate.isTrue(plugin.getKitHandler().isKit(name), "Could not save kit \"" + name + "\" because it does not exist");
-      Kit kit = plugin.getKitHandler().getKit(name).get();
+      Validate.isTrue(MunchyMax.getKitHandler().isKit(name), "Could not save kit \"" + name + "\" because it does not exist");
+      Kit kit = MunchyMax.getKitHandler().getKit(name).get();
 
       YamlConfiguration config = YamlConfiguration.loadConfiguration(f);
 
@@ -374,7 +373,7 @@ public final class DataManager implements Cleanable
 
 
     public void saveKits () throws IOException{
-      for (String k : plugin.getKitHandler().getKits().keySet()) {
+      for (String k : MunchyMax.getKitHandler().getKits().keySet()) {
         try {
           saveKit(k);
         } catch (Exception e) {
@@ -426,7 +425,7 @@ public final class DataManager implements Cleanable
         effects = convertEffects(list);
       }*/
       Kit kit = new Kit.Builder().setInventory(inv).setEffects(list).build();
-      plugin.getKitHandler().setKit(name, kit);
+      MunchyMax.getKitHandler().setKit(name, kit);
       return kit;
     }
 
@@ -442,7 +441,7 @@ public final class DataManager implements Cleanable
 
     public void loadKits () throws IOException{
 
-      File f = new File(plugin.getDataFolder(), CoreFile.KITS.getDirectory());
+      File f = new File(MunchyMax.getInstance().getDataFolder(), CoreFile.KITS.getDirectory());
       if(!f.exists()){
         UtilFile.create(f);
         Bukkit.getLogger().warning("Folder for kits does not exist. Creating a blank.");
@@ -469,7 +468,7 @@ public final class DataManager implements Cleanable
     }
 
     public void reloadKits () throws IOException{
-      plugin.getKitHandler().clear();
+      MunchyMax.getKitHandler().clear();
       loadKits();
 
     }
@@ -493,7 +492,7 @@ public final class DataManager implements Cleanable
 
 
     public Point loadPoint (String name) throws IOException{
-      PointManager manager = plugin.getPointManager();
+      PointManager manager = MunchyMax.getPointManager();
       File file = CoreFile.Points.file;
 
       if (!file.exists()){
@@ -522,7 +521,7 @@ public final class DataManager implements Cleanable
     }
 
     public boolean savePoint (String name) throws IOException{
-      PointManager manager = plugin.getPointManager();
+      PointManager manager = MunchyMax.getPointManager();
       Validate.isTrue(manager.pointExist(name), "Point \"" + name + "\" cannot be saved as it does not exist");
 
 
@@ -541,7 +540,7 @@ public final class DataManager implements Cleanable
     }
 
     public void saveAllPoints () throws IOException{
-      PointManager manager = plugin.getPointManager();
+      PointManager manager = MunchyMax.getPointManager();
       File file = CoreFile.Points.file;
       if (!file.exists()){
         UtilFile.create(file);

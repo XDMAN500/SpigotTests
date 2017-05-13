@@ -4,7 +4,7 @@ import me.varmetek.core.commands.CmdCommand;
 import me.varmetek.core.service.Element;
 import me.varmetek.core.util.Cleanable;
 import me.varmetek.core.util.Messenger;
-import me.varmetek.munchymc.Main;
+import me.varmetek.munchymc.MunchyMax;
 import me.varmetek.munchymc.backend.Kit;
 import me.varmetek.munchymc.backend.KitHandler;
 import me.varmetek.munchymc.util.Utils;
@@ -24,15 +24,15 @@ import java.util.Collections;
  */
 public class CommandKit implements Element, Cleanable
 {
-  private Main main;
+
   private KitHandler kitHandler;
   private static final String prefMal = "&4&l> &r";
   private static final String prefBen = "&2&l> &r";
   private final CmdCommand[] commands;
 
-  public CommandKit (Main main){
-    this.main = main;
-    kitHandler = main.getKitHandler();
+  public CommandKit (){
+
+    kitHandler = MunchyMax.getKitHandler();
 
     commands = new CmdCommand[]{
       new CmdCommand.Builder("kit").setLogic((sender,alias,args,length)->{
@@ -52,7 +52,7 @@ public class CommandKit implements Element, Cleanable
             "&bListing kits",
             "&b============",
             " ");
-          for (String name : main.getKitHandler().getKits().keySet()) {
+          for (String name : MunchyMax.getKitHandler().getKits().keySet()) {
 
             pl.spigot().sendMessage(forKit(name));
           }
@@ -72,7 +72,7 @@ public class CommandKit implements Element, Cleanable
         }
       }).setTab((sender,alias,args,len) ->{
           if(len == 1){
-            return Utils.toStringList(main.getKitHandler().getKits().keySet(), (String s) ->
+            return Utils.toStringList(MunchyMax.getKitHandler().getKits().keySet(), (String s) ->
             {
 
               return s;
@@ -117,7 +117,7 @@ public class CommandKit implements Element, Cleanable
                 try {
                   Kit k = new Kit.Builder().fromPlayer(pl).build();
                   kitHandler.setKit(name, k);
-                  main.getDataManager().asKitData().saveKit(name);
+                  MunchyMax.getDataManager().asKitData().saveKit(name);
                 } catch (IOException e) {
                   e.printStackTrace();
                   Messenger.send(pl, prefMal + "&cError saving kit");
@@ -152,7 +152,7 @@ public class CommandKit implements Element, Cleanable
                   "&bListing kits",
                   "&b============",
                   " ");
-                for (String name : main.getKitHandler().getKits().keySet()) {
+                for (String name : MunchyMax.getKitHandler().getKits().keySet()) {
 
                   pl.spigot().sendMessage(forKit(name));
                 }
@@ -178,7 +178,7 @@ public class CommandKit implements Element, Cleanable
               Messenger.send(pl, "&aRemoving kit " + name);
 
               try {
-                main.getDataManager().asKitData().removeKit(name);
+                MunchyMax.getDataManager().asKitData().removeKit(name);
                 kitHandler.delKit(name);
               } catch (IOException e) {
                 e.printStackTrace();
@@ -216,7 +216,7 @@ public class CommandKit implements Element, Cleanable
                 switch (args[1]) {
                   case "save": {
                     try {
-                      main.getDataManager().asKitData().saveKits();
+                      MunchyMax.getDataManager().asKitData().saveKits();
                       Messenger.send(pl, "&A&l> &7All kits have been saved to disk");
                     } catch (Exception e) {
                       Messenger.send(pl, "&c&l> &7An error occured while saving kits");
@@ -228,7 +228,7 @@ public class CommandKit implements Element, Cleanable
 
                   case "load": {
                     try {
-                      main.getDataManager().asKitData().loadKits();
+                      MunchyMax.getDataManager().asKitData().loadKits();
                       Messenger.send(pl, "&A&l> &7All kits have been loaded from disk");
                     } catch (Exception e) {
                       Messenger.send(pl, "&c&l> &7An error occured while loading kits");
@@ -260,7 +260,7 @@ public class CommandKit implements Element, Cleanable
               case "save":
               case "load":
               case "remove":
-                return Utils.toStringList(main.getKitHandler().getKits().keySet(), (String s) ->
+                return Utils.toStringList(MunchyMax.getKitHandler().getKits().keySet(), (String s) ->
                 {
 
                   return s;
@@ -290,7 +290,7 @@ public class CommandKit implements Element, Cleanable
 
   @Override
   public void clean (){
-    main = null;
+
   }
 
   @Override

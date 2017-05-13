@@ -2,7 +2,7 @@ package me.varmetek.munchymc.commands;
 
 import me.varmetek.core.commands.CmdCommand;
 import me.varmetek.core.service.Element;
-import me.varmetek.munchymc.Main;
+import me.varmetek.munchymc.MunchyMax;
 import me.varmetek.munchymc.backend.PlayerSession;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Listener;
@@ -12,16 +12,16 @@ import org.bukkit.event.Listener;
  */
 public class CommandProvisions implements Element
 {
-	private Main main;
+
   private CmdCommand[] commands;
 
-  public CommandProvisions(Main main){
-		this.main = main;
+  public CommandProvisions(){
+
     commands = new CmdCommand[]{
       new CmdCommand.Builder("run",(sender, alias, args[], length) -> {
         if(!sender.isPlayer() || args.length == 0)return;
         Player pl = sender.asPlayer();
-        PlayerSession user = main.getPlayerHandler().getSession(pl);
+        PlayerSession user = MunchyMax.getPlayerHandler().getSession(pl);
         switch (args[0]){
           case "respawn":
             user.revive();
@@ -35,7 +35,7 @@ public class CommandProvisions implements Element
 
   @Override
   public void clean(){
-		main = null;
+
 	}
 
 	@Override
