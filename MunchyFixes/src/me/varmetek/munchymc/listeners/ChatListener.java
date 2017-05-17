@@ -1,9 +1,7 @@
 package me.varmetek.munchymc.listeners;
 
-import me.varmetek.core.commands.CmdCommand;
 import me.varmetek.core.placeholder.FormatHandleChat;
 import me.varmetek.core.placeholder.FormatHandlePlayer;
-import me.varmetek.core.service.Element;
 import me.varmetek.core.util.Messenger;
 import me.varmetek.munchymc.MunchyMax;
 import me.varmetek.munchymc.backend.PlayerSession;
@@ -25,7 +23,7 @@ import java.util.concurrent.atomic.AtomicReference;
 /**
  * Created by XDMAN500 on 1/2/2017.
  */
-public class ChatListener implements Element
+public class ChatListener implements Listener
 {
 
 	private static final String  permPrefix = "ench.look.bs." ;
@@ -33,7 +31,7 @@ public class ChatListener implements Element
 
 	private final FormatHandlePlayer formatHandle = new FormatHandlePlayer();
 	private final FormatHandleChat chatFormatHandle = new FormatHandleChat("&8<&b"+Utils.placeholder("playerName")+"&8> &7"+Utils.placeholder("playerMessage"), Utils.placeholder("playerMessage"));
-	private final Listener listener;
+
 
 	public ChatListener(){
 
@@ -41,20 +39,21 @@ public class ChatListener implements Element
 		formatHandle.register("%playerName%", (p)->{return p.getName();});
 		chatFormatHandle.register(Utils.placeholder("playerName"),(ev)->{return ev.getPlayer().getName();});
 
-		listener =  new Listener()
-		{
-			@EventHandler (priority =  EventPriority.LOW)
-			public void chat(AsyncPlayerChatEvent ev)
-			{
-				PlayerSession user = MunchyMax.getPlayerHandler().getSession(ev.getPlayer());
-				//plugin.getUserHandler().getUser(ev.getPlayer());
 
-				//Player pl = ev.getPlayer();
-				//plugin.getChatPlaceholderMap().format(ev);
-				chatFormatHandle.apply(ev);
-				Messenger.send(ev.getPlayer(),
-					"Hey :"+ ev.getPlayer().isInvulnerable(),
-					"Exist?:" + user.getPlayer().isPresent());
+	}
+
+	@EventHandler (priority =  EventPriority.LOW)
+	public void chat(AsyncPlayerChatEvent ev)
+	{
+		PlayerSession user = MunchyMax.getPlayerHandler().getSession(ev.getPlayer());
+		//plugin.getUserHandler().getUser(ev.getPlayer());
+
+		//Player pl = ev.getPlayer();
+		//plugin.getChatPlaceholderMap().format(ev);
+		chatFormatHandle.apply(ev);
+		Messenger.send(ev.getPlayer(),
+			"Hey :"+ ev.getPlayer().isInvulnerable(),
+			"Exist?:" + user.getPlayer().isPresent());
 
 
 	/*	if(!ev.getMessage().startsWith(permPrefix))return;
@@ -75,11 +74,7 @@ public class ChatListener implements Element
 			Messenger.send(pl, "Third Part :" + s);
 		}*/
 
-			}
-		};
 	}
-
-
 
 
 	private String getPart(String prefix, String message)
@@ -350,18 +345,5 @@ public class ChatListener implements Element
 		});
 	}
 
-	@Override
-	public void clean (){
 
-	}
-
-	@Override
-	public CmdCommand[] supplyCmd (){
-		return null;
-	}
-
-	@Override
-	public Listener supplyListener (){
-		return listener;
-	}
 }

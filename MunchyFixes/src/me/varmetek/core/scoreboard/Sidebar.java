@@ -7,8 +7,7 @@ import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.Validate;
 import org.bukkit.scoreboard.Objective;
 
-import java.util.Map;
-import java.util.Random;
+import java.util.*;
 
 /**
  * Created by XDMAN500 on 1/17/2017.
@@ -18,12 +17,13 @@ public class Sidebar implements SimpleMapEntry
 
 	protected final SidebarHandler handle;
 
-	protected Map<String,Entry> entries;
+	protected Map<String,String> entries;
+
 
 	protected String title;
 	protected final String id;
 	protected final Random random = new Random();
-
+	protected final RenderOrder renderOrder = new RenderOrder();
 
 	protected Sidebar(SidebarHandler board, String id){
 		this.id = id;
@@ -32,10 +32,11 @@ public class Sidebar implements SimpleMapEntry
 
 		entries = Maps.newHashMap();
 
-
-
 	}
 
+	public RenderOrder getRenderOrder(){
+		return renderOrder;
+	}
 
 	protected String prepareName(String name){
 		return Messenger.color( name+ salt());
@@ -75,55 +76,46 @@ public class Sidebar implements SimpleMapEntry
 
 
 
-	public  void set(String index, String name,  int pos){
+	public  void set(String key, String text){
+		Validate.notNull(key);
+		Validate.isTrue(StringUtils.isNotBlank(key));
 
-
-		String newname = prepareName(name);
-		entries.put(index, this.new Entry(newname,pos ));
-		;
-	}
-
-
-	public  void setName(String index ,String newName){
-		Validate.isTrue(has(index));
-
-		entries.put(index, entries.get(index).withName(prepareName(newName)));
-
-
-
-	}
-
-	public  void setPosition(String index ,int pos){
-		Validate.isTrue(has(index));
-		entries.put(index, entries.get(index).withPosition(pos));
-
-
+		if(text == null){
+			remove(key);
+		}else{
+			entries.put(key,text);
+		}
 
 	}
 
 
 
-	public  void remove(String index){
 
-		entries.remove(index);
+
+
+
+
+	public  void remove(String key){
+
+		entries.remove(key);
+
+	}
+
+	public   String getText(String key){
+		return entries.get(key);
 
 	}
 
-	public   String getName(String index){
-		return stripSalt(entries.get(index).getName());
-
-	}
-	public  int getPos(String index){
-		return entries.get(index).getPos();
-
-	}
 
 	protected void render(Objective obj){
 		obj.setDisplayName(title);
-		entries.keySet().forEach( (str) ->{
-			Entry e  = entries.get(str);
-			obj.getScore(e.getName()).setScore(e.getPos());
-		});
+		Iterator<String> stuff = renderOrder.iterator();
+		int pos = renderOrder.size();
+		while(stuff.hasNext()){
+			String key = stuff.next();
+			obj.getScore( prepareName( entries.get(key))).setScore(pos);
+			pos--;
+		}
 
 
 
@@ -167,31 +159,43 @@ public class Sidebar implements SimpleMapEntry
 		return entries.size();
 	}
 
-	private class Entry
-	{
-		private final String name;
-		private final int pos;
+	public class RenderOrder {
 
-	 Entry(String name, int pos){
-			Validate.isTrue(StringUtils.isNotBlank(name));
-			this.name = name;
-			this.pos = pos;
+		protected List<String> renderOrder = new ArrayList(16);
+		protected List<String> previous = new ArrayList(16);
+
+		public void append(String key, String... keys){
+			if(entries.containsKey(key))renderOrder.add(key);
+			if(keys == null || keys.length == 0)return;
+
+				for(int i = 0; i< keys.length; i++) {
+					if (entries.containsKey(keys[i])) renderOrder.add(keys[i]);
+				}
+
 		}
 
-		public String getName(){
-			return name;
+		public int size(){
+			return renderOrder.size();
+		}
+		public boolean isEmpty(){
+			return renderOrder.isEmpty();
+		}
+		public void reset(){
+			previous.clear();
+			previous.addAll(renderOrder);
+			renderOrder.clear();
+		}
+		public Iterator<String> iterator(){
+			return renderOrder.iterator();
 		}
 
-		public int getPos(){
-			return pos;
+		public List<String> getOrder(){
+			return renderOrder;
 		}
-
-
-		 private Entry withName(String name){
-			return new Entry(name,pos);
-		}
-		private Entry withPosition(int pos){
-			return new Entry(name,pos);
+		public List<String> getPreviousOrder(){
+			return renderOrder;
 		}
 	}
+
+
 }

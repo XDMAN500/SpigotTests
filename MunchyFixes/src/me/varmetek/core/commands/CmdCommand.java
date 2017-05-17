@@ -1,13 +1,11 @@
 package me.varmetek.core.commands;
 
-import com.google.common.collect.ImmutableList;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.Validate;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 /**
@@ -40,15 +38,16 @@ public final class CmdCommand extends Command
 
   public static class Builder
   {
-    public static final ImmutableList<String> emptyAlias = ImmutableList.copyOf(Collections.EMPTY_LIST);
+
+    public static final List<String> emptyAlias = new ArrayList<>();
     public static final CmdLogic defaultLogic =  (sender,alias,args,legnth)->{ sender.asSender().sendMessage("Empty command");};
-    public static final CmdTab defaultTab =  (sender,alias,args,legnth)->{ return Collections.EMPTY_LIST;};
+    public static final CmdTab defaultTab =  (sender,alias,args,legnth)->{ return new ArrayList<>();};
 
     private final String name;
     private CmdLogic cmd = defaultLogic;
     private CmdTab tab = defaultTab;
 
-    private List<String> aliases = null;
+    private List<String> aliases = emptyAlias;
     private String desc = "";
     private String perm = null;
 

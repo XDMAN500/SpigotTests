@@ -1,9 +1,7 @@
 package me.varmetek.munchymc.listeners;
 
-import me.varmetek.core.commands.CmdCommand;
 import me.varmetek.core.scoreboard.Sidebar;
 import me.varmetek.core.scoreboard.SidebarHandler;
-import me.varmetek.core.service.Element;
 import me.varmetek.core.util.Messenger;
 import me.varmetek.munchymc.MunchyMax;
 import me.varmetek.munchymc.backend.PlayerSession;
@@ -35,10 +33,10 @@ import java.util.Random;
 /**
  * Created by XDMAN500 on 12/27/2016.
  */
-public class MixedListener implements Element
+public class MixedListener implements Listener
 {
 
-	private final Listener listen= new Listener(){
+
     @EventHandler
     public void ultraCraft(InventoryClickEvent ev){
       Player pl  = (Player) ev.getWhoClicked();
@@ -211,11 +209,10 @@ public class MixedListener implements Element
       }
       final Sidebar sb = sidebar.get("death").get();
       sb.setTitle("&3Stuff and things");
-      sb.set("spc1","&7=============",10);
-      sb.set("spc2","&5 ",9);
-      sb.set("timer","&7Respawn in &e"+ 5,8);
-      sb.set("spc3","&5 ",1);
-      sb.set("spc4","&7=============",0);
+      sb.set("line","&7=============");
+      sb.set("space","&5 ");
+      sb.set("timer","&7Respawn in &e"+ 5);
+     sb.getRenderOrder().reset();
       sb.setVisible(true);
 
 
@@ -236,8 +233,16 @@ public class MixedListener implements Element
               sidebar.get("default").get().setVisible(true);
             }
           }
-          sb.setName("timer","&7Respawn in &e"+ countdown);
+          sb.set("timer","&7Respawn in &e"+ countdown);
           countdown --;
+          sb.getRenderOrder().reset();
+          sb.getRenderOrder().append(
+            "line",
+            "space",
+            "timer",
+            "space",
+            "timer"
+            );
           sb.getHandle().render();
 
         }
@@ -278,7 +283,7 @@ public class MixedListener implements Element
     }
 
 
-  };
+
 
 
 
@@ -307,18 +312,4 @@ public class MixedListener implements Element
 	}
 
 
-	@Override
-	public void clean (){
-
-	}
-
-	@Override
-	public CmdCommand[] supplyCmd (){
-		return null;
-	}
-
-	@Override
-	public Listener supplyListener (){
-		return listen;
-	}
 }

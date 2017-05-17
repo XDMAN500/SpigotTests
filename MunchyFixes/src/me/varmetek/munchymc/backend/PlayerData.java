@@ -28,6 +28,12 @@ public class PlayerData extends BasePlayerData
   }
   public PlayerData(){}
 
+  @Override
+  public PlayerData copy (){
+    return new PlayerData(this.serialize());
+
+  }
+
   public void setJoinMessage (String msg){
     joinMessage = msg;
   }
@@ -52,6 +58,7 @@ public class PlayerData extends BasePlayerData
     output.put(MSG_LEAVE, leaveMessage);
     return output;
   }
+
 
 
   @Override

@@ -3,10 +3,6 @@
     <output-path>$USER_HOME$/Desktop/Minecraft Stuff/MunchyFixed/plugins</output-path>
     <root id="archive" name="MunchyFixes.jar">
       <element id="module-output" name="MunchyFixes" />
-      <element id="library" level="project" name="ProtocolLib" />
-      <element id="directory" name="META-INF">
-        <element id="file-copy" path="$PROJECT_DIR$/META-INF/MANIFEST.MF" />
-      </element>
     </root>
   </artifact>
 </component>

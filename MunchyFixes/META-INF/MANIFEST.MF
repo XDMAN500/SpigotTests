@@ -1,3 +1,3 @@
 Manifest-Version: 1.0
-Main-Class: me.varmetek.munchymc.Main
+Main-Class: me.varmetek.munchymc.MunchyMax
 

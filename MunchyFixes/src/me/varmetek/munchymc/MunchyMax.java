@@ -2,16 +2,15 @@ package me.varmetek.munchymc;
 
 import ca.thederpygolems.armorequip.ArmorListener;
 import io.netty.util.internal.ConcurrentSet;
-import me.varmetek.core.commands.CmdCommand;
 import me.varmetek.core.item.CustomItem;
 import me.varmetek.core.item.ItemMap;
-import me.varmetek.core.service.Element;
 import me.varmetek.core.service.ElementManager;
+import me.varmetek.core.util.InventorySnapshot;
 import me.varmetek.core.util.PluginCore;
 import me.varmetek.core.util.TaskHandler;
 import me.varmetek.munchymc.backend.*;
+import me.varmetek.munchymc.backend.file.*;
 import me.varmetek.munchymc.backend.hooks.HookManager;
-import me.varmetek.munchymc.backend.mines.MineManager;
 import me.varmetek.munchymc.backend.test.CustomItemRare;
 import me.varmetek.munchymc.backend.test.EnumCustomItem;
 import me.varmetek.munchymc.commands.*;
@@ -19,7 +18,9 @@ import me.varmetek.munchymc.listeners.ChatListener;
 import me.varmetek.munchymc.listeners.ElytraListener;
 import me.varmetek.munchymc.listeners.MixedListener;
 import me.varmetek.munchymc.listeners.TickListener;
+import me.varmetek.munchymc.mines.MineManager;
 import me.varmetek.munchymc.rares.*;
+import me.varmetek.munchymc.util.UtilFile;
 import me.varmetek.munchymc.util.Utils;
 import net.milkbowl.vault.chat.Chat;
 import net.milkbowl.vault.economy.Economy;
@@ -30,7 +31,6 @@ import org.bukkit.Material;
 import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.configuration.serialization.ConfigurationSerialization;
 import org.bukkit.enchantments.Enchantment;
-import org.bukkit.event.Listener;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
@@ -57,6 +57,12 @@ public final class MunchyMax extends PluginCore
 	private Set<TickListener> tickListeners;
 	public ShopView shop;
 	private MineManager mineManager;
+
+	private MineFileManager mineFileManager;
+	private KitFileManager kitFileManager;
+	private PlayerFileManager playerFileManager;
+	private PointFileManager pointFileManager;
+
 	Economy economy;
 	Chat chat;
 	Permission permission;
@@ -103,19 +109,26 @@ public final class MunchyMax extends PluginCore
 	public void onLoad ()
 	{
 		if(dirty)return;
+    ConfigurationSerialization.registerClass(PlayerData.class);
+    ConfigurationSerialization.registerClass(InventorySnapshot.class);
+    tickListeners = new ConcurrentSet<>();
 
-		ConfigurationSerialization.registerClass(PlayerData.class);
 		elementManager = new ElementManager(this,"MM");
 		kitHandler = new KitHandler();
-		itemMap = new ItemMap();
+		itemMap = new ItemMap(this);
 		dataManager = new DataManager();
 		taskHandler = new TaskHandler(this);
-		playerHandler = new PlayerHandler();
+		playerHandler = new PlayerHandler(this);
 		hookManager = new HookManager();
 		pointManager = new PointManager();
 		mineManager = new MineManager();
 		shop = new ShopView();
-		tickListeners = new ConcurrentSet<>();
+
+		mineFileManager = new MineFileManager(mineManager);
+		kitFileManager = new KitFileManager(kitHandler);
+		playerFileManager = new PlayerFileManager(playerHandler);
+		pointFileManager = new PointFileManager(pointManager);
+
 	}
 
 
@@ -126,16 +139,19 @@ public final class MunchyMax extends PluginCore
 			return;
 		}
 
-    dataManager.createCoreFiles();
+    UtilFile.CoreFile.createFiles();
 		checkDepends();
 
 
 
 		tickLoop = taskHandler.runTimer(()->{
-			tickListeners.forEach((t)->
+      for(TickListener t: tickListeners){
+        if(t == null)continue;
+        t.tick();
+      }
 
-				t.tick()
-			);
+
+
 		},1,5);
 
 
@@ -143,7 +159,7 @@ public final class MunchyMax extends PluginCore
 		itemMap.registerItemEvent();
 
 		try {
-			dataManager.asKitData().loadKits();
+			kitFileManager.loadKits();
 
 		}catch(Exception e){
 		  getLogger().warning("Failed Loading kits");
@@ -151,13 +167,18 @@ public final class MunchyMax extends PluginCore
     }
 
     try {
-      dataManager.asPointData().loadllPoints();
+      pointFileManager.loadllPoints();
 
     }catch(Exception e){
       getLogger().warning("Failed Loading points");
       e.printStackTrace();
     }
-		dataManager.asUserData().loadAll();
+		try{
+    	playerFileManager.loadAllOnline();
+		}catch(Exception e){
+			getLogger().warning("Failed Loading user");
+			e.printStackTrace();
+		}
 		registerElements();
 		hookManager.load();
 
@@ -171,20 +192,25 @@ public final class MunchyMax extends PluginCore
 	{
 		if(dirty)return;
 		try {
-			dataManager.asKitData().saveKits();
+			kitFileManager.saveKits();
 		}catch(Exception e){
 			getLogger().warning("Failed saving kits");
 			e.printStackTrace();
 		}
 
 		try {
-			dataManager.asPointData().saveAllPoints();
+			pointFileManager.saveAllPoints();
 
 		}catch(Exception e){
 			getLogger().warning("Failed Saving points");
 			e.printStackTrace();
 		}
-		dataManager.asUserData().saveAll();
+		try {
+			playerFileManager.saveAllUsers();
+		}catch(Exception e){
+			getLogger().warning("Failed Saving users");
+			e.printStackTrace();
+		}
 		clean();
 
 
@@ -258,6 +284,22 @@ public final class MunchyMax extends PluginCore
 		return getInstance().hookManager;
 	}
 
+	public static KitFileManager getKitFileManager ()
+	{
+		return getInstance().kitFileManager;
+	}
+
+	public static MineFileManager getMineFileManager ()
+	{
+		return getInstance().mineFileManager;
+	}
+
+	public static PlayerFileManager getPlayerFileManager(){ return getInstance().playerFileManager;}
+
+	public static PointFileManager getPointFileManager(){
+		return getInstance().pointFileManager;
+	}
+
 
 	public static void addTickListener(TickListener e){
 		getInstance().tickListeners.add(e);
@@ -309,31 +351,16 @@ public final class MunchyMax extends PluginCore
 	{
 	//	cmdManager.register( new CommandJoin(this));
 
-		elementManager.registerAll(
+		elementManager.registerAllListener(
       new ChatListener(),
       new ElytraListener(),
       new MixedListener(),
-      playerHandler,
+
       shop,
-      new Element(){
-        @Override
-        public CmdCommand[] supplyCmd (){
-          return null;
-        }
-
-        @Override
-        public Listener supplyListener (){
-          return new ArmorListener(MunchyMax.getInstance());
-        }
-
-        @Override
-        public void clean (){
-
-        }
-      }
+      new ArmorListener(MunchyMax.getInstance())
     );
 
-    elementManager.registerAll(
+    elementManager.registerAll(playerHandler,
       new CommandJoin(),
       new CommandKit(),
       new CommandLoad(),

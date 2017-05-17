@@ -1,24 +1,25 @@
 package me.varmetek.munchymc.backend;
 
-import com.google.common.collect.ImmutableList;
-import com.google.common.collect.ImmutableMap;
-import me.varmetek.munchymc.util.UtilInventory;
+import me.varmetek.core.util.InventorySnapshot;
+import me.varmetek.munchymc.backend.exceptions.DeserializeException;
 import org.apache.commons.lang.Validate;
+import org.bukkit.configuration.serialization.ConfigurationSerializable;
 import org.bukkit.entity.Player;
-import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;
 
-import java.util.*;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * Created by XDMAN500 on 1/15/2017.
  */
-public class Kit
+public class Kit implements ConfigurationSerializable
 {
-	private ImmutableMap<Integer,ItemStack>  inv;
+  private InventorySnapshot inv;
 	private  ItemStack filler;
-	private  ImmutableList<PotionEffect> effects;
+
 
 
 	/*private Kit( Map<Integer,ItemStack>  inv , Collection<PotionEffect> effects){
@@ -32,23 +33,14 @@ public class Kit
 		this(id, UtilInventory.toMap(inv), effects);
 	}*/
 
-	private Kit(Map<Integer,ItemStack>  inv , List<PotionEffect> effects){
-	  this.inv = ImmutableMap.copyOf(inv);
-    this.effects = ImmutableList.copyOf(effects);
+	private Kit(Builder b){
+	  this.inv = b.inv;
   }
 
 
 	public void apply(Player pl){
-		pl.getInventory().clear();
-    pl.getActivePotionEffects().forEach( (eff)-> pl.removePotionEffect(eff.getType()));
-
-		UtilInventory.fromMap(inv,pl.getInventory());
-		if(effects != null){
-			for(PotionEffect pe : effects){
-				if(pe == null )continue;
-				pl.addPotionEffect(pe);
-			}
-		}
+	  Validate.notNull(pl, "Cannot apply kit to null player");
+    inv.apply(pl);
 	}
 
 	/*
@@ -63,55 +55,57 @@ public class Kit
 	}
 */
 
-
+  public InventorySnapshot getInventorySnapshot(){
+    return inv;
+  }
 	public Map<Integer,ItemStack> getInv(){
-		return inv;
+		return inv.getInventory();
 	}
 
   public List<PotionEffect> getEffects(){
-    return effects;
+    return inv.getPotionEffects();
+  }
+
+  @Override
+  public Map<String,Object> serialize (){
+    Map<String,Object> output = new HashMap<>();
+    output.put("inventory", inv);
+    return output;
+  }
+
+  public static Kit deserialize(Map<String,Object>  map) throws DeserializeException{
+    try {
+      InventorySnapshot inv = (InventorySnapshot) map.get("inventory");
+      return new Kit.Builder().setInventory(inv).build();
+    }catch(Exception e){
+      throw new DeserializeException(e);
+    }
   }
 
   public static class Builder{
-	  public Map<Integer,ItemStack>  inv = Collections.EMPTY_MAP;
-	  public ItemStack filler = null;
-	  public List<PotionEffect> effects = Collections.EMPTY_LIST;
+	  public InventorySnapshot inv;
+
 
 
     public Builder(){}
 
-    public Builder setInventory(Map<Integer,ItemStack> inv){
-      Validate.notNull(inv);
-        this.inv = inv;
-        return this;
-    }
 
-    public Builder setInventory(Inventory inv){
-      Validate.notNull(inv);
-      return setInventory(UtilInventory.toMap(inv));
-    }
 
-    public Builder setEffects(List<PotionEffect> effects){
-      Validate.notNull(effects);
-      this.effects = effects;
+    public Builder setInventory(InventorySnapshot inv){
+      Validate.notNull(inv);
+      this.inv  = inv;
       return this;
     }
-    public Builder setEffects(Collection<PotionEffect> effects){
-      Validate.notNull(effects);
-     return setEffects(Arrays.asList(effects.toArray(new PotionEffect[0])));
-    }
 
-    public Builder fromPlayer(Player pl) {
+    public Builder fromPlayerInv(Player pl) {
       Validate.notNull(pl);
-      setInventory(pl.getInventory());
-      setEffects(pl.getActivePotionEffects());
+      inv = new InventorySnapshot.Builder().fromPlayer(pl).build();
       return this;
     }
 
     public Builder fromKit(Kit kit) {
       Validate.notNull(kit);
-      setInventory(kit.inv);
-      setEffects(kit.effects);
+      inv = new InventorySnapshot.Builder().fromSnapshot(kit.inv).build();
       return this;
     }
 
@@ -120,7 +114,7 @@ public class Kit
 
 	  public Kit build(){
 
-	    return new Kit(inv,effects);
+	    return new Kit(this);
 	  }
 }
 }

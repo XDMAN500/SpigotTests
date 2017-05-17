@@ -6,10 +6,7 @@ import org.apache.commons.lang.Validate;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
 
 /**
  * Created by XDMAN500 on 12/31/2016.
@@ -34,9 +31,11 @@ public abstract class BasePlayerHandler<T extends BasePlayerSession<? extends Ba
 	public T getSession(UUID pl)
 	{
 		Validate.notNull(pl,"The player profile cannot be null");
-		T i;
+		T i =  registry.get(pl);
+		if(i == null){
+			i = add(_createUser(pl));
+		}
 
-		add( i = exists(pl) ?  registry.get(pl) : _createUser(pl) );
 
 		return  i;
 	}
@@ -58,6 +57,7 @@ public abstract class BasePlayerHandler<T extends BasePlayerSession<? extends Ba
 	}
 
 	public T renewSession(UUID id){
+		Validate.notNull(id,"The player profile cannot be null");;
 		if(exists(id)){
 			T e = registry.get(id);
 
@@ -72,32 +72,36 @@ public abstract class BasePlayerHandler<T extends BasePlayerSession<? extends Ba
 	}
 
 	public T renewSession(OfflinePlayer id){
+		Validate.notNull(id,"The player profile cannot be null");;
 		return renewSession(id.getUniqueId());
 
 	}
 
 	protected T renew(T id){
-		return add( _createUser(id));
+		Validate.notNull(id);
+		return add( _renewUser(id));
 
 	}
 
 	public boolean exists(UUID id){
+		Validate.notNull(id,"The player profile cannot be null");;
 		return registry.containsKey(id);
 	}
 
 
 	public boolean exists(OfflinePlayer id){
+		Validate.notNull(id,"The player profile cannot be null");
 		return registry.containsKey(id.getUniqueId());
 	}
 
 
 	protected abstract T _createUser(UUID pl);
-	protected abstract T _createUser(T pl);
+	protected abstract T _renewUser(T pl);
 
 
 
-	public T[] getAllUsers(){
-		return  (T[])registry.values().toArray();
+	public Collection<T> getAllUsers(){
+		return  registry.values();
 
 	}
 

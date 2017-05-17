@@ -234,7 +234,7 @@ public class CommandWarps implements Element
                   switch (args[1]) {
                     case "save": {
                       try {
-                        MunchyMax.getDataManager().asPointData().saveAllPoints();
+                        MunchyMax.getPointFileManager().saveAllPoints();
                         Messenger.send(pl, "&A&l> &7All points have been saved to disk");
                       } catch (Exception e) {
                         Messenger.send(pl, "&c&l> &7An error occured while saving points");
@@ -246,7 +246,7 @@ public class CommandWarps implements Element
 
                     case "load": {
                       try {
-                        MunchyMax.getDataManager().asPointData().loadllPoints();
+                        MunchyMax.getPointFileManager().loadllPoints();
                         Messenger.send(pl, "&A&l> &7All points have been loaded from disk");
                       } catch (Exception e) {
                         Messenger.send(pl, "&c&l> &7An error occured while loading points");

@@ -47,5 +47,5 @@ public abstract class BasePlayerData implements  ConfigurationSerializable, Clea
       source  = (T)input;
     }
   }
-
+  public abstract BasePlayerData copy();
 }

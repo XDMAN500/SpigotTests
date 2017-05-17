@@ -28,7 +28,7 @@ public abstract class BasePlayerSession<D extends BasePlayerData> implements Cle
 		Validate.notNull(handler,"Player handler cannot be null");
 
 		this.handler = handler;
-
+		playerData = _createData();
 		player = Optional.ofNullable(Bukkit.getPlayer(profile));
 
 		this.profile = player.isPresent() ?   player.get() :Bukkit.getOfflinePlayer(profile) ;
@@ -45,12 +45,12 @@ public abstract class BasePlayerSession<D extends BasePlayerData> implements Cle
 	 * This contructor is used for renewing or refreshing a user.
 	 */
 
-	protected BasePlayerSession (BasePlayerSession old){
-		Validate.notNull(profile,"Player profile cannot be null");
-		Validate.notNull(handler,"Player handler cannot be null");
-		(this.handler = old.handler).getPlugin().getLogger().info( "Updating Profile ("+ old.profile.getName()+") "+  old.profile.getUniqueId() );
+	protected BasePlayerSession (BasePlayerSession<D> old){
+		Validate.notNull(old.profile,"Player profile cannot be null");
+		Validate.notNull(old.handler,"Player handler cannot be null");
+		(this.handler = old.handler).getPlugin().getLogger().info( "Updating Profile ("+ old.profile.getName()+") "+ old.profile.getUniqueId() );
 
-
+		this.playerData = old.playerData == null ? _createData() : (D)old.playerData.copy();
 		player = Optional.ofNullable(Bukkit.getPlayer(old.getUUID()));
 
 		profile = player.isPresent() ?   player.get() :Bukkit.getOfflinePlayer(old.getUUID());
@@ -103,6 +103,7 @@ public abstract class BasePlayerSession<D extends BasePlayerData> implements Cle
 
 	}
 
+	protected abstract D _createData();
 
 
 

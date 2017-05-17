@@ -2,8 +2,9 @@ package me.varmetek.munchymc.commands;
 
 import me.varmetek.core.commands.CmdCommand;
 import me.varmetek.core.service.Element;
+import me.varmetek.core.util.Messenger;
 import me.varmetek.munchymc.MunchyMax;
-import org.bukkit.entity.Player;
+import me.varmetek.munchymc.backend.exceptions.ConfigException;
 import org.bukkit.event.Listener;
 
 /**
@@ -20,14 +21,22 @@ public class CommandLoad implements Element
 
       new CmdCommand.Builder("load", (sender, alias, ags, length) -> {
         if (!sender.isPlayer()) return;
-        MunchyMax.getDataManager().asUserData().readInventory(MunchyMax.getPlayerHandler().getSession((Player) sender));
+        try {
+          MunchyMax.getPlayerFileManager().readInventory(MunchyMax.getPlayerHandler().getSession(sender.asPlayer()));
+        }catch(ConfigException e){
+          Messenger.send(sender.asSender(), "&c Command failed due to an error");
+        }
 
       }).build(),
 
       new CmdCommand.Builder("save", (sender, alias, ags, length) -> {
         if (!sender.isPlayer()) return;
-        MunchyMax.getDataManager().asUserData().writeInventory(MunchyMax.getPlayerHandler().getSession(sender.asPlayer()));
+        try {
+          MunchyMax.getPlayerFileManager().writeInventory(MunchyMax.getPlayerHandler().getSession(sender.asPlayer()));
+        } catch(ConfigException e){
+          Messenger.send(sender.asSender(), "&c Command failed due to an error");
 
+    }
 
       }).build(),
 

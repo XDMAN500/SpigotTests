@@ -32,7 +32,7 @@ public class HookManager
 
 		ServicesManager sm = Bukkit.getServicesManager();
 
-		weHook = new HookWorldEdit((WorldEditPlugin) Bukkit.getPluginManager().getPlugin("PermissionsEx"),true);
+		weHook = new HookWorldEdit((WorldEditPlugin) Bukkit.getPluginManager().getPlugin("WorldEdit"),true);
 		permHook = new HookPerm((PermissionsEx)Bukkit.getPluginManager().getPlugin("PermissionsEx"),false);
 
 			RegisteredServiceProvider<Permission> permissionProvider = sm.getRegistration(net.milkbowl.vault.permission.Permission.class);

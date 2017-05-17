@@ -7,6 +7,7 @@ import me.varmetek.core.util.Messenger;
 import me.varmetek.munchymc.MunchyMax;
 import me.varmetek.munchymc.backend.Kit;
 import me.varmetek.munchymc.backend.KitHandler;
+import me.varmetek.munchymc.backend.exceptions.ConfigException;
 import me.varmetek.munchymc.util.Utils;
 import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.chat.BaseComponent;
@@ -115,10 +116,10 @@ public class CommandKit implements Element, Cleanable
                 }
 
                 try {
-                  Kit k = new Kit.Builder().fromPlayer(pl).build();
+                  Kit k = new Kit.Builder().fromPlayerInv(pl).build();
                   kitHandler.setKit(name, k);
-                  MunchyMax.getDataManager().asKitData().saveKit(name);
-                } catch (IOException e) {
+                  MunchyMax.getKitFileManager().saveKit(name);
+                } catch (ConfigException | IOException e) {
                   e.printStackTrace();
                   Messenger.send(pl, prefMal + "&cError saving kit");
                 }
@@ -178,7 +179,7 @@ public class CommandKit implements Element, Cleanable
               Messenger.send(pl, "&aRemoving kit " + name);
 
               try {
-                MunchyMax.getDataManager().asKitData().removeKit(name);
+                MunchyMax.getKitFileManager().removeKit(name);
                 kitHandler.delKit(name);
               } catch (IOException e) {
                 e.printStackTrace();
@@ -216,7 +217,7 @@ public class CommandKit implements Element, Cleanable
                 switch (args[1]) {
                   case "save": {
                     try {
-                      MunchyMax.getDataManager().asKitData().saveKits();
+                      MunchyMax.getKitFileManager().saveKits();
                       Messenger.send(pl, "&A&l> &7All kits have been saved to disk");
                     } catch (Exception e) {
                       Messenger.send(pl, "&c&l> &7An error occured while saving kits");
@@ -228,7 +229,7 @@ public class CommandKit implements Element, Cleanable
 
                   case "load": {
                     try {
-                      MunchyMax.getDataManager().asKitData().loadKits();
+                      MunchyMax.getKitFileManager().loadKits();
                       Messenger.send(pl, "&A&l> &7All kits have been loaded from disk");
                     } catch (Exception e) {
                       Messenger.send(pl, "&c&l> &7An error occured while loading kits");

@@ -1,7 +1,5 @@
 package me.varmetek.munchymc.listeners;
 
-import me.varmetek.core.commands.CmdCommand;
-import me.varmetek.core.service.Element;
 import net.md_5.bungee.api.ChatMessageType;
 import net.md_5.bungee.api.chat.ComponentBuilder;
 import org.bukkit.entity.Player;
@@ -16,75 +14,55 @@ import java.text.DecimalFormat;
 /**
  * Created by XDMAN500 on 12/30/2016.
  */
-public class ElytraListener implements Element
+public class ElytraListener implements Listener
 {
 	private static final double speedLimit = 1.2;
 	private static final DecimalFormat decimalF = new DecimalFormat("%#.###");
 	private static final Vector down = new Vector().setY(2);
-	private final Listener listener ;
-
-	public ElytraListener(){
-
-			listener = new Listener(){
-			@EventHandler
-			public void boost(PlayerMoveEvent ev)
-			{
-				Player pl = ev.getPlayer();
-				if(!pl.isGliding()){
-					return;
-				}
-
-				Vector looking = pl.getLocation().getDirection();
-				Vector motion = pl.getVelocity();
-				//double lookingLength = looking.length();
-				double motionSpeed = motion.length();
-
-				boolean isMaxSpeed = motionSpeed  > speedLimit;
-				double angle =  looking.angle(motion);
-				boolean sameDir =  angle <  (3.14159 / 6.0);
-				if(!isMaxSpeed )
-				{
-					motion.add(looking.clone().multiply(1.0/30.0));
-					pl.setVelocity(motion);
-
-				}
-				if(pl.isSneaking()){
-					pl.setGliding(false);
-				}
-				if(pl.isHandRaised())
-				{
-
-					SpectralArrow e = pl.launchProjectile(SpectralArrow.class, pl.getVelocity().setY(0));
-					e.setGlowing(true);
-					e.setCritical(true);
-					e.setGlowingTicks(2);
-					e.setGravity(true);
-
-				}
-				pl.spigot().sendMessage(ChatMessageType.ACTION_BAR, new ComponentBuilder("Speed: " + decimalF.format(motionSpeed/ speedLimit)).create());
-				//	Messenger.send(pl, " ");
-				//Messenger.send(pl, ev.getEventName() + "Linear: " + sameDir);
-				//	Messenger.send(pl, ev.getEventName() + "Speed: " + decimalF.format(motionSpeed));
 
 
-			}
-
-		};
-	}
 
 
-	@Override
-	public void clean (){
+	@EventHandler
+	public void boost(PlayerMoveEvent ev)
+	{
+		Player pl = ev.getPlayer();
+		if(!pl.isGliding()){
+			return;
+		}
 
-	}
+		Vector looking = pl.getLocation().getDirection();
+		Vector motion = pl.getVelocity();
+		//double lookingLength = looking.length();
+		double motionSpeed = motion.length();
 
-	@Override
-	public CmdCommand[] supplyCmd (){
-		return null;
-	}
+		boolean isMaxSpeed = motionSpeed  > speedLimit;
+		double angle =  looking.angle(motion);
+		boolean sameDir =  angle <  (3.14159 / 6.0);
+		if(!isMaxSpeed )
+		{
+			motion.add(looking.clone().multiply(1.0/30.0));
+			pl.setVelocity(motion);
 
-	@Override
-	public Listener supplyListener (){
-		return null;
+		}
+		if(pl.isSneaking()){
+			pl.setGliding(false);
+		}
+		if(pl.isHandRaised())
+		{
+
+			SpectralArrow e = pl.launchProjectile(SpectralArrow.class, pl.getVelocity().setY(0));
+			e.setGlowing(true);
+			e.setCritical(true);
+			e.setGlowingTicks(2);
+			e.setGravity(true);
+
+		}
+		pl.spigot().sendMessage(ChatMessageType.ACTION_BAR, new ComponentBuilder("Speed: " + decimalF.format(motionSpeed/ speedLimit)).create());
+		//	Messenger.send(pl, " ");
+		//Messenger.send(pl, ev.getEventName() + "Linear: " + sameDir);
+		//	Messenger.send(pl, ev.getEventName() + "Speed: " + decimalF.format(motionSpeed));
+
+
 	}
 }

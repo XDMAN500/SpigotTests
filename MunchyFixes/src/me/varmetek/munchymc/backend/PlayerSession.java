@@ -20,6 +20,7 @@ import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.util.Vector;
 
+import java.text.DecimalFormat;
 import java.time.LocalTime;
 import java.util.*;
 
@@ -28,11 +29,11 @@ public class PlayerSession extends BasePlayerSession<PlayerData>
 {
 
   ;
-  protected Optional<Scoreboardx> board ;
+  protected Optional<Scoreboardx> board  = Optional.empty();
   protected PluginCore plugin;
+
   public PlayerSession (UUID name, final PlayerHandler handler){
     super(name, handler);
-
     plugin  = handler.getPlugin();
     dead = !profile.isOnline();
     if (board.isPresent() && !board.get().getSidebarHandler().has("default")){
@@ -57,7 +58,6 @@ public class PlayerSession extends BasePlayerSession<PlayerData>
 
    plugin = this.handler.getPlugin();
     dead = !profile.isOnline();
-
     board = old.board;
     if(player.isPresent())
     {
@@ -73,6 +73,11 @@ public class PlayerSession extends BasePlayerSession<PlayerData>
   public Optional<Scoreboardx> getScoreBoard(){
     return board;
 
+  }
+
+  @Override
+  protected PlayerData _createData (){
+    return new PlayerData();
   }
 
   @Override
@@ -111,11 +116,17 @@ public class PlayerSession extends BasePlayerSession<PlayerData>
 
 
   public String compileJoinMessage (){
-    return Messenger.color(formater.apply(playerData.joinMessage, this));
+    return Messenger.color(formater.apply(
+      playerData
+        .joinMessage,
+      this));
   }
 
   public String compileLeaveMessage (){
-    return Messenger.color(formater.apply(playerData.leaveMessage, this));
+    return Messenger.color(formater.apply(
+      playerData
+        .leaveMessage,
+      this));
   }
 
 
@@ -190,6 +201,7 @@ public class PlayerSession extends BasePlayerSession<PlayerData>
     return lastMsgReply;
   }
 
+  private static final DecimalFormat timeFormat = new DecimalFormat("00");
   @Override
   public void tick (){
 
@@ -203,27 +215,24 @@ public class PlayerSession extends BasePlayerSession<PlayerData>
 
       sb = sidebars.add("default");
 
-      sb.set("spc1", "&7=============", 10);
-      sb.set("spc2", "&5 ", 9);
-      String timeS = (time.getHour() > 12 ? time.getHour() - 12 : time.getHour()) + ":" + time.getMinute() + ":" + time.getSecond() + " " + (time.isAfter(LocalTime.NOON) ? "PM" : "AM");
-      sb.set("timer", "&4 Time:&b " + timeS, 5);
-      sb.set("spc4", "&7=============", 0);
-      sb.set("spc3", "&5 ", 1);
     } else {
       sb = sidebars.get("default").get();
     }
 
 
     if (sidebars.hasDisplay() && !sb.isVisible()) return;
+
     try {
       sb.setTitle("&b&lMunchy Max");
-
-      sb.set("spc1", "&7=============", 10);
-      sb.set("spc2", "&5 ", 9);
-      String timeS = (time.getHour() > 12 ? time.getHour() - 12 : time.getHour()) + ":" + time.getMinute() + ":" + time.getSecond() + " " + (time.isAfter(LocalTime.NOON) ? "PM" : "AM");
-      sb.set("timer", "&4 Time:&b " + timeS, 5);
-      sb.set("spc4", "&7=============", 0);
-      sb.set("spc3", "&5 ", 1);
+      sb.getRenderOrder().reset();
+      sb.set("line", "&7=============");
+      sb.set("empty", "&5 ");
+      String timeS = (time.getHour() > 12 ?
+                        timeFormat.format(time.getHour() - 12) : timeFormat.format(time.getHour()))
+                       + ":" + timeFormat.format(time.getMinute())
+                       + ":" + timeFormat.format(time.getSecond())
+                       + " " + (time.isAfter(LocalTime.NOON) ? "PM" : "AM");
+      sb.set("time", "&4 Time:&b " + timeS);
       if (!sidebars.hasDisplay()){
         sb.setVisible(true);
       }
@@ -237,6 +246,14 @@ public class PlayerSession extends BasePlayerSession<PlayerData>
       e.printStackTrace();
       plugin.getLogger().warning("Failed to edit sb: " + sb.ID());
     } finally {
+      sb.getRenderOrder().append(
+        "line",
+        "empty",
+        "time",
+        "empty",
+        "line"
+
+        );
       sb.getHandle().render();
     }
   }

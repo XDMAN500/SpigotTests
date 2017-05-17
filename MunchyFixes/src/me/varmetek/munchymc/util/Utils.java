@@ -122,4 +122,23 @@ public final class Utils {
 	public static String alphaCode(int num){
 		return  Integer.toString(num,Character.MAX_RADIX);
 	}
+
+	public  static <T>  List<T> Set2List(Set<T> input){
+		List<T> output =  new ArrayList<>(input.size());
+
+		for(T data : input){
+			output.add(data);
+		}
+		return output;
+	}
+
+	public  static <T>  Set<T> List2Set(List<T> input){
+		Set<T> output =  new HashSet<>(input.size());
+
+		for(T data : input){
+			output.add(data);
+		}
+		return output;
+	}
+
 }

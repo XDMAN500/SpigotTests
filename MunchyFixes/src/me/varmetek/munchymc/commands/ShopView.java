@@ -1,7 +1,6 @@
 package me.varmetek.munchymc.commands;
 
-import me.varmetek.core.commands.CmdCommand;
-import me.varmetek.core.service.Element;
+import me.varmetek.core.util.Cleanable;
 import me.varmetek.core.util.Messenger;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
@@ -22,52 +21,50 @@ import java.util.UUID;
 /**
  * Created by XDMAN500 on 3/1/2017.
  */
-public class ShopView implements Element
+public class ShopView implements Listener,Cleanable
 {
 
 	private Map<UUID,Entry> menu = new HashMap<>();
 
-	private final Listener event;
+
 	public ShopView(){
 
 
-		event = new Listener()
-		{
-			@EventHandler
-			public void clickHead (InventoryClickEvent ev){
-				Player player = (Player) ev.getWhoClicked();
-				if (ev.getClickedInventory() == null) return;
-				if (!menu.containsKey(player.getUniqueId())) return;
-				Bukkit.getServer().getLogger().info("On list");
-				Entry v = menu.get(player.getUniqueId());
 
-				if (v.view != View.MAIN) return;
-				Bukkit.getServer().getLogger().info("On list : in Main");
-				ItemStack clicked = ev.getCurrentItem();
-				if (clicked == null) return;
-				if (clicked.getType() != Material.SKULL_ITEM) return;
-				if (clicked.getDurability() != 3) return;
-				SkullMeta skull = (SkullMeta) clicked.getItemMeta();
-				String ownerName = skull.getOwner();
-				openShopPlayerMain(player, Bukkit.getServer().getPlayer(ownerName));
-			}
+	}
+	@EventHandler
+	public void clickHead (InventoryClickEvent ev){
+		Player player = (Player) ev.getWhoClicked();
+		if (ev.getClickedInventory() == null) return;
+		if (!menu.containsKey(player.getUniqueId())) return;
+		Bukkit.getServer().getLogger().info("On list");
+		Entry v = menu.get(player.getUniqueId());
+
+		if (v.view != View.MAIN) return;
+		Bukkit.getServer().getLogger().info("On list : in Main");
+		ItemStack clicked = ev.getCurrentItem();
+		if (clicked == null) return;
+		if (clicked.getType() != Material.SKULL_ITEM) return;
+		if (clicked.getDurability() != 3) return;
+		SkullMeta skull = (SkullMeta) clicked.getItemMeta();
+		String ownerName = skull.getOwner();
+		openShopPlayerMain(player, Bukkit.getServer().getPlayer(ownerName));
+	}
 
 
-			@EventHandler
-			public void closeInventory (final InventoryCloseEvent ev){
-				Player player = (Player) ev.getPlayer();
+	@EventHandler
+	public void closeInventory (final InventoryCloseEvent ev){
+		Player player = (Player) ev.getPlayer();
 
-				if (!menu.containsKey(player.getUniqueId())) return;
-				Entry v = menu.get(player.getUniqueId());
-				Object[] data = v.data;
-				if (v.view.parent == null){
-					menu.remove(player.getUniqueId());
-				} else {
-					menu.put(player.getUniqueId(), new Entry(v.view, data));
-					open(player, v.view.parent);
-				}
-			}
-		};
+		if (!menu.containsKey(player.getUniqueId())) return;
+		Entry v = menu.get(player.getUniqueId());
+		Object[] data = v.data;
+		if (v.view.parent == null){
+			menu.remove(player.getUniqueId());
+		} else {
+			menu.put(player.getUniqueId(), new Entry(v.view, data));
+			open(player, v.view.parent);
+		}
 	}
 
 	@Override
@@ -77,15 +74,7 @@ public class ShopView implements Element
 		menu = null;
 	}
 
-	@Override
-	public CmdCommand[] supplyCmd (){
-		return null;
-	}
 
-	@Override
-	public Listener supplyListener(){
-		return event;
-	}
 
 	class Entry{
 		final View view;

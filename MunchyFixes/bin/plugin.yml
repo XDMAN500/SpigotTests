@@ -6,23 +6,3 @@ authors:
   - Varmetek
 depend: [ProtocolLib, PermissionsEx, Vault, WorldEdit, WorldGuard]
 commands:
-  rares: null
-  test: null
-  save: null
-  load: null
-  kit: null
-  openinv: null
-  run: null
-  shop: null
-  join: null
-  leave: null
-  msg: null
-  r: null
-  warp: null
-  editpoint: null
-  rank: null
-  confirm: null
-  cancel: null
-  spawn: null
-  checkinv: null
-  editkit: null

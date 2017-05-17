@@ -3,6 +3,7 @@ package me.varmetek.core.scoreboard;
 import me.varmetek.core.util.BasicMap;
 import me.varmetek.core.util.Cleanable;
 import org.apache.commons.lang.Validate;
+import org.bukkit.Bukkit;
 import org.bukkit.scoreboard.DisplaySlot;
 import org.bukkit.scoreboard.Objective;
 
@@ -17,15 +18,22 @@ public class SidebarHandler implements Cleanable
 
 	private Scoreboardx scoreboard;
 	private BasicMap<Sidebar> map;
-	private Objective  display;
+	private Objective[]  display ;
+
+	private String lastname = "";
 	private RenderOrder order = new RenderOrder();
 	private int slot = 0;
 
 	 SidebarHandler (Scoreboardx scoreboard){
 			Validate.notNull(scoreboard);
 			this.scoreboard = scoreboard;
+			display =  new Objective[]{
+			 scoreboard.getScoreboard().registerNewObjective("sidebar0","dummy"),
+			 scoreboard.getScoreboard().registerNewObjective("sidebar1","dummy"),
+			 scoreboard.getScoreboard().registerNewObjective("sidebar2","dummy")
+		 };
 			map = new BasicMap<>();
-			display = scoreboard.getScoreboard().registerNewObjective("sidebar","dummy");
+			//display = scoreboard.getScoreboard().registerNewObjective("sidebar","dummy");
 
 
 
@@ -76,13 +84,25 @@ public class SidebarHandler implements Cleanable
 	public void render(){
 
 		if(order.getCurrent().isPresent()){
-			slot = (slot+1) % 2;
-			Objective old = display;
+			slot = (slot+1) % 3;
+			Objective del = display[display.length-1];
 
-			display = scoreboard.getScoreboard().registerNewObjective("sidebar"+slot,"dummy");
-			order.getCurrent().get().render(display);
-			display.setDisplaySlot(DisplaySlot.SIDEBAR);
-			old.unregister();
+			lastname = del.getName();
+			Bukkit.getLogger().info("{Sidebarhandler} "+  lastname);
+
+			del.unregister();
+
+			for(int i = display.length-1; i> 0; i--){
+					display[i] = display[i-1];
+
+			}
+			display[0] = scoreboard.getScoreboard().registerNewObjective(lastname,"dummy");
+
+
+
+			order.getCurrent().get().render(display[0]);
+			display[0].setDisplaySlot(DisplaySlot.SIDEBAR);
+
 		}
 	}
 
@@ -92,7 +112,7 @@ public class SidebarHandler implements Cleanable
 		scoreboard = null;
 		map.clean();
 		map = null;
-		display.unregister();
+		//display
 		display = null;
 		 order.clean();
 		 order = null;

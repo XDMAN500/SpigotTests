@@ -9,6 +9,7 @@ import org.apache.commons.lang.Validate;
 import org.bukkit.Bukkit;
 import org.bukkit.Server;
 import org.bukkit.command.CommandMap;
+import org.bukkit.command.SimpleCommandMap;
 import org.bukkit.event.Listener;
 
 import java.lang.reflect.Method;
@@ -46,7 +47,10 @@ public class ElementManager implements Cleanable
     Method getCommandMap = server.getClass().getDeclaredMethod("getCommandMap");
     getCommandMap.setAccessible(true);
     cmdMap = (CommandMap) getCommandMap.invoke( server);
-    plugin.getLogger().warning("[!!!!] The command map has been tampered with. Hopefully commands still work.");
+    if(!cmdMap.getClass().equals(SimpleCommandMap.class)){
+      plugin.getLogger().warning("[!!!!] The command map has been tampered with. Hopefully commands still work.");
+      plugin.getLogger().warning("[!!!!] Offender " + cmdMap.getClass().getName());
+    }
 
   }
 

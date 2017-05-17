@@ -3,8 +3,11 @@ package me.varmetek.munchymc.backend;
 import me.varmetek.core.commands.CmdCommand;
 import me.varmetek.core.service.Element;
 import me.varmetek.core.user.BasePlayerHandler;
+import me.varmetek.core.util.PluginCore;
 import me.varmetek.munchymc.MunchyMax;
+import me.varmetek.munchymc.backend.exceptions.ConfigException;
 import me.varmetek.munchymc.listeners.TickListener;
+import org.apache.commons.lang.Validate;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
@@ -23,11 +26,11 @@ public class PlayerHandler extends BasePlayerHandler<PlayerSession> implements T
 
 
 
+	private PluginCore plugin;
 
-	public PlayerHandler ()
+	public PlayerHandler (PluginCore plugin)
 	{
-
-
+		super(plugin);
 		MunchyMax.addTickListener(this);
 
 
@@ -48,11 +51,13 @@ public class PlayerHandler extends BasePlayerHandler<PlayerSession> implements T
 	@Override
 	protected PlayerSession _createUser(UUID pl)
 	{
+		Validate.notNull( pl, "Id cannot be null");
 		return new PlayerSession(pl,this);
 	}
 	@Override
-	protected PlayerSession _createUser(PlayerSession pl)
+	protected PlayerSession _renewUser(PlayerSession pl)
 	{
+		Validate.notNull( pl, "Session cannot be null");
 		return new PlayerSession(pl);
 	}
 
@@ -79,8 +84,8 @@ public class PlayerHandler extends BasePlayerHandler<PlayerSession> implements T
 				ev.getPlayer().setInvulnerable(false);
 				try
 				{
-					MunchyMax.getDataManager().asUserData().loadUser(user);
-				}catch(Exception e){
+					MunchyMax.getPlayerFileManager().loadUser(user);
+				}catch(ConfigException e){
 					MunchyMax.getInstance().getLogger().warning("Could not load player" + " \"" + user.getName() + "\".");
 				}
 
@@ -95,8 +100,8 @@ public class PlayerHandler extends BasePlayerHandler<PlayerSession> implements T
 
 				try
 				{
-					MunchyMax.getDataManager().asUserData().saveUser(user);
-				}catch(Exception e){
+					MunchyMax.getPlayerFileManager().saveUser(user);
+				}catch(ConfigException e){
 					MunchyMax.getInstance().getLogger().warning("Could not save player" + " \"" + user.getName() + "\".");
 				}
 
@@ -111,8 +116,8 @@ public class PlayerHandler extends BasePlayerHandler<PlayerSession> implements T
 
 				try
 				{
-					MunchyMax.getDataManager().asUserData().saveUser(user);
-				}catch(Exception e){
+					MunchyMax.getPlayerFileManager().saveUser(user);
+				}catch(ConfigException e){
 					MunchyMax.getInstance().getLogger().warning("Could not save player" + " \"" + user.getName() + "\".");
 				}
 
