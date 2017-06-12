@@ -1,6 +1,8 @@
 package me.varmetek.munchymc.commands;
 
+import com.google.common.collect.ImmutableList;
 import me.varmetek.core.commands.CmdCommand;
+import me.varmetek.core.commands.CmdSender;
 import me.varmetek.core.service.Element;
 import me.varmetek.core.util.Messenger;
 import me.varmetek.munchymc.MunchyMax;
@@ -44,7 +46,15 @@ public class CommandWarps implements Element
   @Override
   public CmdCommand[] supplyCmd (){
     return new CmdCommand[]{
-      new CmdCommand.Builder("spawn").setLogic((sender, alias, args, length) -> {
+      new CmdCommand.Builder("spawn").setLogic(
+
+        (cmd)->{
+
+          CmdSender sender = cmd.getSender();
+          int len = cmd.getArguments().size();
+          String alias = cmd.getAlias();
+          ImmutableList<String> args = cmd.getArguments();
+
         if (!sender.isPlayer()){
           Messenger.send(sender.asSender(), "&c This command is for players only");
           return;
@@ -54,7 +64,14 @@ public class CommandWarps implements Element
         pl.performCommand("warp spawn");
       }).build(),
 
-        new CmdCommand.Builder("warp", (sender, alias, args, length) -> {
+        new CmdCommand.Builder("warp").setLogic(
+          (cmd)->{
+
+            CmdSender sender = cmd.getSender();
+            int length = cmd.getArguments().size();
+            String alias = cmd.getAlias();
+            ImmutableList<String> args = cmd.getArguments();
+
           if (!sender.isPlayer()){
             Messenger.send(sender.asSender(), "&c This command is for players only");
             return;
@@ -74,7 +91,7 @@ public class CommandWarps implements Element
               }
             }
           } else {
-            String name = args[0];
+            String name = args.get(0);
             Optional<Point> point = manager.getWarp(name);
             if (point.isPresent()){
               if (hasPermission(pl, name)){
@@ -91,7 +108,14 @@ public class CommandWarps implements Element
 
         }).build(),
 
-        new CmdCommand.Builder("editpoint", (sender, alias, args, length) -> {
+        new CmdCommand.Builder("editpoint").setLogic(
+          (cmd)->{
+
+            CmdSender sender = cmd.getSender();
+            int length = cmd.getArguments().size();
+            String alias = cmd.getAlias();
+            ImmutableList<String> args = cmd.getArguments();
+
           if (!sender.isPlayer()){
             Messenger.send(sender.asSender(), "&c This command is for players only");
             return;
@@ -120,14 +144,14 @@ public class CommandWarps implements Element
 
             );
           } else {
-            switch (args[0]) {
+            switch (args.get(0).toLowerCase()) {
               case "set":{
                 if (length <= 1){
                   Messenger.send(pl, "&4Usage:&c  /editpoint set <name>");
                   return;
 
                 } else {
-                  String name = args[1];
+                  String name = args.get(1);
                   Optional<Point> point = manager.getPoint(name);
                   if (point.isPresent()){
                     Optional<CommandAction> op = MunchyMax.getElementManager().getElement(CommandAction.class);
@@ -158,7 +182,7 @@ public class CommandWarps implements Element
                   Messenger.send(pl, "&4Usage:&c  /editpoint remove <name>");
 
                 } else {
-                  String name = args[1];
+                  String name = args.get(1);
                   Optional<Point> point = manager.getPoint(name);
                   if (point.isPresent()){
                     manager.delPoint(name);
@@ -173,7 +197,7 @@ public class CommandWarps implements Element
                   Messenger.send(pl, "&4Usage:&c  /editpoint tp <name>");
 
                 } else {
-                  String name = args[1];
+                  String name = args.get(1);
                   Optional<Point> point = manager.getPoint(name);
                   if (point.isPresent()){
                     point.get().teleport(pl);
@@ -196,7 +220,7 @@ public class CommandWarps implements Element
                   Messenger.send(pl, "&4Usage:&c  /editpoint config <name>");
 
                 } else {
-                  String name = args[1];
+                  String name = args.get(1);
                   if (!manager.pointExist(name)){
                     Messenger.send(pl, "&c Point \"" + name + "\" does not exist.");
                     return;
@@ -208,7 +232,7 @@ public class CommandWarps implements Element
                       "&c  /editpoint config " + name + " delwarp"
                     );
                   } else {
-                    switch (args[2]) {
+                    switch (args.get(2)) {
                       case "setwarp":
                         manager.setWarp(name);
                         Messenger.send(pl, "&a Point \"" + name + "\" can now be used in /warp.");
@@ -231,7 +255,7 @@ public class CommandWarps implements Element
                     "&c&l  >&7 /editpoint server load"
                   );
                 } else {
-                  switch (args[1]) {
+                  switch (args.get(1)) {
                     case "save": {
                       try {
                         MunchyMax.getPointFileManager().saveAllPoints();

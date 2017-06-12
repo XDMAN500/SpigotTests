@@ -1,6 +1,8 @@
 package me.varmetek.munchymc.commands;
 
+import com.google.common.collect.ImmutableList;
 import me.varmetek.core.commands.CmdCommand;
+import me.varmetek.core.commands.CmdSender;
 import me.varmetek.core.service.Element;
 import me.varmetek.core.util.Messenger;
 import me.varmetek.munchymc.MunchyMax;
@@ -19,7 +21,14 @@ public class CommandLoad implements Element
 
     commands = new CmdCommand[]{
 
-      new CmdCommand.Builder("load", (sender, alias, ags, length) -> {
+      new CmdCommand.Builder("load").setLogic(
+        (cmd)->{
+
+          CmdSender sender = cmd.getSender();
+          int len = cmd.getArguments().size();
+          String alias = cmd.getAlias();
+          ImmutableList<String> args = cmd.getArguments();
+
         if (!sender.isPlayer()) return;
         try {
           MunchyMax.getPlayerFileManager().readInventory(MunchyMax.getPlayerHandler().getSession(sender.asPlayer()));
@@ -29,7 +38,14 @@ public class CommandLoad implements Element
 
       }).build(),
 
-      new CmdCommand.Builder("save", (sender, alias, ags, length) -> {
+      new CmdCommand.Builder("save").setLogic(
+        (cmd)->{
+
+        CmdSender sender = cmd.getSender();
+        int len = cmd.getArguments().size();
+        String alias = cmd.getAlias();
+          ImmutableList<String> args = cmd.getArguments();
+
         if (!sender.isPlayer()) return;
         try {
           MunchyMax.getPlayerFileManager().writeInventory(MunchyMax.getPlayerHandler().getSession(sender.asPlayer()));

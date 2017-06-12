@@ -1,51 +1,78 @@
 package me.varmetek.munchymc.mines;
 
 import com.sk89q.worldedit.BlockVector;
-import me.varmetek.munchymc.backend.exceptions.DeserializeException;
+import me.varmetek.core.util.Cleanable;
+import me.varmetek.munchymc.backend.exceptions.ConfigException;
 import org.apache.commons.lang3.Validate;
-import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.World;
-import org.bukkit.material.MaterialData;
+import org.bukkit.plugin.Plugin;
+import org.bukkit.scheduler.BukkitRunnable;
 import org.spigotmc.CaseInsensitiveMap;
 
-import java.util.*;
+import java.util.Collection;
+import java.util.Map;
+import java.util.Optional;
+import java.util.Set;
 
 /**
  * Created by XDMAN500 on 5/10/2017.
  */
-public class MineManager
+public class MineManager implements Cleanable
 {
 
-  private Map<String,Mine> mines = new CaseInsensitiveMap<>();
+  private Map<String, Mine > mines =new CaseInsensitiveMap<>();
+  private final PokeMineTask pokeTask = new PokeMineTask();
+  //private Table<UUID,String,Mine> mines = Tables.newCustomTable(Maps.newHashMap(),()->{return new CaseInsensitiveMap<>();});
 
-  public  MineManager(){
+  private Plugin plugin;
+  public  MineManager(Plugin pl){
+    plugin = pl;
 
   }
+
+  public void startTask(){
+    pokeTask.runTaskTimer(plugin,40L,100L);
+  }
+  public Collection<Mine> getAllMines(){
+    return mines.values();
+  }
+
   public Optional<Mine> getMineAt(Location loc){
     return getMineAt(loc.getWorld(),loc.getBlockX(),loc.getBlockY(),loc.getBlockZ());
   }
 
   public Optional<Mine> getMineAt(World world,int x, int y, int z){
-    Optional<Mine> output = Optional.empty();
+    Validate.notNull(world,"World cannot be null");
+    ;
 
     if(mines.isEmpty()){
-      return output;
+      return Optional.empty();
     }
+
     for(Mine mine: mines.values()){
       if(!mine.getWorld().equals(world))continue;
 
-      if(mine.getRegion().contains(x, y, z)){
-        output = Optional.of(mine);
-        break;
+      if(mine.contains(x, y, z)){
+        return Optional.of(mine);
+
 
       }
     }
 
-    return output;
+    return Optional.empty();
   }
 
+
+
   public Optional<Mine> getMine(String name){
+   // Validate.notNull(world,"World cannot be null");
+    Validate.notNull(name, "Mine name cannot be null");
+    if(mines.isEmpty()) return Optional.empty();
+
+
+
+
     return Optional.ofNullable(mines.get(name));
   }
 
@@ -59,64 +86,57 @@ public class MineManager
   }
 
 
-  public boolean hasMine(String name){
-    return mines.containsKey(name);
+  public boolean hasMine(World world, String name){
+   Validate.notNull(world, "World cannot be null");
+    Validate.notNull(name, "Mine name cannot be null");
+    try {
+      return mines.containsKey(name);
+    }catch(NullPointerException ex){
+      return false;
+    }
   }
 
   public void remove(String name){
+    //Validate.notNull(world,"World cannot be null");
+    Validate.notNull(name, "Mine name cannot be null");
+
     mines.remove(name);
   }
 
   public Set<String> getMineNames(){
     return mines.keySet();
+
+  }
+  private void register(Mine mine){
+    Validate.notNull(mine, "Mine cannot be null");
+    mines.put(mine.getName(),mine);
   }
 
-  public void deserializeMine(Map<String,Object> input, String name) throws  DeserializeException {
+  public Mine deserializeMine(Map<String,Object> input, String name) throws ConfigException{
+    Mine mine = new Mine(this,name,input);
+    register(mine);
+    return mine;
 
-    String worldS = null;
-    String block_max = null;
-    String block_min = null;
-    List<String>  blockList = null;
 
-    String errorMsg = "Error extracting raw data for Mine";
-    try{
+  }
 
-      worldS = (String)input.get("world");
-      block_max = (String)input.get("blockMax");
-      block_min = (String)input.get("blockMin");
-      blockList = (List<String>)input.get("blocks");
-      Validate.notNull(name);
-      Validate.notNull(worldS);
-      Validate.notNull(block_max);
-      Validate.notNull(block_min);
-      Validate.notNull(blockList);
+  @Override
+  public void clean (){
+    plugin = null;
+    if(pokeTask.getTaskId() != -1)
+      pokeTask.cancel();
+    mines.values().forEach(Mine::clean);
+    mines.clear();
+    mines = null;
+  }
 
-    }catch(Exception e){
-      e.printStackTrace();
-      throw new IllegalArgumentException(errorMsg+": "+ e.getMessage());
 
+  private class PokeMineTask extends BukkitRunnable{
+    public void run(){
+      //MunchyMax.logger().info("[MINES] running poke");
+      mines.values().forEach( Mine::poke);
     }
-
-    World world = null;
-    BlockVector max = null, min = null;
-    Map<MaterialData,Integer> blocks = new HashMap<>();
-    try{
-      world = Bukkit.getWorld(name);
-      String[] Vdata = block_max.split("-");
-      max = new BlockVector(Integer.parseInt(Vdata[0]),Integer.parseInt(Vdata[1]),Integer.parseInt(Vdata[2]) );
-      Vdata = block_min.split("-");
-      min = new BlockVector(Integer.parseInt(Vdata[0]),Integer.parseInt(Vdata[1]),Integer.parseInt(Vdata[2]) );
-      blockList.forEach( (in)->{
-        String[]  data = in.split(":");
-        blocks.put( new MaterialData( Integer.parseInt(data[0]),Byte.parseByte(data[1])), Integer.parseInt(data[2]));
-      });
-    }catch(Exception e){
-      throw new DeserializeException("Error extracting raw data for Mine" ,e);
-
-
-    }
-    Mine mine = create(name, max,min,world);
-    mine.getRawBlockData().putAll(blocks);
-
   }
 }
+
+

@@ -1,6 +1,7 @@
 package me.varmetek.munchymc.util;
 
 import me.varmetek.core.util.Messenger;
+import org.apache.commons.lang.Validate;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.World;
@@ -42,7 +43,7 @@ public final class Utils {
 
 
 	public static final ConsoleCommandSender CONSOLE = Bukkit.getConsoleSender();
-	public static List<String> matchString(Collection<? extends String> list, String input){
+	public static List<String> matchString( String input,Collection<? extends String> list){
 
 		List<String> output = new ArrayList<String>();
 		if(list == null || input == null)return output;
@@ -80,7 +81,7 @@ public final class Utils {
 		for(OfflinePlayer p : Bukkit.getOfflinePlayers()){
 			tabs.add(p.getName());
 		}
-		return matchString(tabs, input.toLowerCase());
+		return matchString( input.toLowerCase(),tabs);
 	}
 	public static Set<Player> getOnlinePlayers(){
 		Set<Player>  list = new HashSet<Player>();
@@ -99,7 +100,7 @@ public final class Utils {
 			for(Player p : getOnlinePlayers()){
 			tabs.add(p.getName());
 		}
-		return matchString(tabs, input.toLowerCase());
+		return matchString(input.toLowerCase(),tabs);
 	}
 	public static boolean isRightClicked(Action action){
 		return action == Action.RIGHT_CLICK_AIR || action == Action.RIGHT_CLICK_BLOCK;
@@ -108,11 +109,39 @@ public final class Utils {
 		return action == Action.LEFT_CLICK_AIR || action == Action.LEFT_CLICK_BLOCK;
 	}
 
-	public static int  getInt(String s){
-		return (Integer)Try.of(()->{ return new Integer(s);}).getOrElse(null);
+	public static Integer getInt(String s){
+		Validate.notNull(s, "Input cannot be null");
+		try{
+			return Integer.valueOf(s);
+		}catch(NumberFormatException ex){
+			return null;
+		}
+	}
+
+
+
+	public static long getSystemSeconds(){
+		return System.currentTimeMillis()/1000L;
+	}
+
+	public static Short getShort(String s){
+		Validate.notNull(s, "Input cannot be null");
+		try{
+			return Short.valueOf(s);
+		}catch(NumberFormatException ex){
+			return null;
+		}
 	}
 	public static <T> List<String> toStringList(Collection<T> stuff , Function<T,String>  func){
 		List<String> things = new ArrayList<>(stuff.size());
+		for(T object : stuff){
+			things.add(func.apply(object));
+		}
+		return things;
+	}
+
+	public static <T> List<String> toStringList(T[] stuff , Function<T,String>  func){
+		List<String> things = new ArrayList<>(stuff.length);
 		for(T object : stuff){
 			things.add(func.apply(object));
 		}

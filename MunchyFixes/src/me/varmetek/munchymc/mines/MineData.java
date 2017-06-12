@@ -67,15 +67,15 @@ public class MineData
     return minPoint;
   }
 
-  public List<LocalBlock> getBlockData(){
+  public List<BlockData> getBlockData(){
 
-    List<LocalBlock> output = new ArrayList<>(blocks.size());
+    List<BlockData> output = new ArrayList<>(blocks.size());
     double totalWeight = totalWeight();
 
 
     blocks.entrySet().forEach( (entry) ->{
 
-      output.add( new LocalBlock(entry.getKey(),entry.getValue(), entry.getValue().doubleValue()/totalWeight));
+      output.add( new BlockData(entry.getKey(),entry.getValue(), entry.getValue().doubleValue()/totalWeight));
     });
 
 

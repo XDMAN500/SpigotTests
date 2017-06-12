@@ -1,6 +1,6 @@
 package me.varmetek.munchymc.listeners;
 
-import me.varmetek.munchymc.backend.PlayerSession;
+import me.varmetek.munchymc.backend.user.PlayerSession;
 import org.bukkit.event.Cancellable;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;

@@ -69,17 +69,27 @@ public final class UtilFile
 
 	public enum CoreFile
 	{
-		WARPS("", ".yml"), LOC("", ".yml"), CONFIG("", ".yml"), USER("", __), USERREG(USER.getDirectory(), ".yml"),
-		KITS("", __), Points("", ".yml"),MINES("",".yml");
+		WARPS("", "warps.yml"),
+		LOC("", "loc.yml"),
+		CONFIG("", "config.yml"),
+		USER("","user"+ __),
+		USERREG(USER.getDirectory(), "userReg.yml"),
+		KITS("", "kits"+__),
+		POINTS("", "points.yml"),
+		MINES("","mines.yml"),
+		MINES_BROKEN("","mines-broken.yml"),
+		POINTS_BROKEN("","kits-broken.yml");
 
-		private String path;
+		private final String path;
 		private File file = null;
-		private String suffix;
 
-		CoreFile (String argPath, String suffix){
-			this.suffix = suffix;
+		private final String fileName;
+
+		CoreFile (String argPath, String fileName){
+			this.fileName = fileName;
 			this.path = argPath;
 			file = getFile();
+
 			//file =new File(Main.get().getDataFolder(), name() + suffix);
 
 			/*TaskHandler.Async.run(()->{
@@ -101,7 +111,7 @@ public final class UtilFile
 		}
 
 		public String getName (){
-			return name() + suffix;
+			return fileName;
 		}
 
 		public String getDirectory (){

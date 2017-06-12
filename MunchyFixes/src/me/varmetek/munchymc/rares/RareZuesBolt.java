@@ -4,10 +4,9 @@ import me.varmetek.core.util.Messenger;
 import me.varmetek.munchymc.MunchyMax;
 import me.varmetek.munchymc.backend.RareItemListener;
 import me.varmetek.munchymc.backend.test.CustomItemRare;
-import net.minecraft.server.v1_11_R1.AxisAlignedBB;
+import org.apache.commons.lang.Validate;
 import org.bukkit.Location;
 import org.bukkit.attribute.Attribute;
-import org.bukkit.craftbukkit.v1_11_R1.entity.CraftEntity;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
@@ -20,6 +19,8 @@ import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.util.Vector;
 
+import java.lang.reflect.Field;
+import java.lang.reflect.Method;
 import java.text.DecimalFormat;
 import java.util.List;
 
@@ -100,16 +101,17 @@ public class RareZuesBolt extends RareItemListener
 
 		if(useRayCollision)
 		{
-			AxisAlignedBB box = ((CraftEntity)entity).getHandle().getBoundingBox().g(bulletSize);
+		/*	AxisAlignedBB box = ((CraftEntity)entity).getHandle().getBoundingBox().g(bulletSize);
 			Vector top = new Vector(box.a,box.b,box.c);
-			Vector bottom = new Vector(box.d,box.e,box.f);
+			Vector bottom = new Vector(box.d,box.e,box.f);*/
 			//Messenger.send(player,box.toString());
 
 			//Messenger.send(player," ");
 			//Messenger.send(player,entity.getName() +"   "+ vectorString(finish));
 			//Messenger.send(player, "-> "+ vectorString(top));
 			//Messenger.send(player, "-> "+ vectorString(bottom));
-			return finish.isInAABB(top,bottom);
+			BoundingBox bb =  BoundingBox.fromEntity(entity).grow(bulletSize);
+			return finish.isInAABB(bb.getMinPoint(),bb.getMaxPoint());
 		}else{
 			Vector direction0 = finish0.clone().subtract(start);
 
@@ -233,5 +235,141 @@ public class RareZuesBolt extends RareItemListener
 
 			}
 		};
+	}
+
+	private static class BoundingBox{
+	/*	public static Method
+			met_handle = null,
+			met_box = null;
+		public static Field
+			fd_a = null,
+		  fd_b = null,
+			fd_c = null,
+			fd_d = null,
+			fd_e = null,
+			fd_f= null
+
+			  ;*/
+
+
+		public static boolean virgin = true;
+
+
+		public final double xMin;
+		public final double yMin;
+		public final double zMin;
+		public final double xMax;
+		public final double yMax;
+		public final double zMax;
+
+		public BoundingBox (double _x1, double _y1, double _z1, double _x2,double _y2, double _z2){
+			xMin = Math.min(_x1,_x2);
+			yMin = Math.min(_y1,_y2);
+			zMin = Math.min(_z1,_z2);
+			xMax = Math.max(_x1,_x2);
+			yMax = Math.max(_y1,_y2);
+			zMax = Math.max(_z1,_z2);
+
+
+		}
+
+		public BoundingBox(Vector max, Vector min){
+			this(max.getX(),max.getY(),max.getZ(),min.getX(),min.getY(),min.getZ());
+		}
+		public BoundingBox g(double dx, double dz, double dy) {
+
+			return new BoundingBox(this.xMin - dx,
+				                        this.yMin - dz,
+				                        this.zMin - dy,
+				                        this.xMax + dx,
+				                        this.yMax + dz,
+				                        this.zMax + dy);
+		}
+
+		public BoundingBox grow(double diff) {
+			return this.g(diff, diff, diff);
+		}
+
+		public Vector getMaxPoint(){
+			return new Vector(xMax,yMax,zMax);
+		}
+
+		public Vector getMinPoint(){
+			return new Vector(xMin,yMin,zMin);
+		}
+
+		public static BoundingBox fromEntity(LivingEntity entity){
+		//Example:
+		//	        AxisAlignedBB box = ((CraftEntity)entity).getHandle().getBoundingBox()
+		//	        Vector top = new Vector(box.a,box.b,box.c);
+		//	        Vector bottom = new Vector(box.d,box.e,box.f);
+			Validate.notNull(entity);
+
+      Method
+        met_handle = null,
+        met_box = null;
+       Field
+        fd_a = null,
+        fd_b = null,
+        fd_c = null,
+        fd_d = null,
+        fd_e = null,
+        fd_f= null;
+      try{
+				met_handle = met_handle == null  ? entity.getClass().getMethod("getHandle") : met_handle;
+				met_handle.setAccessible(true);
+
+				Object handle = met_handle.invoke(entity);
+				met_box = met_box == null ? handle.getClass().getMethod("getBoundingBox") : met_box;
+				met_box.setAccessible(true);
+				Object box = met_box.invoke(handle);
+
+				fd_a = fd_a == null ? box.getClass().getField("a") : fd_a;
+				fd_a.setAccessible(true);
+
+				fd_b = fd_b == null ? box.getClass().getField("b") : fd_b;
+				fd_b.setAccessible(true);
+
+				fd_c = fd_c == null ? box.getClass().getField("c") : fd_c;
+				fd_c.setAccessible(true);
+
+				fd_d = fd_d == null ? box.getClass().getField("d") : fd_d;
+				fd_d.setAccessible(true);
+
+				fd_e = fd_e == null ? box.getClass().getField("e") : fd_e;
+				fd_e.setAccessible(true);
+
+				fd_f = fd_f == null ? box.getClass().getField("f") : fd_f;
+				fd_f.setAccessible(true);
+				BoundingBox bb = new BoundingBox(fd_a.getDouble(box),
+					                             fd_b.getDouble(box),
+					                             fd_c.getDouble(box),
+					                             fd_d.getDouble(box),
+					                             fd_e.getDouble(box),
+					                             fd_f.getDouble(box)
+				);
+				virgin = false;
+				return bb;
+
+
+			}catch(Exception ex){
+			/*	if(virgin){
+					met_box = null;
+					met_handle = null;
+					fd_a = null;
+					fd_b = null;
+					fd_c = null;
+					fd_d = null;
+					fd_e = null;
+					fd_f= null;
+				}*/
+				throw new IllegalArgumentException("Entity does not have a bounding box",ex);
+			}
+
+
+
+		}
+
+
 	}
 }

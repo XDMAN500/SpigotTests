@@ -1,6 +1,8 @@
 package me.varmetek.munchymc.commands;
 
+import com.google.common.collect.ImmutableList;
 import me.varmetek.core.commands.CmdCommand;
+import me.varmetek.core.commands.CmdSender;
 import me.varmetek.core.service.Element;
 import me.varmetek.munchymc.MunchyMax;
 import org.bukkit.Material;
@@ -21,7 +23,14 @@ public class CommandShop implements Element
 
 
 		commands = new CmdCommand[]{
-		  new CmdCommand.Builder("shop",(sender,alias,args,length) -> {
+		  new CmdCommand.Builder("shop").setLogic(
+        (cmd)->{
+
+          CmdSender sender = cmd.getSender();
+          int len = cmd.getArguments().size();
+          String alias = cmd.getAlias();
+          ImmutableList<String> args = cmd.getArguments();
+
         Player pl;
         if (sender.isPlayer()){
           pl = sender.asPlayer();

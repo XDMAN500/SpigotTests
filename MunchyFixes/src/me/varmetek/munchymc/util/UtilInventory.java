@@ -2,6 +2,7 @@ package me.varmetek.munchymc.util;
 
 import me.varmetek.munchymc.MunchyMax;
 import org.apache.commons.lang.Validate;
+import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.configuration.MemorySection;
 import org.bukkit.enchantments.Enchantment;
@@ -11,13 +12,12 @@ import org.bukkit.event.inventory.ClickType;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.Recipe;
+import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.material.MaterialData;
 
 import javax.annotation.Nullable;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Created by XDMAN500 on 12/27/2016.
@@ -25,6 +25,10 @@ import java.util.Map;
 public final class UtilInventory
 {
 	private UtilInventory(){}
+
+
+	public static final Set<Recipe> PakedRs = new HashSet<Recipe>();
+
 
 	public static String getAlphaCode(ItemStack i){
 		if(i == null ||Material.AIR == i.getType()){
@@ -38,7 +42,7 @@ public final class UtilInventory
 		}
 		return Integer.toString(i.hashCode(),Character.MAX_RADIX);
 
-}
+	}
 
 
 
@@ -237,8 +241,43 @@ public final class UtilInventory
 		return map;
 	}
 
+	public static boolean isEmpty(Collection<ItemStack> inv){
+		if(inv.isEmpty()) return true;
 
 
+		for(ItemStack i : inv){
+			if(!isItemEmpty(i)){
+				return false;
+			}
+		}
+		return true;
+	}
+	public static boolean isEmpty(Inventory inv){
+
+
+
+		for(ItemStack i : inv){
+			if(!isItemEmpty(i)){
+				return false;
+			}
+		}
+		return true;
+	}
+  public static boolean isFull(Inventory inv){
+	  return inv.firstEmpty() == -1;
+  }
+
+	public static boolean isFull(Collection<ItemStack> inv){
+		if(inv.isEmpty()) return false;
+
+
+		for(ItemStack i : inv){
+			if(isItemEmpty(i)){
+				return false;
+			}
+		}
+		return true;
+	}
 
 	public static Inventory fromMap(Map<Integer, ItemStack>  map, Inventory inv){
 		map.forEach((slot,item) -> inv.setItem(slot,item));
@@ -277,4 +316,141 @@ public final class UtilInventory
 		return map;
 	}
 
+	public static int firstPartial(int materialId, Inventory inv) {
+		ItemStack[] inventory = inv.getStorageContents();
+
+		for(int i = 0; i < inventory.length; ++i) {
+			ItemStack item = inventory[i];
+			if(item != null && item.getTypeId() == materialId && item.getAmount() < item.getMaxStackSize()) {
+				return i;
+			}
+		}
+
+		return -1;
+	}
+
+	public static int firstPartial(Material material,Inventory inv) {
+		Validate.notNull(material, "Material cannot be null");
+		return firstPartial(material.getId(),inv);
+	}
+
+	public static int firstPartial(ItemStack item, Inventory  inv) {
+		ItemStack[] inventory = inv.getStorageContents();
+
+		if(item == null) {
+			return -1;
+		} else {
+			for(int i = 0; i < inventory.length; ++i) {
+				ItemStack cItem = inventory[i];
+				if(cItem != null && cItem.getAmount() < cItem.getMaxStackSize() && cItem.isSimilar(item)) {
+					return i;
+				}
+			}
+
+			return -1;
+		}
+	}
+	public static int firstPartial(Material material,Collection<ItemStack> inv) {
+		Validate.notNull(material, "Material cannot be null");
+		return firstPartial(material.getId(),inv);
+	}
+
+
+	public static int firstPartial(int materialId,  Collection<ItemStack> inv) {
+		Iterator<ItemStack> inventory = inv.iterator();
+
+		for(int i = 0; inventory.hasNext(); ++i) {
+			ItemStack item = inventory.next();
+			if(item != null && item.getTypeId() == materialId && item.getAmount() < item.getMaxStackSize()) {
+				return i;
+			}
+		}
+
+		return -1;
+	}
+	public static int firstPartial(ItemStack item, Collection<ItemStack> inv) {
+
+
+		if(item == null) {
+			return -1;
+		} else {
+			Iterator<ItemStack> inventory = inv.iterator();
+
+			for(int i = 0; inventory.hasNext(); ++i) {
+				ItemStack cItem = inventory.next();
+				if(cItem != null && cItem.getAmount() < cItem.getMaxStackSize() && cItem.isSimilar(item)) {
+					return i;
+				}
+			}
+
+			return -1;
+		}
+	}
+
+
+
+	public static boolean canAccept(Inventory inv, ItemStack item){
+		return inv.firstEmpty() != -1 || firstPartial(item,inv) != -1;
+	}
+  public static boolean canAccept(Inventory inv, Material item){
+    return inv.firstEmpty() != -1 || firstPartial(item,inv) != -1;
+  }
+
+
+	public static  int getAmount(Inventory inv, Material item){
+		Validate.notNull(inv);
+		Validate.notNull(item);
+		int amount = 0;
+
+		for(ItemStack i: inv){
+			if(isItemEmpty(i) || i.getType() != item)continue;
+			amount += i.getAmount();
+		}
+		return amount;
+
+	}
+
+
+	public static List<String> getLore(ItemMeta im){
+		Validate.notNull(im);
+		List<String> lore = im.getLore();
+		if(lore == null){
+			lore = new ArrayList<String>();
+		}
+		return lore;
+	}
+
+	public static  int getAmount(Inventory inv, ItemStack item){
+		int amount = 0;
+
+		for(ItemStack i: inv){
+			if(isItemEmpty(i) || !item.isSimilar(i)) continue;;
+			amount += i.getAmount();
+		}
+		return amount;
+
+	}
+
+
+
+	public static Inventory convert2Inv(Collection<ItemStack> items){
+
+		return convert2Inv(items,54);
+	}
+	public static Inventory convert2Inv(Collection<ItemStack> items , int minSize){
+		int size = items.size();
+		if(size > minSize){
+			if (size % 9 != 0){
+				size += 9 - size % 9;
+			}
+		}else{
+			size = minSize;
+		}
+		Inventory inv = Bukkit.getServer().createInventory(null, size);
+
+		items.forEach(
+			item -> inv.addItem(item)
+		);
+		return inv;
+	}
 }

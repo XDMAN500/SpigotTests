@@ -1,10 +1,12 @@
 package me.varmetek.munchymc.commands;
 
+import com.google.common.collect.ImmutableList;
 import me.varmetek.core.commands.CmdCommand;
+import me.varmetek.core.commands.CmdSender;
 import me.varmetek.core.service.Element;
 import me.varmetek.core.util.Messenger;
 import me.varmetek.munchymc.MunchyMax;
-import me.varmetek.munchymc.backend.PlayerSession;
+import me.varmetek.munchymc.backend.user.PlayerSession;
 import org.apache.commons.lang.Validate;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Listener;
@@ -50,7 +52,13 @@ public class CommandJoin implements Element
   public CmdCommand[] supplyCmd (){
     return new CmdCommand[]{
 
-      new CmdCommand.Builder("join", (sender, label, args, length) ->{
+      new CmdCommand.Builder("join",
+                              (cmd)->{
+
+                                CmdSender sender = cmd.getSender();
+                                int len = cmd.getArguments().size();
+                                String label = cmd.getAlias();
+                                ImmutableList<String> args = cmd.getArguments();
 
         Player player;
         if (sender.isPlayer()){
@@ -59,7 +67,7 @@ public class CommandJoin implements Element
           sender.asSender().sendMessage("This command is only for players");
           return;
         }
-        int len = args.length;
+
         PlayerSession user = MunchyMax.getPlayerHandler().getSession(player);
         if (len == 0){
 
@@ -69,7 +77,7 @@ public class CommandJoin implements Element
             "&b/" + label + " getraw &7- sets the raw join message format",
             "&b/" + label + " get &7- sets the compiled join message format");
         } else {
-          switch (args[0]) {
+          switch (args.get(0)) {
             case "get":
               Messenger.send(player, "&b Your join message: &r" + user.compileJoinMessage());
               ;
@@ -78,8 +86,8 @@ public class CommandJoin implements Element
               player.sendMessage(Messenger.color("&b Your join message: &r") + user.getPlayerData().getJoinMessage());
               break;
             case "set":
-              if (args.length > 1){
-                user.getPlayerData().setJoinMessage(condense(Arrays.copyOfRange(args, 1, len), " "));
+              if (len > 1){
+                user.getPlayerData().setJoinMessage(condense(Arrays.copyOfRange((String[]) args.toArray(), 1, len), " "));
                 Messenger.send(player, "&bJoin message set to:&r " + user.compileJoinMessage());
               } else {
                 Messenger.send(player, "&b/" + label + " set <msg> &7- sets the join message");
@@ -91,8 +99,13 @@ public class CommandJoin implements Element
       }).addAlias("j").build(),
 
 
-      new CmdCommand.Builder("leave", (sender, label, args, length) -> {
+      new CmdCommand.Builder("leave").setLogic(
+        (cmd)->{
 
+          CmdSender sender = cmd.getSender();
+          int len = cmd.getArguments().size();
+          String label = cmd.getAlias();
+          ImmutableList<String> args = cmd.getArguments();
         Player player;
         if (sender.isPlayer()){
           player = sender.asPlayer();
@@ -100,7 +113,7 @@ public class CommandJoin implements Element
           sender.asSender().sendMessage("This command is only for players");
           return;
         }
-        int len = args.length;
+
         PlayerSession user = MunchyMax.getPlayerHandler().getSession(player);
         if (len == 0){
 
@@ -109,7 +122,7 @@ public class CommandJoin implements Element
             "&b/" + label + " getraw &7- sets the raw leave message format",
             "&b/" + label + " get &7- sets the compiled leave message format");
         } else {
-          switch (args[0]) {
+          switch (args.get(0)) {
             case "get":
               Messenger.send(player, "&b Your leave message: &r" + user.compileLeaveMessage());
               break;
@@ -117,8 +130,8 @@ public class CommandJoin implements Element
               player.sendMessage(Messenger.color("&b Your leave message: &r") + user.getPlayerData().getLeaveMessage());
               break;
             case "set":
-              if (args.length > 1){
-                user.getPlayerData().setLeaveMessage(condense(Arrays.copyOfRange(args, 1, len), " "));
+              if (len > 1){
+                user.getPlayerData().setLeaveMessage(condense(Arrays.copyOfRange( (String[])args.toArray(), 1, len), " "));
                 Messenger.send(player, "&bLeave message set to :&r" + user.compileLeaveMessage());
               } else {
                 Messenger.send(player, "&b/" + label + " set <msg> &7- sets the leave message");

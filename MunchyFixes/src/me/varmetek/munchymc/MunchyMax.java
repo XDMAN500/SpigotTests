@@ -8,16 +8,17 @@ import me.varmetek.core.service.ElementManager;
 import me.varmetek.core.util.InventorySnapshot;
 import me.varmetek.core.util.PluginCore;
 import me.varmetek.core.util.TaskHandler;
-import me.varmetek.munchymc.backend.*;
+import me.varmetek.munchymc.backend.ChatPlaceholderMap;
+import me.varmetek.munchymc.backend.KitHandler;
+import me.varmetek.munchymc.backend.PointManager;
+import me.varmetek.munchymc.backend.RareType;
 import me.varmetek.munchymc.backend.file.*;
 import me.varmetek.munchymc.backend.hooks.HookManager;
 import me.varmetek.munchymc.backend.test.CustomItemRare;
 import me.varmetek.munchymc.backend.test.EnumCustomItem;
+import me.varmetek.munchymc.backend.user.PlayerHandler;
 import me.varmetek.munchymc.commands.*;
-import me.varmetek.munchymc.listeners.ChatListener;
-import me.varmetek.munchymc.listeners.ElytraListener;
-import me.varmetek.munchymc.listeners.MixedListener;
-import me.varmetek.munchymc.listeners.TickListener;
+import me.varmetek.munchymc.listeners.*;
 import me.varmetek.munchymc.mines.MineManager;
 import me.varmetek.munchymc.rares.*;
 import me.varmetek.munchymc.util.UtilFile;
@@ -36,10 +37,11 @@ import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.plugin.RegisteredServiceProvider;
-import org.bukkit.scheduler.BukkitTask;
 
 import java.util.Optional;
 import java.util.Set;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public final class MunchyMax extends PluginCore
 {
@@ -53,7 +55,7 @@ public final class MunchyMax extends PluginCore
 	private DataManager dataManager;
 	private ElementManager elementManager;
 	private KitHandler kitHandler;
-	private BukkitTask tickLoop;
+	private TaskHandler.Task tickLoop;
 	private Set<TickListener> tickListeners;
 	public ShopView shop;
 	private MineManager mineManager;
@@ -72,10 +74,10 @@ public final class MunchyMax extends PluginCore
 	private boolean dirty = false;
 
 	public MunchyMax (){
-		boolean dirty = instance.isPresent() && this != instance.get();
+		boolean dirty = instance.isPresent();
 
 		if(dirty){
-			throw new IllegalStateException("Singleton has already been set");
+			throw new IllegalStateException("Singleton is already set");
 		}else{
 			instance = Optional.of(this);
 		}
@@ -109,7 +111,8 @@ public final class MunchyMax extends PluginCore
 	public void onLoad ()
 	{
 		if(dirty)return;
-    ConfigurationSerialization.registerClass(PlayerData.class);
+		this.getLogger().getParent().setLevel(Level.ALL);
+    //ConfigurationSerialization.registerClass(PlayerData.class);
     ConfigurationSerialization.registerClass(InventorySnapshot.class);
     tickListeners = new ConcurrentSet<>();
 
@@ -121,13 +124,13 @@ public final class MunchyMax extends PluginCore
 		playerHandler = new PlayerHandler(this);
 		hookManager = new HookManager();
 		pointManager = new PointManager();
-		mineManager = new MineManager();
+		mineManager = new MineManager(this);
 		shop = new ShopView();
 
-		mineFileManager = new MineFileManager(mineManager);
-		kitFileManager = new KitFileManager(kitHandler);
-		playerFileManager = new PlayerFileManager(playerHandler);
-		pointFileManager = new PointFileManager(pointManager);
+		mineFileManager = new MineFileManager(mineManager, this.getLogger());
+		kitFileManager = new KitFileManager(kitHandler,this.getLogger());
+		playerFileManager = new PlayerFileManager(playerHandler,this.getLogger());
+		pointFileManager = new PointFileManager(pointManager,this.getLogger());
 
 	}
 
@@ -139,20 +142,20 @@ public final class MunchyMax extends PluginCore
 			return;
 		}
 
+		MineListener.setupRegistry();
     UtilFile.CoreFile.createFiles();
 		checkDepends();
 
+	 tickLoop = taskHandler.new Task(){
+			public void run(){
+				for(TickListener t: tickListeners){
+					if(t == null)continue;
+					t.tick();
+				}
+			}
+		}.runTimer(1,5);
 
 
-		tickLoop = taskHandler.runTimer(()->{
-      for(TickListener t: tickListeners){
-        if(t == null)continue;
-        t.tick();
-      }
-
-
-
-		},1,5);
 
 
 		registerItems();
@@ -173,6 +176,14 @@ public final class MunchyMax extends PluginCore
       getLogger().warning("Failed Loading points");
       e.printStackTrace();
     }
+
+    try {
+      mineFileManager.loadAll();
+
+    }catch(Exception e){
+      getLogger().warning("Failed Loading mines");
+      e.printStackTrace();
+    }
 		try{
     	playerFileManager.loadAllOnline();
 		}catch(Exception e){
@@ -181,8 +192,8 @@ public final class MunchyMax extends PluginCore
 		}
 		registerElements();
 		hookManager.load();
-
-
+		playerHandler.runTask();
+		mineManager.startTask();
 	}
 
 
@@ -190,13 +201,24 @@ public final class MunchyMax extends PluginCore
 	@Override
 	public void onDisable ()
 	{
-		if(dirty)return;
+
+
+		if(dirty)return
+			         ;
+		tickLoop.cancel();
 		try {
 			kitFileManager.saveKits();
 		}catch(Exception e){
 			getLogger().warning("Failed saving kits");
 			e.printStackTrace();
 		}
+
+    try {
+      mineFileManager.saveAll();
+    }catch(Exception e){
+      getLogger().warning("Failed saving mines");
+      e.printStackTrace();
+    }
 
 		try {
 			pointFileManager.saveAllPoints();
@@ -334,12 +356,15 @@ public final class MunchyMax extends PluginCore
 		taskHandler.clean();
 		itemMap.clean();
 		kitHandler.clean();
+		mineManager.clean();
 		kitHandler = null;
 		playerHandler = null;
 		elementManager = null;
 		taskHandler = null;
 		dataManager = null;
 		itemMap = null;
+		mineManager = null;
+
 		instance = Optional.empty();
 
 	}
@@ -349,20 +374,20 @@ public final class MunchyMax extends PluginCore
 
 	protected void registerElements ()
 	{
-	//	cmdManager.register( new CommandJoin(this));
 
 		elementManager.registerAllListener(
       new ChatListener(),
       new ElytraListener(),
       new MixedListener(),
+			new MineListener(playerHandler,mineManager),
 
       shop,
-      new ArmorListener(MunchyMax.getInstance())
+      new ArmorListener(this)
     );
 
     elementManager.registerAll(playerHandler,
       new CommandJoin(),
-      new CommandKit(),
+      new CommandKit(kitHandler),
       new CommandLoad(),
       new CommandOpenInv(),
       new CommandProvisions(),
@@ -370,33 +395,17 @@ public final class MunchyMax extends PluginCore
       new CommandRares(),
       new CommandShop(),
       new CommandTest(),
-      new CommandAction(),
+      new CommandAction(this),
       new CommandMsg(),
       new CommandWarps(),
       new CommandOpenInv(),
-      new CommandMines()
+      new CommandMines(mineManager),
+	    new CommandServer(this),
+      new CommandCheckInv(),
+	    new CommandAutoAction(playerHandler),
+	    new CommandItemEdit()
 
-    )
-
-
-		;
-
-
-		/*elementService.registerListener(new ArmorListener(this));
-		elementService.registerListener(new ChatListener(this));
-		elementService.registerListener(new ElytraListener());
-		elementService.registerListener(new MixedListener(this));
-		elementService.registerListener(userHandler);
-		elementService.registerListener(shop);
-
-		elementService.registerCommand(new CommandContainer("rares", new CommandRares(this)));
-		elementService.registerCommand(new CommandContainer("test", new CommandTest(this)));
-		elementService.registerCommand(new CommandContainer("save", new CommandSave(this)));
-		elementService.registerCommand(new CommandContainer("load", new CommandLoad(this)));
-		elementService.registerCommand(new CommandContainer("kit", new CommandKit(this)));
-		elementService.registerCommand(new CommandContainer("run", new CommandProvisions(this)));
-		elementService.registerCommand(new CommandContainer("openinv", new CommandOpenInv(this)));
-		elementService.registerCommand(new CommandContainer("shop", new CommandShop(this)));*/
+    );
 
 
 	}
@@ -441,7 +450,7 @@ public final class MunchyMax extends PluginCore
 						@Override
 						protected ItemStack build ()
 						{
-							Bukkit.getLogger().warning("THIS WAS RAN");
+							//Bukkit.getLogger().warning("THIS WAS RAN");
 							ItemStack item = new ItemStack(Material.STAINED_GLASS_PANE, 1, (short) 8);
 							ItemMeta im = item.getItemMeta();
 
@@ -640,6 +649,12 @@ public final class MunchyMax extends PluginCore
 
 
 	}
+
+	public static Logger logger(){
+			return	getInstance().getLogger();
+	}
+
+
 }
 
 

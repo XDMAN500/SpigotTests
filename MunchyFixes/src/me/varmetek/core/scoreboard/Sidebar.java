@@ -1,13 +1,15 @@
 package me.varmetek.core.scoreboard;
 
-import com.google.common.collect.Maps;
 import me.varmetek.core.util.Messenger;
 import me.varmetek.core.util.SimpleMapEntry;
-import org.apache.commons.lang.StringUtils;
+import me.varmetek.munchymc.MunchyMax;
 import org.apache.commons.lang.Validate;
-import org.bukkit.scoreboard.Objective;
+import org.bukkit.ChatColor;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.concurrent.Callable;
+import java.util.logging.Level;
 
 /**
  * Created by XDMAN500 on 1/17/2017.
@@ -16,32 +18,43 @@ public class Sidebar implements SimpleMapEntry
 {
 
 	protected final SidebarHandler handle;
-
-	protected Map<String,String> entries;
-
-
-	protected String title;
+	protected final List<Callable<String>> preOrder;
+	protected final Callable<String> title;
+	protected final int priority;
 	protected final String id;
-	protected final Random random = new Random();
-	protected final RenderOrder renderOrder = new RenderOrder();
-
-	protected Sidebar(SidebarHandler board, String id){
-		this.id = id;
-		this.handle = board;
 
 
-		entries = Maps.newHashMap();
+
+	protected Sidebar (Builder builder,SidebarHandler handle){
+		this.id = builder.id;
+		this.handle = handle;
+		this.preOrder = new ArrayList(builder.order);
+		this.title = builder.title;
+		priority = builder.priority;
+
+
 
 	}
 
-	public RenderOrder getRenderOrder(){
-		return renderOrder;
-	}
+	public static class SidebarRenderException extends Exception{
+		public SidebarRenderException() {
+			super();
+		}
 
-	protected String prepareName(String name){
-		return Messenger.color( name+ salt());
-	}
+		public SidebarRenderException(String message) {
+			super(message);
+		}
 
+		public SidebarRenderException(String message, Throwable cause) {
+			super(message, cause);
+		}
+
+
+		public SidebarRenderException(Throwable cause) {
+			super(cause);
+		}
+
+	}
 	public boolean isVisible(){
 		return handle.isDisplayed(id);
 	}
@@ -63,7 +76,7 @@ public class Sidebar implements SimpleMapEntry
 	}
 
 
-	public String getTitle(){
+	/*public String getTitle(){
 		return title;
 
 
@@ -71,72 +84,84 @@ public class Sidebar implements SimpleMapEntry
 	public void setTitle(String s){
 		title = Messenger.color(s);
 
+	}*/
+
+
+
+
+
+
+
+
+
+
+
+	public int getPriority(){
+		return priority;
 	}
 
 
 
+	protected String prepareName(String name, int pos){
+		return Messenger.color( name+ salt(pos));
+	}
 
-	public  void set(String key, String text){
-		Validate.notNull(key);
-		Validate.isTrue(StringUtils.isNotBlank(key));
+	protected void render(SidebarHandler.Bar bar) throws SidebarRenderException{
+		try {
 
-		if(text == null){
-			remove(key);
-		}else{
-			entries.put(key,text);
+			bar.obj.setDisplayName(Messenger.color(title.call()));
+
+		//int size = Math.min(preOrder.size(),bar.lines.length);
+		//int slot = 0;
+
+		for(int i = 0;  i <bar.lines.length; i++){
+				if(preOrder.size() <= i){
+					bar.clearLine(i);
+					continue;
+				}
+
+
+				String text = prepareName(preOrder.get(i).call(),i + bar.hashCode());
+
+
+				/*if(text.equals(bar.lines[i])){
+					continue;
+				}*/
+				//if( (!text.equals(bar.lines[i]) )){
+				//	bar.obj.getScoreboard().resetScores(bar.lines[i]);
+				//}
+
+				//postOrder[i] = text;
+				bar.setLine(preOrder.size()-1-i,text);
+				//slot++;
+				//obj.getScore(text).setScore(size-slot);
+
+
+
+		}
+		}catch(Exception e){
+			MunchyMax.logger().log(Level.WARNING,"error setting scoreboard",e);
+			throw new SidebarRenderException(e);
+
 		}
 
-	}
-
-
-
-
-
-
-
-
-	public  void remove(String key){
-
-		entries.remove(key);
 
 	}
 
-	public   String getText(String key){
-		return entries.get(key);
-
-	}
+	protected static final String salt = "\u00a0";
 
 
-	protected void render(Objective obj){
-		obj.setDisplayName(title);
-		Iterator<String> stuff = renderOrder.iterator();
-		int pos = renderOrder.size();
-		while(stuff.hasNext()){
-			String key = stuff.next();
-			obj.getScore( prepareName( entries.get(key))).setScore(pos);
-			pos--;
-		}
-
-
-
-	}
-	public boolean has(String index){
-		return entries.containsKey(index);
-	}
-	protected static final String salt = Messenger.color("\u00a0&r");
-
-
-	protected String salt(){
-		String prefix = Integer.toHexString(random.nextInt(1000));
+	protected String salt(int pos){
+		String prefix = Integer.toHexString(pos);
 
 		StringBuilder builder = new StringBuilder(salt);
 		for(int i = 0; i< prefix.length(); i++)
 		{
-			builder.append('&');
+			builder.append(ChatColor.COLOR_CHAR);
 			builder.append(prefix.charAt(i));
 		}
 
-		return Messenger.color(builder.toString());
+		return builder.toString();
 	}
 
 	protected String stripSalt(String s){
@@ -145,6 +170,10 @@ public class Sidebar implements SimpleMapEntry
 		Validate.isTrue(index!= -1 && index < s.length(), "No salt to strip");
 		return s.substring(0,index);
 
+	}
+
+	protected String stripSalt(String s,int pos){
+		return s.replace(salt(pos),"");
 	}
 
 
@@ -156,23 +185,98 @@ public class Sidebar implements SimpleMapEntry
 
 
 	public int size(){
-		return entries.size();
+		return preOrder.size();
 	}
 
-	public class RenderOrder {
+	public static class Builder{
+		protected String id;
+		protected List<Callable<String>> order = new ArrayList(16);
+		protected Callable<String> title = ()->{return "";};
+		protected int priority = 0;
 
-		protected List<String> renderOrder = new ArrayList(16);
-		protected List<String> previous = new ArrayList(16);
 
-		public void append(String key, String... keys){
-			if(entries.containsKey(key))renderOrder.add(key);
-			if(keys == null || keys.length == 0)return;
-
-				for(int i = 0; i< keys.length; i++) {
-					if (entries.containsKey(keys[i])) renderOrder.add(keys[i]);
-				}
+		public Builder ( String id){
+			this.id = id;
 
 		}
+
+		public Builder setTitle(Callable<String> title){
+			Validate.notNull(title);
+			this.title = title;
+			return this;
+		}
+
+		public Builder setPriority(int p){
+			priority = p;
+			return this;
+		}
+		public Builder setTitle(String title){
+			Validate.notNull(title);
+			this.title = ()->{return title;};
+			return this;
+		}
+
+
+		public Builder addText(Callable<String> text){
+			Validate.notNull(text);
+			if(order.size() >=16) throw new IllegalStateException("Sidebar cannot have more than 16 lines of text");
+			order.add(text);
+			return this;
+		}
+
+		public Builder addText(String text){
+			Validate.notNull(text);
+			if(order.size() >=16) throw new IllegalStateException("Sidebar cannot have more than 16 lines of text");
+			order.add(()->{return text;});
+			return this;
+		}
+
+		public Sidebar build(SidebarHandler handler){
+			return new Sidebar(this,handler);
+
+		}
+
+		@Override
+		public int hashCode(){
+		  return id.hashCode();
+    }
+
+    @Override
+    public boolean equals(Object e){
+      return e.getClass() == this.getClass() && e.hashCode() == this.hashCode();
+    }
+
+	}
+	/*public class RenderOrder {
+
+		//protected List<Callable<String>> renderOrder = new ArrayList(16);
+		protected List<String> previous = new ArrayList(16);
+
+
+		public void pushOrder(List<Callable<String>> order){
+			Validate.notNull(order,"Pushed order cannot be null");
+
+			renderOrder.clear();
+			for(Callable<String> s: order){
+				if(s == null)continue;
+				if(renderOrder.size() >= 16) break;
+				renderOrder.add(s);
+			}
+
+		}
+		public void pushOrder(Callable<String>[] order){
+			Validate.notNull(order,"Pushed order cannot be null");
+
+			renderOrder.clear();
+			for(Callable<String> s: order){
+				if(s == null)continue;
+				if(renderOrder.size() >= 16) break;
+				renderOrder.add(s);
+			}
+
+		}
+
+
 
 		public int size(){
 			return renderOrder.size();
@@ -180,22 +284,22 @@ public class Sidebar implements SimpleMapEntry
 		public boolean isEmpty(){
 			return renderOrder.isEmpty();
 		}
-		public void reset(){
+	/*	protected void reset(){
 			previous.clear();
 			previous.addAll(renderOrder);
 			renderOrder.clear();
-		}
-		public Iterator<String> iterator(){
+		}*/
+		/*public Iterator<Callable<String>> iterator(){
 			return renderOrder.iterator();
 		}
 
-		public List<String> getOrder(){
-			return renderOrder;
+		public List<Callable<String>> getOrder(){
+			return Collections.unmodifiableList(renderOrder);
 		}
 		public List<String> getPreviousOrder(){
-			return renderOrder;
+			return Collections.unmodifiableList(previous);
 		}
-	}
+	}*/
 
 
 }

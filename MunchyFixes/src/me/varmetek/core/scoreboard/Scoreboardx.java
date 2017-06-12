@@ -1,6 +1,8 @@
 package me.varmetek.core.scoreboard;
 
 import me.varmetek.core.util.Cleanable;
+import me.varmetek.core.util.PluginCore;
+import org.apache.commons.lang.Validate;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.scoreboard.Scoreboard;
@@ -13,9 +15,14 @@ public class Scoreboardx implements Cleanable
 	private Scoreboard scoreboard;
 	private SidebarHandler sidebarHandler;
 
-	public Scoreboardx(){
+	protected PluginCore plugin;
+
+	public Scoreboardx(PluginCore plugin){
+		Validate.notNull(plugin);
+		this.plugin = plugin;
 		scoreboard = Bukkit.getScoreboardManager().getNewScoreboard();
 		sidebarHandler = new SidebarHandler(this);
+
 	}
 
 	public SidebarHandler getSidebarHandler(){
@@ -29,11 +36,14 @@ public class Scoreboardx implements Cleanable
 		pl.setScoreboard(scoreboard);
 	}
 
-
+	public PluginCore getPlugin(){
+		return plugin;
+	}
 	@Override
 	public void clean ()
 	{
 		sidebarHandler.clean();
 		sidebarHandler = null;
+		plugin = null;
 	}
 }

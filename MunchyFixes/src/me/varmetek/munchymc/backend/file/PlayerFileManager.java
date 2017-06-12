@@ -1,9 +1,8 @@
 package me.varmetek.munchymc.backend.file;
 
-import me.varmetek.munchymc.MunchyMax;
-import me.varmetek.munchymc.backend.PlayerData;
-import me.varmetek.munchymc.backend.PlayerHandler;
-import me.varmetek.munchymc.backend.PlayerSession;
+import me.varmetek.munchymc.backend.user.PlayerData;
+import me.varmetek.munchymc.backend.user.PlayerHandler;
+import me.varmetek.munchymc.backend.user.PlayerSession;
 import me.varmetek.munchymc.backend.exceptions.ConfigException;
 import me.varmetek.munchymc.util.UtilFile;
 import me.varmetek.munchymc.util.UtilInventory;
@@ -17,6 +16,8 @@ import org.bukkit.inventory.Inventory;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * Created by XDMAN500 on 5/15/2017.
@@ -26,42 +27,38 @@ public final class PlayerFileManager implements FileManager
   private final static String __ = File.separator;
   private final static UtilFile.CoreFile FILE = UtilFile.CoreFile.USER;
   private PlayerHandler playerHandler;
+  private Logger log;
 
-  public PlayerFileManager (PlayerHandler playerHandler){
+  public PlayerFileManager (PlayerHandler playerHandler, Logger logger){
     this.playerHandler = playerHandler;
+    this.log = logger;
   }
 
-  private void logInfo(String info){
-    MunchyMax.getInstance().getLogger().info(info);
-  }
 
-  private void logWarning(String info){
-    MunchyMax.getInstance().getLogger().info(info);
-  }
 
-  public String getUserFolderName (PlayerSession user){
+  private String getUserFolderName (PlayerSession user){
     return user.getUUID().toString();
   }
 
-  public String getUserDataFileName (PlayerSession user){
+  private String getUserDataFileName (PlayerSession user){
     return getUserFolderName(user) + __ + "data.yml";
   }
 
 
-  public File getUserFile (PlayerSession user) throws IllegalArgumentException, IOException{
+  private File getUserFile (PlayerSession user) throws  IOException{
     return getUserFile(user, "data.yml");
   }
 
-  public File createUserFile (PlayerSession user) throws IllegalArgumentException, IOException{
+  private File createUserFile (PlayerSession user) throws IOException{
     return createUserFile(user, "data.yml");
   }
 
-  public File createUserFile (PlayerSession user, String extra) throws IllegalArgumentException, IOException{
+  private File createUserFile (PlayerSession user, String extra) throws IOException{
     return UtilFile.create(getUserFile(user, extra));
   }
 
 
-  public File getUserFile (PlayerSession user, String extra) throws IllegalArgumentException, IOException{
+  private File getUserFile (PlayerSession user, String extra) throws  IOException{
     String currentPath = getUserFolderName(user);
 
 			/*FileConfiguration  regis = YamlConfiguration.loadConfiguration(UtilFile.getFile(CoreFile.USERREG.getDirectory()));
@@ -90,7 +87,12 @@ public final class PlayerFileManager implements FileManager
   }
 
 
-  // User
+
+////////////////////////////////////////////////////////////////////////////////////
+/*
+     SAVING
+*/
+///////////////////////////////////////////////////////////////////////////////////
 
 
   public void saveUser (PlayerSession user) throws ConfigException{
@@ -99,9 +101,9 @@ public final class PlayerFileManager implements FileManager
 
       File file = createUserFile(user, "user.yml");
       FileConfiguration config = YamlConfiguration.loadConfiguration(file);
-      config.set("data", user.getPlayerData());
+      config.set("data", user.getPlayerData().serialize());
       config.save(file);
-      logInfo("Saving user (" + user.getName() + ")");
+      log.info("Saving user (" + user.getName() + ")");
     }catch(Exception e){
       throw new ConfigException(e);
     }
@@ -123,9 +125,10 @@ public final class PlayerFileManager implements FileManager
 
         saveUser(user);
       } catch (ConfigException e) {
-        logWarning("Could not save player " + user.getName() + " :" + e.getMessage());
+        log.log(Level.WARNING,"Could not save player " + user.getName() + " :",e);
       }
     }
+    log.info("Saved all players");
 
   }
 
@@ -135,27 +138,41 @@ public final class PlayerFileManager implements FileManager
       try {
         savePlayer(p);
       } catch (ConfigException e) {
-        logWarning("Could not save player " + p.getName() + " :" + e.getMessage());
+        log.log(Level.SEVERE,"Could not save player " +p.getName() + " :",e);
       }
     }
+    log.info("Saved all online players");
   }
 
 
+
+
+////////////////////////////////////////////////////////////////////////////////////
+/*
+     LOADING
+*/
+///////////////////////////////////////////////////////////////////////////////////
+
+
+
+
   public void loadUser (PlayerSession user) throws ConfigException{
-    PlayerData data = null;
+
 
     try {
+      PlayerData data = null;
       File file = getUserFile(user, "user.yml");
       FileConfiguration config = YamlConfiguration.loadConfiguration(file);
 
 
-      data =  (PlayerData) config.get("data");
-
+      data =  new PlayerData(config.getConfigurationSection("data").getValues(false));
+      log.info("Loading user (" + user.getName() + ")");
+      user.setPlayerData(data);
     }catch(Exception e){
       throw new ConfigException(e);
     }
-    logInfo("Loading user (" + user.getName() + ")");
-    user.setPlayerData(data);
+
+
 
   }
 
@@ -169,22 +186,25 @@ public final class PlayerFileManager implements FileManager
       try {
         loadUser(playerHandler.getSession(p));
       } catch (ConfigException e) {
-        logWarning("Could not load player " + p.getName() + " :" + e.getMessage());
+        log.log(Level.SEVERE,"Could not load player " + p.getName() + " :",e);
       }
 
     }
+
+    log.info("Loaded all players");
   }
 
 
-  public void reloadUsers () throws IOException{
+  public void reloadUsers (){
     for (Player p : Bukkit.getOnlinePlayers()) {
       try {
         savePlayer(p);
         loadPlayer(p);
       }catch(ConfigException e){
-        logWarning("Could not reload player " + p.getName() + " :" + e.getMessage());
+        log.log(Level.SEVERE,"Could not reload player " + p.getName() + " :",e);
       }
     }
+    log.info("reLoaded all players");
   }
 
 
@@ -209,7 +229,7 @@ public final class PlayerFileManager implements FileManager
       Bukkit.getLogger().info("Finished Writing Inventory " + user.getName());
 
     } catch (Exception e) {
-      logWarning("Failed to Write Inventory " + user.getName());
+      log.warning("Failed to Write Inventory " + user.getName());
       throw new ConfigException(e);
 
 
@@ -229,14 +249,14 @@ public final class PlayerFileManager implements FileManager
     try {
 
       file = getUserFile(user);
-      logInfo("Writing Inventory " + user.getName());
+      log.info("Writing Inventory " + user.getName());
       Inventory inv = user.getPlayer().get().getInventory();
       inv.clear();
       FileConfiguration playerConfig = YamlConfiguration.loadConfiguration(file);
       if (playerConfig.contains("inv")){
         MemorySection ser = (MemorySection) playerConfig.get("inv");
         if (ser == null){
-          logInfo("Failed to read Inventory " + user.getName());
+          log.info("Failed to read Inventory " + user.getName());
         } else {
           UtilInventory.fromMap(ser, inv);
         }
@@ -248,12 +268,12 @@ public final class PlayerFileManager implements FileManager
 						}
 					});*/
       } else {
-        logInfo("Failed to read Inventory " + user.getName());
+        log.info("Failed to read Inventory " + user.getName());
       }
 
 
     } catch (Exception e) {
-      logInfo("Failed to read Inventory " + user.getName());
+      log.info("Failed to read Inventory " + user.getName());
       throw new ConfigException(e);
      //
 

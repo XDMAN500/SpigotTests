@@ -1,10 +1,12 @@
 package me.varmetek.munchymc.commands;
 
+import com.google.common.collect.ImmutableList;
 import me.varmetek.core.commands.CmdCommand;
+import me.varmetek.core.commands.CmdSender;
 import me.varmetek.core.service.Element;
 import me.varmetek.core.util.Messenger;
 import me.varmetek.munchymc.MunchyMax;
-import me.varmetek.munchymc.backend.PlayerSession;
+import me.varmetek.munchymc.backend.user.PlayerSession;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Listener;
@@ -32,7 +34,15 @@ public class CommandMsg implements Element
   public CmdCommand[] supplyCmd (){
     return new CmdCommand[]{
       new CmdCommand.Builder("msg")
-        .setLogic((sender, alias, args, len) -> {
+        .setLogic(
+          (cmd)->{
+
+            CmdSender sender = cmd.getSender();
+            int len = cmd.getArguments().size();
+            String alias = cmd.getAlias();
+            ImmutableList<String> args = cmd.getArguments();
+
+
           if (!sender.isPlayer()){
             Messenger.send(sender.asSender(), "&c This command is for players only");
             return;
@@ -41,9 +51,9 @@ public class CommandMsg implements Element
           if (len <= 1){
             Messenger.send(pl, "&cUsage: /msg <player> <text>");
           } else {
-            Player target = Bukkit.getPlayer(args[0]);
+            Player target = Bukkit.getPlayer(args.get(0));
             if (target == null){
-              Messenger.send(pl, "&c Player \"" + args[0] + "\" is not online");
+              Messenger.send(pl, "&c Player \"" + args.get(0) + "\" is not online");
               return;
             }
             PlayerSession plUser = MunchyMax.getPlayerHandler().getSession(pl);
@@ -56,13 +66,22 @@ public class CommandMsg implements Element
               targUser.setMsgReply(pl.getName());
               targUser.setLastMsgReply(System.currentTimeMillis());
             }
-            Messenger.send(pl, "&7&l To " + target.getName() + "&8=> &7" + msg(Arrays.copyOfRange(args, 1, len)));
-            Messenger.send(target, "&7&l From " + pl.getName() + "&8=>&7 " + msg(Arrays.copyOfRange(args, 1, len )));
+            Messenger.send(pl, "&7&l To " + target.getName() + "&8=> &7" + msg(Arrays.copyOfRange(args.toArray(new String[0]), 1, len)));
+            Messenger.send(target, "&7&l From " + pl.getName() + "&8=>&7 " + msg(Arrays.copyOfRange(args.toArray(new String[0]), 1, len )));
           }
 
         }).build(),
       new CmdCommand.Builder("r")
-        .setLogic((sender, alias, args, len) -> {
+        .setLogic(
+
+          (cmd)->{
+
+            CmdSender sender = cmd.getSender();
+            int len = cmd.getArguments().size();
+            String alias = cmd.getAlias();
+            ImmutableList<String> args = cmd.getArguments();
+
+
           if (!sender.isPlayer()){
             Messenger.send(sender.asSender(), "&c This command is for players only");
             return;
@@ -75,10 +94,10 @@ public class CommandMsg implements Element
 
             Player target = Bukkit.getPlayer(plUser.getMsgReply());
             if (target == null){
-              Messenger.send(pl, "&c Player \"" + args[0] + "\" is not online");
+              Messenger.send(pl, "&c Player \"" + args.get(0) + "\" is not online");
               return;
             }
-            pl.performCommand("msg " + target.getName() +" "+ msg(Arrays.copyOfRange(args, 0, len - 1)));
+            pl.performCommand("msg " + target.getName() +" "+ msg(Arrays.copyOfRange(args.toArray(new String[0]), 0, len - 1)));
 
           }
 

@@ -1,10 +1,8 @@
 package me.varmetek.munchymc.listeners;
 
-import me.varmetek.core.scoreboard.Sidebar;
-import me.varmetek.core.scoreboard.SidebarHandler;
 import me.varmetek.core.util.Messenger;
 import me.varmetek.munchymc.MunchyMax;
-import me.varmetek.munchymc.backend.PlayerSession;
+import me.varmetek.munchymc.backend.user.PlayerSession;
 import me.varmetek.munchymc.backend.Rares;
 import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.chat.ClickEvent;
@@ -193,7 +191,7 @@ public class MixedListener implements Listener
 
       if((ev.getEntity().getType() != EntityType.PLAYER )) return;
       Player player = (Player)ev.getEntity();
-      PlayerSession user =  MunchyMax.getPlayerHandler().getSession(player);
+     final  PlayerSession user =  MunchyMax.getPlayerHandler().getSession(player);
       if(!user.getScoreBoard().isPresent())return;
 
       if(player.getHealth() >  ev.getFinalDamage()){return;	}
@@ -203,13 +201,73 @@ public class MixedListener implements Listener
       Messenger.send(player," "," ");
 
       user.kill();
-      SidebarHandler sidebar = user.getScoreBoard().get().getSidebarHandler();
+      user.getDeathSB().setVisible(true);
+      new BukkitRunnable(){
+
+
+        int countdown = 5;
+
+
+        public void run(){
+
+          if(!user.isDead() || countdown == 0){
+            this.cancel();
+            user.revive();
+           user.getDeathSB().setVisible(false);
+
+            //user.getStandardSB().setVisible(true);
+          }
+         // String sbTimer = "&7Respawn in &e"+ countdown;
+          countdown --;
+          user.deathClock.set(countdown);
+          //sb.getRenderOrder().reset();
+          //sb.getRenderOrder().pushOrder(new String[]{sbLine,sbSpace,sbTimer,sbSpace,sbLine});
+        //  sb.getHandle().render();
+
+        }
+
+      }.runTaskTimer(MunchyMax.getInstance(),1,20);
+     /* SidebarHandler sidebar = user.getScoreBoard().get().getSidebarHandler();
       if(!sidebar.has("death")){
         sidebar.add("death");
       }
       final Sidebar sb = sidebar.get("death").get();
-      sb.setTitle("&3Stuff and things");
-      sb.set("line","&7=============");
+      sb.setTitle("&3Death Screen");
+      String
+        sbLine = "&7=============",
+        sbSpace = "&5 ",
+        sbTimer = "&7Respawn in &e"+ 5
+        ;
+      sb.getRenderOrder().pushOrder(new String[]{sbLine,sbSpace,sbTimer,sbSpace,sbLine});
+
+      new BukkitRunnable(){
+        Sidebar dd = sb;
+
+        int countdown = 5;
+
+
+        public void run(){
+          if(!user.isDead() || countdown == 0){
+            this.cancel();
+            user.revive();
+            sb.setVisible(false);
+
+            if(sidebar.has("default"))
+            {
+              sidebar.get("default").get().setVisible(true);
+            }
+          }
+         String sbTimer = "&7Respawn in &e"+ countdown;
+          countdown --;
+          //sb.getRenderOrder().reset();
+          sb.getRenderOrder().pushOrder(new String[]{sbLine,sbSpace,sbTimer,sbSpace,sbLine});
+          sb.getHandle().render();
+
+        }
+
+      }.runTaskTimer(MunchyMax.getInstance(),1,20);
+      */
+   /*   sb.set("line","&7=============");
       sb.set("space","&5 ");
       sb.set("timer","&7Respawn in &e"+ 5);
      sb.getRenderOrder().reset();
@@ -247,7 +305,7 @@ public class MixedListener implements Listener
 
         }
 
-      }.runTaskTimer(MunchyMax.getInstance(),1,20);
+      }.runTaskTimer(MunchyMax.getInstance(),1,20);*/
 
 
     }

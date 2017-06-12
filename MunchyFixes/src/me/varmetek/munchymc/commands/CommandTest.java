@@ -1,10 +1,12 @@
 package me.varmetek.munchymc.commands;
 
+import com.google.common.collect.ImmutableList;
 import me.varmetek.core.commands.CmdCommand;
+import me.varmetek.core.commands.CmdSender;
 import me.varmetek.core.service.Element;
 import me.varmetek.core.util.Messenger;
 import me.varmetek.munchymc.MunchyMax;
-import me.varmetek.munchymc.backend.PlayerSession;
+import me.varmetek.munchymc.backend.user.PlayerSession;
 import me.varmetek.munchymc.listeners.UserTestModeChangeEvent;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
@@ -18,7 +20,14 @@ public class CommandTest implements Element
 	public CommandTest(){
 
 		commands = new CmdCommand[]{
-			new CmdCommand.Builder("test", (sender,alias,args,length) ->{
+			new CmdCommand.Builder("test").setLogic(
+				(cmd)->{
+
+					CmdSender sender = cmd.getSender();
+					int len = cmd.getArguments().size();
+					String alias = cmd.getAlias();
+					ImmutableList<String> args = cmd.getArguments();
+
 				if(!sender.isPlayer())return ;
 				Player pl = sender.asPlayer();
 				PlayerSession user = MunchyMax.getPlayerHandler().getSession(pl);

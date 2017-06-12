@@ -1,10 +1,12 @@
 package me.varmetek.munchymc.commands;
 
+import com.google.common.collect.ImmutableList;
 import me.varmetek.core.commands.CmdCommand;
+import me.varmetek.core.commands.CmdSender;
 import me.varmetek.core.item.CustomItem;
 import me.varmetek.core.service.Element;
 import me.varmetek.munchymc.MunchyMax;
-import me.varmetek.munchymc.backend.PlayerSession;
+import me.varmetek.munchymc.backend.user.PlayerSession;
 import me.varmetek.munchymc.backend.Rares;
 import me.varmetek.munchymc.backend.test.CustomItemRare;
 import me.varmetek.munchymc.backend.test.EnumCustomItem;
@@ -34,7 +36,14 @@ public class CommandRares implements Element
 
     makeGUI();
     commands = new CmdCommand[]{
-      new CmdCommand.Builder("rares", (sender, alias, args, length) -> {
+      new CmdCommand.Builder("rares").setLogic(
+        (cmd)->{
+
+          CmdSender sender = cmd.getSender();
+          int len = cmd.getArguments().size();
+          String alias = cmd.getAlias();
+          ImmutableList<String> args = cmd.getArguments();
+
         if (!(sender.isPlayer())) return;
         Player pl = sender.asPlayer();
         pl.openInventory(gui);

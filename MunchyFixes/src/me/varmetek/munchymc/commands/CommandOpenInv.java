@@ -1,10 +1,12 @@
 package me.varmetek.munchymc.commands;
 
+import com.google.common.collect.ImmutableList;
 import me.varmetek.core.commands.CmdCommand;
+import me.varmetek.core.commands.CmdSender;
 import me.varmetek.core.service.Element;
 import me.varmetek.core.util.Messenger;
 import me.varmetek.munchymc.MunchyMax;
-import me.varmetek.munchymc.backend.PlayerSession;
+import me.varmetek.munchymc.backend.user.PlayerSession;
 import me.varmetek.munchymc.util.UtilInventory;
 import me.varmetek.munchymc.util.Utils;
 import org.bukkit.Bukkit;
@@ -34,7 +36,14 @@ public class CommandOpenInv implements Element
 
 
     commands = new CmdCommand[]{
-      new CmdCommand.Builder("openinv" , (sender,alias,args,length) -> {
+      new CmdCommand.Builder("openinv").setLogic (
+        (cmd)->{
+
+          CmdSender sender = cmd.getSender();
+          int length = cmd.getArguments().size();
+          String alias = cmd.getAlias();
+          ImmutableList<String> args = cmd.getArguments();
+
         Player player;
         PlayerSession user;
 
@@ -65,7 +74,7 @@ public class CommandOpenInv implements Element
 
 
         }else{
-          Optional<InventoryType>  option = user.getInventoryMap().getType(args[0]);
+          Optional<InventoryType>  option = user.getInventoryMap().getType(args.get(0));
           if(option.isPresent()){
             player.openInventory(user.getInventoryMap().get(option.get()).get());
 

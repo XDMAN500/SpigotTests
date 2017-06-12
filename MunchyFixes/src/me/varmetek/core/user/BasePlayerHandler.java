@@ -19,6 +19,7 @@ public abstract class BasePlayerHandler<T extends BasePlayerSession<? extends Ba
 	protected  Map<UUID, T> registry = new HashMap<>();
 
 	public BasePlayerHandler (PluginCore plugin ){
+		Validate.notNull(plugin);
 		this.plugin = plugin;
 
 	}

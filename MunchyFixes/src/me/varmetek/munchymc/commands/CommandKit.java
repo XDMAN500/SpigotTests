@@ -1,6 +1,8 @@
 package me.varmetek.munchymc.commands;
 
+import com.google.common.collect.ImmutableList;
 import me.varmetek.core.commands.CmdCommand;
+import me.varmetek.core.commands.CmdSender;
 import me.varmetek.core.service.Element;
 import me.varmetek.core.util.Cleanable;
 import me.varmetek.core.util.Messenger;
@@ -31,12 +33,19 @@ public class CommandKit implements Element, Cleanable
   private static final String prefBen = "&2&l> &r";
   private final CmdCommand[] commands;
 
-  public CommandKit (){
+  public CommandKit (KitHandler handler){
 
-    kitHandler = MunchyMax.getKitHandler();
+    kitHandler = handler;
 
     commands = new CmdCommand[]{
-      new CmdCommand.Builder("kit").setLogic((sender,alias,args,length)->{
+      new CmdCommand.Builder("kit").setLogic(
+        (cmd)->{
+
+          CmdSender sender = cmd.getSender();
+          int length = cmd.getArguments().size();
+          String alias = cmd.getAlias();
+          ImmutableList<String> args = cmd.getArguments();
+
         Player pl;
 
 
@@ -53,7 +62,7 @@ public class CommandKit implements Element, Cleanable
             "&bListing kits",
             "&b============",
             " ");
-          for (String name : MunchyMax.getKitHandler().getKits().keySet()) {
+          for (String name : kitHandler.getKits().keySet()) {
 
             pl.spigot().sendMessage(forKit(name));
           }
@@ -62,7 +71,7 @@ public class CommandKit implements Element, Cleanable
             " ",
             "&b============");
         }else{
-          String name  = args[0];
+          String name  = args.get(0);
           if (kitHandler.isKit(name)){
             Messenger.send(pl, prefBen + "&aLoading kit " + name);
             kitHandler.getKit(name).get().apply(pl);
@@ -71,9 +80,16 @@ public class CommandKit implements Element, Cleanable
 
           }
         }
-      }).setTab((sender,alias,args,len) ->{
+      }).setTab(
+        (cmd)->{
+
+          CmdSender sender = cmd.getSender();
+          int len = cmd.getArguments().size();
+          String alias = cmd.getAlias();
+          ImmutableList<String> args = cmd.getArguments();
+
           if(len == 1){
-            return Utils.toStringList(MunchyMax.getKitHandler().getKits().keySet(), (String s) ->
+            return Utils.toStringList(kitHandler.getKits().keySet(), (String s) ->
             {
 
               return s;
@@ -83,7 +99,13 @@ public class CommandKit implements Element, Cleanable
           }
       }).build(),
 
-      new CmdCommand.Builder("editkit", (sender, alias, args, length) -> {
+      new CmdCommand.Builder("editkit").setLogic(
+        (cmd)->{
+
+          CmdSender sender = cmd.getSender();
+          int length = cmd.getArguments().size();
+          String alias = cmd.getAlias();
+          ImmutableList<String> args = cmd.getArguments();
 
 
         Player pl;
@@ -102,11 +124,11 @@ public class CommandKit implements Element, Cleanable
         if (length == 0){
           pl.performCommand("editkit help");
         } else {
-          switch (args[0]) {
+          switch (args.get(0).toLowerCase()) {
             case "save": {
               if (length == 2){
 
-                String name = args[1];
+                String name = args.get(1);
 
                 if (kitHandler.isKit(name)){
                   Messenger.send(pl, prefBen + "&aOverwriting kit " + name);
@@ -119,7 +141,7 @@ public class CommandKit implements Element, Cleanable
                   Kit k = new Kit.Builder().fromPlayerInv(pl).build();
                   kitHandler.setKit(name, k);
                   MunchyMax.getKitFileManager().saveKit(name);
-                } catch (ConfigException | IOException e) {
+                } catch (ConfigException e) {
                   e.printStackTrace();
                   Messenger.send(pl, prefMal + "&cError saving kit");
                 }
@@ -133,7 +155,7 @@ public class CommandKit implements Element, Cleanable
 
             case "load": {
               if (length == 2){
-                String name = args[1];
+                String name = args.get(1);
                 if (kitHandler.isKit(name)){
                   Messenger.send(pl, prefBen + "&aLoading kit " + name);
                   kitHandler.getKit(name).get().apply(pl);
@@ -153,7 +175,7 @@ public class CommandKit implements Element, Cleanable
                   "&bListing kits",
                   "&b============",
                   " ");
-                for (String name : MunchyMax.getKitHandler().getKits().keySet()) {
+                for (String name : kitHandler.getKits().keySet()) {
 
                   pl.spigot().sendMessage(forKit(name));
                 }
@@ -170,7 +192,7 @@ public class CommandKit implements Element, Cleanable
               if (length <= 1){
                 Messenger.send(pl, "/editkit remove <name>");
               }
-              String name = args[1];
+              String name = args.get(1);
               if (!kitHandler.isKit(name)){
                 Messenger.send(pl, "Kit " + name + " doesn't exist");
                 return;
@@ -214,7 +236,7 @@ public class CommandKit implements Element, Cleanable
                   "&c&l  >&7 /editkit server load"
                 );
               } else {
-                switch (args[1]) {
+                switch (args.get(1).toLowerCase()) {
                   case "save": {
                     try {
                       MunchyMax.getKitFileManager().saveKits();
@@ -252,16 +274,23 @@ public class CommandKit implements Element, Cleanable
           }
         }
 
-      }).setTab((sender, alias, args, length) -> {
+      }).setTab(
+        (cmd)->{
+
+          CmdSender sender = cmd.getSender();
+          int length = cmd.getArguments().size();
+          String alias = cmd.getAlias();
+          ImmutableList<String> args = cmd.getArguments();
+
         switch (length) {
           case 1:
             return Arrays.asList("save", "load", "remove", "list", "clear", "help");
           case 2:
-            switch (args[1]) {
+            switch (args.get(1).toLowerCase()) {
               case "save":
               case "load":
               case "remove":
-                return Utils.toStringList(MunchyMax.getKitHandler().getKits().keySet(), (String s) ->
+                return Utils.toStringList(kitHandler.getKits().keySet(), (String s) ->
                 {
 
                   return s;

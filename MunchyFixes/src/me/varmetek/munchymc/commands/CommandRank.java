@@ -1,11 +1,12 @@
 package me.varmetek.munchymc.commands;
 
+import com.google.common.collect.ImmutableList;
 import me.varmetek.core.commands.CmdCommand;
 import me.varmetek.core.commands.CmdSender;
 import me.varmetek.core.service.Element;
 import me.varmetek.core.util.Messenger;
 import me.varmetek.munchymc.MunchyMax;
-import me.varmetek.munchymc.backend.PlayerSession;
+import me.varmetek.munchymc.backend.user.PlayerSession;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Listener;
@@ -33,7 +34,13 @@ public class CommandRank implements Element
   @Override
   public CmdCommand[] supplyCmd (){
     return new CmdCommand[]{
-      new CmdCommand.Builder("rank", (sender, alias, args, length) -> {
+      new CmdCommand.Builder("rank").setLogic(
+        (cmd)->{
+
+          CmdSender sender = cmd.getSender();
+          int length = cmd.getArguments().size();
+          String alias = cmd.getAlias();
+          ImmutableList<String> args = cmd.getArguments();
       /*msg.send("&7");
 							msg.send("&7Player");
 							msg.send( "& &a/" + alias +"  player  perm add "<player"> <permission>");
@@ -86,16 +93,16 @@ public class CommandRank implements Element
 
           }
         } else {
-          switch (args[0]) {
+          switch (args.get(0).toLowerCase()) {
             case "p":
             case "player"://////////////////////////////////////////////////////////
 
               if (length > 1){
-                switch (args[1]) {
+                switch (args.get(1).toLowerCase()) {
 
                   case "p":
                   case "perm":////////////////////////////////////////////
-                    handlePlayerPerm(args, sender);
+                    handlePlayerPerm(args.toArray(new String[0]), sender);
                     break;
 
                   case "group":////////////////////////////////////////////////////////////////////

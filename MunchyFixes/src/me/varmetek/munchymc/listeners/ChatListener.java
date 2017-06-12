@@ -4,7 +4,7 @@ import me.varmetek.core.placeholder.FormatHandleChat;
 import me.varmetek.core.placeholder.FormatHandlePlayer;
 import me.varmetek.core.util.Messenger;
 import me.varmetek.munchymc.MunchyMax;
-import me.varmetek.munchymc.backend.PlayerSession;
+import me.varmetek.munchymc.backend.user.PlayerSession;
 import me.varmetek.munchymc.util.Container;
 import me.varmetek.munchymc.util.Utils;
 import net.md_5.bungee.api.ChatColor;

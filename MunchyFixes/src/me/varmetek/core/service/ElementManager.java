@@ -56,7 +56,7 @@ public class ElementManager implements Cleanable
 
 
   public ElementManager registerListener(Listener list){
-    Validate.notNull(list);
+    Validate.notNull(list,"Listener cannot be null");
     register(new Element(){
 
       @Override

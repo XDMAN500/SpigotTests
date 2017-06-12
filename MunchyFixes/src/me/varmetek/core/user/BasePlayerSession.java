@@ -1,6 +1,7 @@
 package me.varmetek.core.user;
 
 import me.varmetek.core.util.Cleanable;
+import me.varmetek.core.util.PluginCore;
 import me.varmetek.munchymc.listeners.TickListener;
 import org.apache.commons.lang.Validate;
 import org.bukkit.Bukkit;
@@ -18,6 +19,7 @@ public abstract class BasePlayerSession<D extends BasePlayerData> implements Cle
 	protected OfflinePlayer profile;
 	protected  BasePlayerHandler handler;
 	protected D playerData;
+	protected PluginCore plugin;
 
 	protected Optional<Player> player ;
 
@@ -26,7 +28,7 @@ public abstract class BasePlayerSession<D extends BasePlayerData> implements Cle
 	protected BasePlayerSession (UUID profile, BasePlayerHandler  handler){
 		Validate.notNull(profile,"Player profile cannot be null");
 		Validate.notNull(handler,"Player handler cannot be null");
-
+		plugin = handler.getPlugin();
 		this.handler = handler;
 		playerData = _createData();
 		player = Optional.ofNullable(Bukkit.getPlayer(profile));
@@ -105,7 +107,9 @@ public abstract class BasePlayerSession<D extends BasePlayerData> implements Cle
 
 	protected abstract D _createData();
 
-
+	public BasePlayerHandler getHandler(){
+		return handler;
+	}
 
 
 

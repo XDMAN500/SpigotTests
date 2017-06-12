@@ -1,6 +1,7 @@
 package me.varmetek.core.commands;
 
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -9,8 +10,11 @@ import java.util.List;
 public interface CmdTab
 {
 
-	public static List<String>  send(String... options){
+	static List<String>  send(String... options){
+		if(options == null || options.length == 0){
+			return Collections.EMPTY_LIST;
+		}
 		return Arrays.asList(options);
 	}
-	List<String> execute (CmdSender sender, String alias, String[] args,int length);
+	List<String> execute (CmdData cmd);
 }

@@ -1,7 +1,7 @@
 package me.varmetek.core.user;
 
 import me.varmetek.core.util.Cleanable;
-import me.varmetek.munchymc.backend.PlayerData;
+import me.varmetek.munchymc.backend.user.PlayerData;
 import org.bukkit.configuration.serialization.ConfigurationSerializable;
 
 import java.util.Map;
@@ -39,13 +39,26 @@ public abstract class BasePlayerData implements  ConfigurationSerializable, Clea
 
   protected boolean checkInput(Class<?> type,Object input){
     return input!= null &&
-             type.getClass().isInstance(input);
+             type.isInstance(input);
   }
 
-  protected <T> void setInput( T source,Object input){
+  protected <T> boolean setInput( T source,Object input){
     if(checkInput(source.getClass(),input)){
       source  = (T)input;
+      return true;
     }
+    return false;
   }
+
+  protected <T> boolean setInput( T source,Object input, T def){
+    if(!setInput(source,input)){
+      source = def;
+      return false;
+    }
+
+    return true;
+  }
+
+
   public abstract BasePlayerData copy();
 }

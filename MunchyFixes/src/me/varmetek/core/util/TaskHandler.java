@@ -2,6 +2,7 @@ package me.varmetek.core.util;
 
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.PluginBase;
+import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.scheduler.BukkitScheduler;
 import org.bukkit.scheduler.BukkitTask;
 
@@ -15,13 +16,55 @@ public class TaskHandler implements Cleanable
 	protected final Async async;
 	protected final BukkitScheduler schedule;
 
-
-
 	public  TaskHandler(PluginBase plugin){
 		this.plugin = plugin;
 		schedule = plugin.getServer().getScheduler();
-		async = new Async();
+			async = new Async();
 	}
+
+	public abstract class  Task extends BukkitRunnable{
+			public Task runNow(){
+				this.runTask(plugin);
+				return this;
+			}
+
+			public Task runLater(long delay){
+				this.runTaskLater(plugin, delay);
+				return this;
+			}
+
+			public Task runTimer(long delay, long period){
+				this.runTaskTimer(plugin,delay,period);
+				return this;
+			}
+
+	}
+
+	public abstract class  AsyncTask extends BukkitRunnable{
+		public AsyncTask runNow(){
+			this.runTaskAsynchronously(plugin);
+			return this;
+		}
+
+		public AsyncTask runLater(long delay){
+			this.runTaskLaterAsynchronously(plugin, delay);
+			return this;
+		}
+
+		public AsyncTask runTimer(long delay, long period){
+			this.runTaskTimerAsynchronously(plugin,delay,period);
+			return this;
+		}
+
+	}
+
+  @Override
+  public void clean ()
+  {
+   // async = null;
+
+  }
+
 
 
 
@@ -46,15 +89,6 @@ public class TaskHandler implements Cleanable
 		return async;
 	}
 
-
-	@Override
-	public void clean ()
-	{
-		//async = null;
-		//plugin = null;
-	}
-
-
 	public class Async
 	{
 
@@ -78,4 +112,9 @@ public class TaskHandler implements Cleanable
 			return schedule.runTaskTimerAsynchronously(plugin, run, time, delay);
 		}
 	}
+
+
+
+
+
 }

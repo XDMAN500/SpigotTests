@@ -1,14 +1,10 @@
 package me.varmetek.munchymc.mines;
 
 
-import com.sk89q.worldguard.protection.regions.ProtectedRegion;
 import me.varmetek.munchymc.MunchyMax;
-import org.bukkit.World;
+import org.bukkit.Material;
 import org.bukkit.material.MaterialData;
 import org.bukkit.scheduler.BukkitRunnable;
-
-import java.util.List;
-import java.util.Random;
 
 /**
  * Created by XDMAN500 on 5/10/2017.
@@ -16,111 +12,233 @@ import java.util.Random;
 public class MineGeneratorImpl2 extends MineGenerator
 {
 
+  private long blockCount = 0;
 
 
   public MineGeneratorImpl2 (Mine mine){
-   super(mine);
+    super(mine);
+
+
   }
-  @SuppressWarnings("deprecation")
-  public void generate(){
-    World world = mine.getWorld();
-
-    if(world == null)return;
-    ProtectedRegion pr =  mine.getRegion();
 
 
-    int minX = pr.getMinimumPoint().getBlockX();
-    int minY = pr.getMinimumPoint().getBlockY();
-    int minZ = pr.getMinimumPoint().getBlockZ();
-    int maxX = pr.getMaximumPoint().getBlockX();
-    int maxY = pr.getMaximumPoint().getBlockY();
-    int maxZ = pr.getMaximumPoint().getBlockZ();
+  @SuppressWarnings ("deprecation")
+  public void generate (){
 
-    RandomMaterial rand = new RandomMaterial(mine.getBlockData());
-
-    try{
-
-      new BukkitRunnable(){
-        int y = minY;
-        public void run(){
-          if(y>maxY){
-            this.cancel();
-            return;
-          }
-
-          for (int z = minZ; z <= maxZ; z++) {
-
-            for (int x = minX; x <= maxX; x++) {
+    new ResetTask(500).runTaskTimer(MunchyMax.getInstance(),1L,5L);
 
 
+  }
+
+  public long getBlockCount(){
+
+    return blockCount;
+  }
+
+  public void calculateBlockCount(){
+    new TallyTask(10000).runTaskTimer(MunchyMax.getInstance(),1L,5L);
+  }
+
+  @Override
+  public void empty (){
+    new EmptyTask(500).runTaskTimer(MunchyMax.getInstance(),1L,5L);
+  }
+
+
+  protected class ResetTask extends BukkitRunnable
+  {
+
+
+    int stepX = minX;
+    int stepY = minY;
+    int stepZ = minZ;
+
+    final int threshhold;
+
+
+    final  RandomBlock rand = new RandomBlock(mine.getBlockData());
+
+    public ResetTask (int threshhold){
+
+      this.threshhold = threshhold;
+
+    }
+    @Override
+    public void cancel(){
+      super.cancel();
+      working = false;
+    }
+    @Override
+    public void run (){
+      working = true;
+      int i = 0;
+      for (; stepY <= maxY; stepY++) {
+        for (; stepZ <= maxZ; stepZ++) {
+          for (; stepX <= maxX; stepX++) {
+            try {
               MaterialData chosen = rand.next(10);
-              world.getBlockAt(x,y,z).setTypeIdAndData(chosen.getItemTypeId(),chosen.getData(),false);
+              world.getBlockAt(stepX, stepY, stepZ).setTypeIdAndData(chosen.getItemTypeId(), chosen.getData(), false);
+              i++;
+            // Bukkit.broadcastMessage("Mine gen: "+ i + " ("+stepX +","+ stepY +","+stepZ+") /" +" ("+maxX +","+ maxY +","+maxZ+")"  );
+
+              if (i >= threshhold){
+
+                return;
+              }
+
+            }
+            catch(Exception e){
+              this.cancel();
+              throw new MineResetException("Error occured when reseting mine",e);
 
             }
           }
-          y++;
+           stepX = minX;
+        // Bukkit.broadcastMessage("Mine gen: Finished X");
         }
-      }.runTaskTimer(MunchyMax.getInstance(), 5L, 0L);
-	 /*     for (int y = minY; y <= maxY; y++) {
-	        for (int z = minZ; z <= maxZ; z++) {
-	          for (int x = minX; x <= maxX; x++) {
+        stepZ = minZ;
+     //   Bukkit.broadcastMessage("Mine gen: Finished Z");
+      }
+     // Bukkit.broadcastMessage("Mine gen: Finished Y");
+      this.cancel();
+      blockCount = mine.volume();
 
-	        	  LocalBlock chosen  = Rmat.nextBlock(Main.resetSamples);
 
-	        	   world.getBlockAt(x, y, z).
-	        	   setTypeIdAndData(chosen.getID(), chosen.getData(), false);
 
-	          }
-	        }
-
-	      }*/
     }
-    catch(NullPointerException e){
-      MunchyMax.getInstance().getLogger().warning("Mine \"" + mine.getName() + " \" could not reset properly");
-      e.printStackTrace();
-    }
+
 
   }
-  /**
-   *
-   *  Based on rolls and a randomized list
-   * */
-    private class RandomMaterial{
-
-      private Random rand = new Random();
-      private List<LocalBlock> list;
-
-      public RandomMaterial ( List<LocalBlock> blocks ){
-        this.list = blocks;
+  protected class EmptyTask extends BukkitRunnable
+  {
 
 
-      }
+    int stepX = minX;
+    int stepY = minY;
+    int stepZ = minZ;
 
-      public MaterialData next(int sample){
+    final int threshhold;
 
-        LocalBlock chosen = null;
-        for(int i = 0; i< sample ;i++){
-          double roll = rand.nextDouble();
-          for (LocalBlock data : list){
-            roll = rand.nextDouble();
-            if (data.getChance() >= roll){
-              chosen = data;
-              break;
+
+
+
+    public EmptyTask (int threshhold){
+
+      this.threshhold = threshhold;
+
+    }
+
+    @Override
+    public void cancel(){
+      super.cancel();
+      working = false;
+    }
+
+    @Override
+    public void run (){
+      working = true;
+      int i = 0;
+      for (; stepY <= maxY; stepY++) {
+        for (; stepZ <= maxZ; stepZ++) {
+          for (; stepX <= maxX; stepX++) {
+            try {
+
+              world.getBlockAt(stepX, stepY, stepZ).setType(Material.AIR);
+              i++;
+              // Bukkit.broadcastMessage("Mine gen: "+ i + " ("+stepX +","+ stepY +","+stepZ+") /" +" ("+maxX +","+ maxY +","+maxZ+")"  );
+
+              if (i >= threshhold){
+
+                return;
+              }
+
+            }
+            catch(Exception e){
+              this.cancel();
+              throw new MineResetException("Error occured when emptying mine",e);
+
             }
           }
-          list.sort((LocalBlock b1, LocalBlock b2)-> { return rand.nextInt(3)-1; });
-
-         if(chosen != null){
-            break;
-          }
+          stepX = minX;
+          // Bukkit.broadcastMessage("Mine gen: Finished X");
         }
-
-        if(chosen == null){
-          chosen =  list.get(rand.nextInt(list.size()));
-        }
-
-
-        return chosen.getData();
+        stepZ = minZ;
+        //   Bukkit.broadcastMessage("Mine gen: Finished Z");
       }
+      // Bukkit.broadcastMessage("Mine gen: Finished Y");
+      this.cancel();
+      blockCount = 0;
+
+
+
+
     }
+
+
+  }
+
+  protected class TallyTask extends BukkitRunnable
+  {
+
+
+    int stepX = minX;
+    int stepY = minY;
+    int stepZ = minZ;
+
+    final int threshhold;
+    long count = 0;
+
+
+
+    public TallyTask (int threshhold){
+
+      this.threshhold = threshhold;
+
+    }
+
+
+    @Override
+    public void run (){
+
+      int i = 0;
+      for (; stepY <= maxY; stepY++) {
+        for (; stepZ <= maxZ; stepZ++) {
+          for (; stepX <= maxX; stepX++) {
+            try {
+
+              if (world.getBlockAt(stepX, stepY, stepZ).getType() != Material.AIR){
+                count++;
+              }
+              i++;
+              // Bukkit.broadcastMessage("Mine gen: "+ i + " ("+stepX +","+ stepY +","+stepZ+") /" +" ("+maxX +","+ maxY +","+maxZ+")"  );
+
+              if (i >= threshhold){
+
+                return;
+              }
+
+            }
+            catch(Exception e){
+              this.cancel();
+              throw new MineResetException("Error occured when tallying mine",e);
+
+            }
+          }
+          stepX = minX;
+          // Bukkit.broadcastMessage("Mine gen: Finished X");
+        }
+        stepZ = minZ;
+        //   Bukkit.broadcastMessage("Mine gen: Finished Z");
+      }
+      // Bukkit.broadcastMessage("Mine gen: Finished Y");
+
+      this.cancel();
+      blockCount = count;
+
+
+    }
+
+
+  }
+
 }

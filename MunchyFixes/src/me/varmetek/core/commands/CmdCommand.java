@@ -27,21 +27,21 @@ public final class CmdCommand extends Command
 
   @Override
   public boolean execute (CommandSender sender, String commandLabel, String[] args){
-   logic.execute( new CmdSender(sender),commandLabel,args,args.length);
+   logic.execute( new CmdData(new CmdSender(sender),commandLabel,args,this));
     return false;
   }
 
   @Override
   public List<String> tabComplete(CommandSender sender, String commandLabel, String[] args){
-    return tab.execute( new CmdSender(sender),commandLabel,args,args.length);
+    return tab.execute( new CmdData(new CmdSender(sender),commandLabel,args,this));
   }
 
   public static class Builder
   {
 
     public static final List<String> emptyAlias = new ArrayList<>();
-    public static final CmdLogic defaultLogic =  (sender,alias,args,legnth)->{ sender.asSender().sendMessage("Empty command");};
-    public static final CmdTab defaultTab =  (sender,alias,args,legnth)->{ return new ArrayList<>();};
+    public static final CmdLogic defaultLogic =  (cmd)->{ cmd.getSender().asSender().sendMessage("Empty command");};
+    public static final CmdTab defaultTab =  cmd -> { return new ArrayList<>();};
 
     private final String name;
     private CmdLogic cmd = defaultLogic;
